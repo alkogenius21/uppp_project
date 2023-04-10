@@ -1,42 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Библиотека</title>
+    <title>Вторая Кегостровская Библиотека</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <header>
-        <h1>Библиотека</h1>
+        <h1>Вторая Кегостровская Библиотека</h1>
         <nav>
             <ul>
                 <li><a href="#">Главная</a></li>
                 <li><a href="#">Каталог</a></li>
-                <li><a href="#">Вход/Регистрация</a></li>
+                <li><a href="#">Контакты</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <h2>Новые поступления</h2>
-        <ul>
-            <li><a href="#">"Война и мир" Л.Н. Толстой</a></li>
-            <li><a href="#">"Герой нашего времени" М.Ю. Лермонтов</a></li>
-            <li><a href="#">"Анна Каренина" Л.Н. Толстой</a></li>
-            <li><a href="#">"Преступление и наказание" Ф.М. Достоевский</a></li>
-        </ul>
-        <h2>Лучшие книги</h2>
-        <ol>
-            <li><a href="#">"Мастер и Маргарита" М.А. Булгаков</a></li>
-            <li><a href="#">"1984" Дж. Оруэлл</a></li>
-            <li><a href="#">"Унесенные ветром" М.Митчелл</a></li>
-            <li><a href="#">"Три товарища" Э.М. Ремарк</a></li>
-        </ol>
+        <section>
+            <h2>Популярные книги</h2>
+            <ul>
+                <li><a href="#">Джейн Эйр</a></li>
+                <li><a href="#">Анна Каренина</a></li>
+                <li><a href="#">Унесенные ветром</a></li>
+            </ul>
+        </section>
+        <section>
+            <h2>Новые поступления</h2>
+            <ul>
+                <li><a href="#">Маленький принц</a></li>
+                <li><a href="#">1984</a></li>
+                <li><a href="#">451 градус по Фаренгейту</a></li>
+            </ul>
+        </section>
     </main>
     <footer>
-        <p>
-            Copyright ©
-            <script>
-			document.write(new Date().getFullYear())
-            </script> Библиотека. Все права защищены.
-        </p>
+        <p>© Моя библиотека 2023</p>
     </footer>
 </body>
 </html>
