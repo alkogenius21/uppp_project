@@ -45,14 +45,13 @@
     <Compile Include="uppp_project\wsgi.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="library\templates\library\index.html" />
+    <Content Include="library\templates\index.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="library\" />
     <Folder Include="library\migrations\" />
     <Folder Include="library\templates\" />
-    <Folder Include="library\templates\library\" />
     <Folder Include="uppp_project\" />
   </ItemGroup>
   <ItemGroup>

@@ -7,5 +7,5 @@ from library import views
 urlpatterns = [
     # Uncomment the next line to enable the admin:
     path('admin/', admin.site.urls),
-    path('', views.index, name='home')
+    path('', views.index)
 ]
