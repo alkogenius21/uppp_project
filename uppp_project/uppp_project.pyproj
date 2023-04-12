@@ -46,7 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="library\static\css\styles.css" />
+    <Content Include="library\static\js\map.js" />
+    <Content Include="library\templates\about.html" />
+    <Content Include="library\templates\adress.html" />
+    <Content Include="library\templates\catalog.html" />
     <Content Include="library\templates\index.html" />
+    <Content Include="library\templates\personal_area.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +59,7 @@
     <Folder Include="library\migrations\" />
     <Folder Include="library\static\" />
     <Folder Include="library\static\css\" />
+    <Folder Include="library\static\js\" />
     <Folder Include="library\templates\" />
     <Folder Include="uppp_project\" />
   </ItemGroup>
