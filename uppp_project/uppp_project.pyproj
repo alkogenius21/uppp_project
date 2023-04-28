@@ -43,6 +43,9 @@
     <Compile Include="library_manager\migrations\__init__.py" />
     <Compile Include="library_manager\models.py" />
     <Compile Include="library_manager\tests.py" />
+    <Compile Include="library_manager\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="library_manager\views.py" />
     <Compile Include="library_manager\__init__.py" />
     <Compile Include="manage.py" />
@@ -60,6 +63,8 @@
     <Content Include="library\templates\catalog.html" />
     <Content Include="library\templates\index.html" />
     <Content Include="library\templates\personal_area.html" />
+    <Content Include="library_manager\templates\base1.html" />
+    <Content Include="library_manager\templates\index1.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +77,7 @@
     <Folder Include="library\templates\" />
     <Folder Include="library_manager\" />
     <Folder Include="library_manager\migrations\" />
+    <Folder Include="library_manager\templates\" />
     <Folder Include="uppp_project\" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@ from uppp_project import settings
 from django.contrib import admin
 from django.urls import path, include
 from library import views
+import library_manager
 from django.conf.urls.static import static
 urlpatterns = [
     # Uncomment the next line to enable the admin:
@@ -14,7 +15,7 @@ urlpatterns = [
     path('catalog/', views.catalog, name='catalog'),
     path('adress/', views.adress, name='adress'),
     path('profile/', views.personal_area, name='profile'),
-    path('manager/', views.managment, name='manager')
+    path('manage/', include('library_manager.urls')),
 ]
 
 if settings.DEBUG:
