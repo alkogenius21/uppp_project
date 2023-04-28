@@ -12,7 +12,7 @@ class Book(models.Model):
     Book_Description = models.TextField() 
     Book_YearOfPublishing = models.IntegerField() 
     Book_ISBN = models.IntegerField()
-    Book_Photo = models.ImageField(upload_to='media/photos/&Genre/&Author', default='media/book_default.jpg')
+    Book_Photo = models.ImageField(upload_to='media/photos/%Genre/%Author', default='media/book_default.jpg')
 
     def __str__(self):
         return self.Book_Title
@@ -24,7 +24,7 @@ class User(models.Model):
     User_Patronymic = models.CharField(max_length=15) 
     User_DateOfBirth = models.DateField()
     User_PhoneNumber = models.CharField(max_length=12)
-    User_Mail = models.CharField()
+    User_Mail = models.CharField(max_length=250)
 
     def __str__(self):
         return self.User_Mail

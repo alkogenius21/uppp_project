@@ -49,6 +49,7 @@
     <Content Include="library\static\js\map.js" />
     <Content Include="library\templates\about.html" />
     <Content Include="library\templates\adress.html" />
+    <Content Include="library\templates\base.html" />
     <Content Include="library\templates\catalog.html" />
     <Content Include="library\templates\index.html" />
     <Content Include="library\templates\managment.html" />

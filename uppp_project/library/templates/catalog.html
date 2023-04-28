@@ -1,11 +1,18 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
+{%block content%}
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
 
-</body>
-</html>
+<h1>{{title}}</h1>
+
+<ul>
+    {% for m in books %}
+    <li>
+        <h2>{{m.Book_Title}}</h2>
+        <h3>{{m.Book_Author}}</h3>
+        <p>{{m.Book_Description}}</p>
+        <hr />
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

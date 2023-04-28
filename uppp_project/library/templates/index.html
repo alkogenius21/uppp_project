@@ -1,41 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
+{%block content%}
 <head>
-    <title>Вторая Кегостровская Библиотека</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"
 </head>
-<body>
-    <header>
-        <h1>Вторая Кегостровская Библиотека</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Каталог</a></li>
-                <li><a href="#">Контакты</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h2>Популярные книги</h2>
-            <ul>
-                <li><a href="#">Джейн Эйр</a></li>
-                <li><a href="#">Анна Каренина</a></li>
-                <li><a href="#">Унесенные ветром</a></li>
-            </ul>
-        </section>
-        <section>
-            <h2>Новые поступления</h2>
-            <ul>
-                <li><a href="#">Маленький принц</a></li>
-                <li><a href="#">1984</a></li>
-                <li><a href="#">451 градус по Фаренгейту</a></li>
-            </ul>
-        </section>
-    </main>
-    <footer>
-        <p>© Моя библиотека 2023</p>
-    </footer>
-</body>
-</html>
+
+<h1>{{title}}</h1>
+<p>Пошел нахуй, сайт на доработке!!!!!</p>
+{% endblock %}
