@@ -41,6 +41,7 @@ nav a {
 
 h1 {
     margin-bottom: 20px;
+    font-size: 10em;
 }
 
 h2 {
@@ -50,20 +51,6 @@ h2 {
 ul li {
     margin-bottom: 10px;
 }
-
-/* стили для "Популярные книги" и "Новые поступления" разделов */
-section {
-    margin-bottom: 30px;
-}
-
-    section ul li a {
-        color: #333;
-        text-decoration: none;
-    }
-
-        section ul li a:hover {
-            text-decoration: underline;
-        }
 
 /* стили для подвала */
 footer {

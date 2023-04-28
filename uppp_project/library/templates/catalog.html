@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-{%block content%}
-
-
-<h1>{{title}}</h1>
-
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"
+</head>
+<div class="header"></div>
 <ul>
     {% for m in books %}
     <li>
