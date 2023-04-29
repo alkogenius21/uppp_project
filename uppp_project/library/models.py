@@ -3,6 +3,7 @@ File with description of all database tables for MTV template
 """
 
 from django.db import models
+from django.urls import reverse
 
 class Book(models.Model):
 
@@ -13,9 +14,19 @@ class Book(models.Model):
     Book_YearOfPublishing = models.IntegerField() 
     Book_ISBN = models.IntegerField()
     Book_Photo = models.ImageField(upload_to='media/photos/%Genre/%Author', default='media/book_default.jpg')
-
+    Category = models.ForeignKey('Book_Category', on_delete=models.CASCADE, null=True)
     def __str__(self):
         return self.Book_Title
+
+class Book_Category(models.Model):
+
+    Genre = models.CharField(max_length=100, db_index=True)
+
+    def __str__(self):
+        return self.Genre
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'cat_id': self.pk})
 
 class User(models.Model):
 
@@ -24,7 +35,7 @@ class User(models.Model):
     User_Patronymic = models.CharField(max_length=15) 
     User_DateOfBirth = models.DateField()
     User_PhoneNumber = models.CharField(max_length=12)
-    User_Mail = models.CharField(max_length=250)
+    User_Mail = models.CharField(max_length=250, null=True)
 
     def __str__(self):
         return self.User_Mail

@@ -15,18 +15,28 @@ def index(request):
     return render(request, 'index.html', {'menu': Nav_Tables, 'title': 'Вторая Кегостровская библиотека'})
 
 def about(request):
-    books_list = Book.objects.all()
-    return render(request, 'about.html', {'menu': Nav_Tables, 'title': 'Каталог книг', 'books': books_list})
+    settings ={'menu': Nav_Tables, 
+               'title': 'История Библиотеки'
+               }
+    return render(request, 'about.html', context=settings)
 
 def adress(request):
-    return render(request, 'adress.html', {'menu': Nav_Tables, 'menu': Nav_Tables})
+    settings ={'menu': Nav_Tables, 
+               'title': 'Адрес',}
+    return render(request, 'adress.html', context=settings)
 
 def catalog(request):
+    cats = Book_Category.objects.all()
     books_list = Book.objects.all()
-    return render(request, 'catalog.html', {'menu': Nav_Tables, 'title': 'Каталог книг', 'books': books_list})
+    settings = {'menu': Nav_Tables, 
+                'title': 'Каталог книг', 
+                'books': books_list,
+                'cats': cats,
+                'cat_selected': 0}
+
+    return render(request, 'catalog.html', context=settings)
 
 def personal_area(request):
-    return render(request, 'personal_area.html', {'menu': Nav_Tables})
-
-def managment(request):
-    return render(request, 'managment.html')
+    settings = {'menu': Nav_Tables,
+                'title': 'Личный Кабинет'}
+    return render(request, 'personal_area.html', context=settings)
