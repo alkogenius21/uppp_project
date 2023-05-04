@@ -2,17 +2,20 @@
 {% load static %}
 {% block content %}
 <head>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}"
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 </head>
 <div class="header"></div>
 <ul>
     {% for m in books %}
+    {% if not Book_Aviability %}
     <li>
         <h2>{{m.Book_Title}}</h2>
         <h3>{{m.Book_Author}}</h3>
         <p>{{m.Book_Description}}</p>
+        <p><img src="{{m.Book_Photo.url}}" /></p>
         <hr />
     </li>
+    {% endif %}
     {% endfor %}
 </ul>
 

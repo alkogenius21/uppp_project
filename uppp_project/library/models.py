@@ -1,5 +1,7 @@
+# -*- coding: cp1251 -*-
 from django.db import models
 from django.urls import reverse
+
 
 class Book(models.Model):
 
@@ -11,11 +13,17 @@ class Book(models.Model):
     Book_UDK = models.CharField(max_length=200, null=True)
     Book_BBK = models.CharField(max_length=200, null=True)
     Book_Aviability = models.BooleanField(default=True)
-    Book_Photo = models.ImageField(upload_to='media/photos/%Genre/%Author', default='media/book_default.jpg')
+    Book_Quanity = models.IntegerField(max_length=35, null=True)
+    Book_Photo = models.ImageField(upload_to='media/books', default='media/book_default.jpg')
     Book_Genre = models.ForeignKey('Book_Category', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.Book_Title
+
+    class Meta:
+        verbose_name = 'Книги'
+        verbose_name_plural = 'Книги'
+        ordering = ['Book_Genre', 'Book_Title']
 
 class Book_Category(models.Model):
 
