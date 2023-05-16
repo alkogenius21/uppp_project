@@ -3,30 +3,43 @@
 <html>
 <head>
     {% block head %}
-        <meta charset="utf-8" />
+        <meta charset="utf-8" />    
         <title>{{title}}</title>
-        <link type="text/css" href="{% static 'css/styles.css'  %}" />
+        <link type="text/css" href="{% static 'css/styles_base.css'  %}" />
     {% endblock %}
 </head>
 <body>
     {% block mainmenu %}
     <header>
-        <h1>{{title}}</h1>
-        <nav>
-            <ul id="mainmenu" class="mainmenu">
+        <div class="container">
+            <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="Логотип" />
+                <div class="logo-text">Вторая Кегостровская Библиотека</div>
+            </div>
+            <ul class="menu">
                 {% for i in menu %}
-                <li><a href="{% url i.url_name %}">{{ i.title }}</a></li>
+                <li><a href="{% url i.url_name %}" {% if i.active %} class="actives" {% endif %}>{{ i.title }}</a></li>
                 {% endfor %}
             </ul>
-            <div class="clear"></div>
-        </nav>
+        </div>
     </header>
     {% endblock mainmenu %}
 
-    {%block content%}
+    {% block content %}
     {% endblock %}
+    
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <img src="{% static 'images/phone.png' %}" alt="Телефон">
+                <span>+7(911)467-28-20</span>
+            </div>
+            <div class="social-links">
+                <a href="https://vk.com/dobrolubovka" target="_blank"><img src="{% static 'images/vk.png' %}" alt="VK" width="40" height="40"></a>
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"><img src="{% static 'images/youtube.png' %}" alt="YouTube" width="75" height="75"></a>
+            </div>
+        </div>
+        © Вторая кегостровская библиотека 2023
+    </footer>
 </body>
 </html>
-<footer>
-    <p>© Вторая кегостровская библиотека 2023</p>
-</footer>

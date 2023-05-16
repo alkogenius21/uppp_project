@@ -55,7 +55,8 @@
     <Compile Include="uppp_project\wsgi.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="library\static\css\styles.css" />
+    <Content Include="library\static\css\styles_base.css" />
+    <Content Include="library\static\css\styles_index.css" />
     <Content Include="library\static\js\map.js" />
     <Content Include="library\templates\about.html" />
     <Content Include="library\templates\adress.html" />
@@ -73,7 +74,6 @@
     <Folder Include="library\static\" />
     <Folder Include="library\static\css\" />
     <Folder Include="library\static\js\" />
-    <Folder Include="library\static\images\" />
     <Folder Include="library\templates\" />
     <Folder Include="library_manager\" />
     <Folder Include="library_manager\migrations\" />

@@ -61,11 +61,11 @@ class Type_Of_Account(models.Model):
 
 class News_paper(models.Model):
 
-    News_DateOfPub = models.DateTimeField() 
+    News_DateOfPub = models.DateField(auto_now_add=True, null=True) 
     News_Article = models.TextField()
     News_TitleOfArticle = models.CharField(max_length=40) 
     News_ArticleAuthor = models.CharField(max_length=80)
-    News_Photo = models.ImageField(upload_to='media/photos/%Genre/%Author', default='media/book_default.jpg')
+    News_Photo = models.ImageField(upload_to='media/posts/', default='media/default_post .jpg')
 
     def __str__(self):
         return self.News_Article

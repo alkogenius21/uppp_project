@@ -12,31 +12,92 @@ Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
              {'title': "Личный Кабинет", 'url_name': 'profile'}]
 
 def index(request):
-    return render(request, 'index.html', {'menu': Nav_Tables, 'title': 'Вторая Кегостровская библиотека'})
+
+    active_item = 'Главная'
+    news_list = News_paper.objects.all()
+
+    settings = {'menu': Nav_Tables,
+               'title': 'Вторая Кегостровская библиотека',
+               'news': news_list
+               }
+
+    for item in Nav_Tables:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+    
+    return render(request, 'index.html', context=settings)
 
 def about(request):
+
+    active_item = 'История библиотеки'
+
     settings ={'menu': Nav_Tables, 
-               'title': 'История Библиотеки'
-               }
+            'title': 'История Библиотеки'
+            }
+
+    for item in Nav_Tables:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
     return render(request, 'about.html', context=settings)
 
 def adress(request):
+
+    active_item = 'Адрес'
+
     settings ={'menu': Nav_Tables, 
-               'title': 'Адрес',}
+                'title': 'Адрес'
+                }
+
+    for item in Nav_Tables:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
     return render(request, 'adress.html', context=settings)
 
 def catalog(request):
+
+    
+    active_item = 'Каталог'
+
     cats = Book_Category.objects.all()
     books_list = Book.objects.all()
     settings = {'menu': Nav_Tables, 
                 'title': 'Каталог книг', 
                 'books': books_list,
                 'cats': cats,
-                'cat_selected': 0}
+                'cat_selected': 0
+                }
+
+    for item in Nav_Tables:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+
 
     return render(request, 'catalog.html', context=settings)
 
 def personal_area(request):
+
+    active_item = 'Личный Кабинет'
+
     settings = {'menu': Nav_Tables,
-                'title': 'Личный Кабинет'}
+                'title': 'Личный Кабинет'
+                }
+
+    for item in Nav_Tables:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+
     return render(request, 'personal_area.html', context=settings)
