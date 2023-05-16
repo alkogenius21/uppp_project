@@ -1,18 +1,57 @@
 {% extends 'base.html' %}
 {% load static %}
-{%block content%}
+{% block content %}
 <head>
     <link rel="stylesheet" href="{% static 'css/styles_base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/styles_index.css' %}" />
 </head>
-<div class="news-feed">
-    {% for j in news %}
-    <div class="post">
-        <h2 class="post-title">{{j.News_TitleOfArticle}}</h2>
-        <p class="post-text">{{j.News_Article}}</p>
-        <img src="{{j.News_Photo.url}}" class="post-image">
-        <p class="post-date">{{j.News_DateOfPub}}</p>
+<div class="container12">
+    <div class="news-column">
+        <h2>{{news_name}}</h2>
+        {% for j in news %}
+        <div class="news-post">
+            <h3>{{j.News_TitleOfArticle}}</h3>
+            <p>{{j.News_Article}}</p>
+            <img src="{{j.News_Photo.url}}">
+            <p class="date">{{j.News_DateOfPub}}</p>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+    <div class="books-column">
+        <div class="popular-books">
+            <h2>{{popular}}</h2>
+            <ul>
+                {% for k in book %}
+                {% if k.Book_Popular %}
+                <li>
+                    <div class="book-item">
+                        <img src="{{k.Book_Photo.url}}">
+                        <div class="book-details">
+                            <h3>{{k.Book_Title}}</h3>
+                            <p>{{k.Book_Author}}</p>
+                        </div>
+                    </div>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="latest-arrivals">
+        <h2>{{latest}}</h2>
+        <ul>
+            {% for d in popular_list %}
+            <li>
+                <div class="book-item">
+                    <img src="{{d.Book_Photo.url}}">
+                    <div class="book-details">
+                        <h3>{{d.Book_Title}}</h3>
+                        <p>{{d.Book_Author}}</p>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}

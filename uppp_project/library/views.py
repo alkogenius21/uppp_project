@@ -1,8 +1,6 @@
 # -*- coding: cp1251 -*-
 from django.shortcuts import render
-
-from django.http import HttpResponse
-
+from datetime import datetime, timedelta
 from .models import *
  
 Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
@@ -13,12 +11,27 @@ Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
 
 def index(request):
 
+    current_date = datetime.now().date()
+    week_ago = current_date - timedelta(days=7)
+
     active_item = 'Главная'
     news_list = News_paper.objects.all()
+    book = Book.objects.all()
+    popular_books = []
+    for obj in book:
+        if obj.Book_DateOfAdd > week_ago:
+            popular_books.append(obj)
+
+        
 
     settings = {'menu': Nav_Tables,
                'title': 'Вторая Кегостровская библиотека',
-               'news': news_list
+               'news': news_list,
+               'popular': 'Популярные книги',
+               'latest': 'Последние поступления',
+               'news_name': 'Новости',
+               'book': book,
+               'popular_list': popular_books
                }
 
     for item in Nav_Tables:
@@ -50,7 +63,8 @@ def adress(request):
     active_item = 'Адрес'
 
     settings ={'menu': Nav_Tables, 
-                'title': 'Адрес'
+                'title': 'Адрес',
+                'adress': 'Мы находимся здесь:'
                 }
 
     for item in Nav_Tables:

@@ -1,1 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/styles_base.css' %}" />
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=3cbdcdd0-3cf0-44e7-8275-4614b9bfccc5&lang=ru_RU" type="text/javascript"></script>
+    <script src="{% static 'js/map.js' %}"></script>
+    <style>
+        #map {
+            height: 750px;
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<h1>{{adress}}</h1>
+<div id="map"></div>
+{% endblock %}

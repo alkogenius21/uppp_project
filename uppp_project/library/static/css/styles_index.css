@@ -1,32 +1,90 @@
-.news-feed {
-    max-width: 800px;
+.container12 {
+    display: flex;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-.post {
-    background-color: #f5f5f5;
-    padding: 20px;
+.news-column {
+    flex: 1; /* Занимает доступное пространство */
+    overflow-y: auto;
+    height: 400px;
+}
+
+.news-post {
     margin-bottom: 20px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-.post-title {
-    font-size: 30px;
-    margin-top: 0;
+    .news-post h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .news-post p {
+        margin-bottom: 10px;
+    }
+
+    .news-post img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .news-post .date {
+        font-style: italic;
+        color: #999;
+    }
+
+.books-column,
+.latest-arrivals {
+    width: 30%; /* Ширина 30% */
+    overflow-x: auto; /* Горизонтальный скролл */
+    white-space: nowrap; /* Запрет переноса на новую строку */
+    height: 400px;
 }
 
-.post-text {
-    margin-bottom: 10px;
+    .popular-books ul,
+    .latest-arrivals ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .popular-books ul li,
+        .latest-arrivals ul li {
+            margin-bottom: 10px;
+        }
+
+    .popular-books h2,
+    .latest-arrivals h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+.book-item {
+    display: inline-flex; /* Горизонтальное расположение элементов */
+    align-items: center;
+    margin-right: 20px; /* Расстояние между элементами */
 }
 
-.post-image {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
+    .book-item:last-child {
+        margin-right: 0; /* Убираем правый отступ для последнего элемента */
+    }
+
+    .book-item img {
+        width: 100px;
+        height: 150px;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+.book-details {
+    flex-grow: 1;
 }
 
-.post-date {
-    font-style: italic;
-    color: #888;
-}
+    .book-details h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .book-details p {
+        margin-bottom: 10px;
+    }

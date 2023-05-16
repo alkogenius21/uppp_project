@@ -65,7 +65,6 @@ header {
 .menu li a:hover,
 .menu li a.active {
     background-color: #fff;
-    color: #007bff;
 }
 
 /*Подвал сайта*/

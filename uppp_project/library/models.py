@@ -16,6 +16,8 @@ class Book(models.Model):
     Book_Quanity = models.IntegerField(max_length=35, null=True)
     Book_Photo = models.ImageField(upload_to='media/books', default='media/book_default.jpg')
     Book_Genre = models.ForeignKey('Book_Category', on_delete=models.CASCADE, null=True)
+    Book_DateOfAdd = models.DateField(auto_now_add=True, null = True)
+    Book_Popular = models.BooleanField(null=True)
 
     def __str__(self):
         return self.Book_Title
