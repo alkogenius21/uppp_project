@@ -17,10 +17,10 @@ def index(request):
     active_item = 'Главная'
     news_list = News_paper.objects.all()
     book = Book.objects.all()
-    popular_books = []
+    latest_books = []
     for obj in book:
         if obj.Book_DateOfAdd > week_ago:
-            popular_books.append(obj)
+            latest_books.append(obj)
 
         
 
@@ -31,7 +31,7 @@ def index(request):
                'latest': 'Последние поступления',
                'news_name': 'Новости',
                'book': book,
-               'popular_list': popular_books
+               'latest_list': latest_books
                }
 
     for item in Nav_Tables:

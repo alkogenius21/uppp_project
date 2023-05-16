@@ -57,6 +57,7 @@
   <ItemGroup>
     <Content Include="library\static\css\styles_base.css" />
     <Content Include="library\static\css\styles_index.css" />
+    <Content Include="library\static\js\carousel.js" />
     <Content Include="library\static\js\map.js" />
     <Content Include="library\templates\about.html" />
     <Content Include="library\templates\adress.html" />

@@ -3,9 +3,11 @@
 <html>
 <head>
     {% block head %}
-        <meta charset="utf-8" />    
-        <title>{{title}}</title>
-        <link type="text/css" href="{% static 'css/styles_base.css'  %}" />
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{% static 'css/styles_base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles_index.css' %}" />
+    <script src="{% static 'js/carousel.js' %}"></script>
     {% endblock %}
 </head>
 <body>
@@ -24,9 +26,9 @@
         </div>
     </header>
     {% endblock mainmenu %}
-
-    {% block content %}
-    {% endblock %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
     
     <footer>
         <div class="footer-content">

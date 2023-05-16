@@ -1,90 +1,106 @@
-.container12 {
-    display: flex;
+.container-index {
     max-width: 1200px;
     margin: 0 auto;
+    height: 850px;
     padding: 20px;
 }
 
+h2 {
+    margin-top: 0;
+}
+
+/* Стили для левой колонки со скроллбаром */
 .news-column {
-    flex: 1; /* Занимает доступное пространство */
-    overflow-y: auto;
-    height: 400px;
+    float: left;
+    width: 650px;
+    height: 800px;
+    overflow-y: scroll;
+    background-color: #f5f5f5;
+    padding: 30px;
 }
 
-.news-post {
+.news-item {
     margin-bottom: 20px;
+    padding: 10px;
+    background-color: #eefdc1;
 }
 
-    .news-post h3 {
-        font-size: 18px;
-        margin-bottom: 5px;
-    }
+.news-item h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
 
-    .news-post p {
-        margin-bottom: 10px;
-    }
+.news-item a {
+    color: #333;
+    text-decoration: none;
+}
 
-    .news-post img {
-        max-width: 100%;
-        height: auto;
-    }
+.news-item img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
 
-    .news-post .date {
-        font-style: italic;
-        color: #999;
-    }
+.news-item p {
+    font-size: 14px;
+    font-style:italic;
+    color: #777;
+}
 
-.books-column,
-.latest-arrivals {
-    width: 30%; /* Ширина 30% */
-    overflow-x: auto; /* Горизонтальный скролл */
-    white-space: nowrap; /* Запрет переноса на новую строку */
+
+.news-item h3 {
+    margin-top: 0;
+}
+
+/* Стили для прямоугольников в правой части */
+.rectangle {
+    float: left;
+    width: 425px;
     height: 400px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    background-color: #f5f5f5;
+    padding: 10px;
 }
 
-    .popular-books ul,
-    .latest-arrivals ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-        .popular-books ul li,
-        .latest-arrivals ul li {
-            margin-bottom: 10px;
-        }
-
-    .popular-books h2,
-    .latest-arrivals h2 {
-        font-size: 20px;
-        margin-bottom: 10px;
-    }
-
-.book-item {
-    display: inline-flex; /* Горизонтальное расположение элементов */
-    align-items: center;
-    margin-right: 20px; /* Расстояние между элементами */
+/* Стили для кнопок карусели */
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
 }
 
-    .book-item:last-child {
-        margin-right: 0; /* Убираем правый отступ для последнего элемента */
-    }
-
-    .book-item img {
-        width: 100px;
-        height: 150px;
-        object-fit: cover;
-        margin-right: 10px;
-    }
-
-.book-details {
-    flex-grow: 1;
+.carousel-button:hover {
+    background-color: #aaa;
 }
 
-    .book-details h3 {
-        font-size: 18px;
-        margin-bottom: 5px;
-    }
+.carousel-button.previous {
+    left: 10px;
+}
 
-    .book-details p {
-        margin-bottom: 10px;
-    }
+.carousel-button.next {
+    right: 10px;
+}
+
+/* Стили для элементов карусели */
+.carousel-item {
+    display: none;
+}
+
+.carousel-item.active {
+    display: block;
+}
+
+/* Стили для изображений */
+img {
+    max-width: 100%;
+    height: auto;
+}
