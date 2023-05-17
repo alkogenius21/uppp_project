@@ -12,17 +12,19 @@ h2 {
 /* Стили для левой колонки со скроллбаром */
 .news-column {
     float: left;
-    width: 650px;
+    width: 760px;
     height: 800px;
     overflow-y: scroll;
     background-color: #f5f5f5;
     padding: 30px;
+    border-radius: 10px;
 }
 
 .news-item {
     margin-bottom: 20px;
     padding: 10px;
     background-color: #eefdc1;
+    border-radius: 10px 0 0 10px;
 }
 
 .news-item h3 {
@@ -55,13 +57,14 @@ h2 {
 /* Стили для прямоугольников в правой части */
 .rectangle {
     float: left;
-    width: 425px;
+    width: 320px;
     height: 400px;
     margin-left: 20px;
     margin-bottom: 20px;
     position: relative;
     background-color: #f5f5f5;
     padding: 10px;
+    border-radius: 10px;
 }
 
 /* Стили для кнопок карусели */
@@ -93,6 +96,34 @@ h2 {
 /* Стили для элементов карусели */
 .carousel-item {
     display: none;
+    background-color: white;
+    text-align: center;
+}
+
+.carousel-item h3 {
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.carousel-item a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+}
+
+.carousel-item img {
+    max-width: 100%;
+    height: auto;
+    margin: 15px auto;
+    object-fit: cover;
+    width: 150px;
+    height: 240px;
+}
+
+.carousel-item .author {
+    font-size: 14px;
+    margin-top: 5px;
 }
 
 .carousel-item.active {
@@ -100,7 +131,7 @@ h2 {
 }
 
 /* Стили для изображений */
-img {
+/*img {
     max-width: 100%;
     height: auto;
-}
+}*/

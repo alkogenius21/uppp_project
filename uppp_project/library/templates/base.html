@@ -7,7 +7,11 @@
     <title>{{title}}</title>
     <link rel="stylesheet" href="{% static 'css/styles_base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/styles_index.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles_catalog.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles_about.css' %}" />
     <script src="{% static 'js/carousel.js' %}"></script>
+    <script src="{% static 'js/map.js' %}"></script>
+    <script src="{% static 'js/catalog.js' %}"></script>
     {% endblock %}
 </head>
 <body>
@@ -36,12 +40,13 @@
                 <img src="{% static 'images/phone.png' %}" alt="Телефон">
                 <span>+7(911)467-28-20</span>
             </div>
+            © Вторая кегостровская библиотека 2023
             <div class="social-links">
                 <a href="https://vk.com/dobrolubovka" target="_blank"><img src="{% static 'images/vk.png' %}" alt="VK" width="40" height="40"></a>
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"><img src="{% static 'images/youtube.png' %}" alt="YouTube" width="75" height="75"></a>
             </div>
         </div>
-        © Вторая кегостровская библиотека 2023
+        
     </footer>
 </body>
 </html>

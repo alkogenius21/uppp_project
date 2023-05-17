@@ -1,0 +1,32 @@
+.container-about {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 60vh;
+    padding: 20px;
+}
+
+.history {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.image-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    position: relative;
+}
+
+.image-wrapper img {
+    max-width: 100%;
+    height: auto;
+}
+
+.static-image {
+    bottom: 0;
+    right: 0;
+    width: 600px;
+    height: auto;
+}

@@ -47,7 +47,9 @@ def about(request):
     active_item = 'История библиотеки'
 
     settings ={'menu': Nav_Tables, 
-            'title': 'История Библиотеки'
+            'title': 'История Библиотеки',
+            'text1': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vel risus ut lacus rhoncus ultricies. Sed ac leo sapien. Fusce sem odio, commodo a elit a, suscipit suscipit ligula. Mauris congue finibus rutrum. In sed tortor vitae nisi scelerisque rhoncus nec ac turpis. In eu malesuada tortor.',
+            'text2': 'Suspendisse tristique felis nec massa placerat, at hendrerit arcu hendrerit. Mauris id urna eu purus aliquet tempus. Integer eu lorem id erat finibus semper. Curabitur mollis viverra augue ut pulvinar. Ut tempor auctor mauris. Integer ut dui sit amet sem mattis ultrices.'
             }
 
     for item in Nav_Tables:
@@ -86,7 +88,12 @@ def catalog(request):
                 'title': 'Каталог книг', 
                 'books': books_list,
                 'cats': cats,
-                'cat_selected': 0
+                'cat_selected': 0,
+                'bron': 'Заброинровать',
+                'about': 'Подробнее',
+                'no_result': 'По вашему запросу ничего не найдено',
+                'placeholder': 'Название или Автор книги...',
+                'srch_btn': 'Найти'
                 }
 
     for item in Nav_Tables:

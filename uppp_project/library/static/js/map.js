@@ -7,7 +7,7 @@ function init() {
 
     var map = new ymaps.Map("map", {
         center: companyCoordinates,
-        zoom: 20
+        zoom: 18
     });
 
     var marker = new ymaps.Placemark(companyCoordinates, {

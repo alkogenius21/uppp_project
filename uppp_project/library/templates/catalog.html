@@ -1,30 +1,29 @@
 {% extends 'base.html' %}
-{% load static %}
+
 {% block content %}
-<head>
-    <link rel="stylesheet" href="{% static 'css/styles_base.css' %}" />
-</head>
-<div class="header"></div>
-<ul>
+<div class="search-container">
+    <input type="text" id="search-input" placeholder={{ placeholder }} onkeydown="handleSearch(event)">
+    <button id="search-button" onclick="searchBooks()">{{ srch_btn }}</button>
+</div>
+
+<div class="book-grid">
     {% for m in books %}
-    {% if not Book_Aviability %}
-    <li>
-        <h2>{{m.Book_Title}}</h2>
-        <h3>{{m.Book_Author}}</h3>
-        <p>{{m.Book_Description}}</p>
-        <p><img src="{{m.Book_Photo.url}}" /></p>
-        <hr />
-    </li>
-    {% endif %}
+    <div class="book-container">
+        <img class="book-image" src="{{ m.Book_Photo.url }}" alt="{{ m.Book_Title }}">
+        <div class="book-details">
+            <div class="book-title">{{ m.Book_Title }}</div>
+            <div class="book-author">{{ m.Book_Author }}</div>
+            <div class="book-actions">
+                <button id="btn-details-{{ m.id }}" class="btn btn-details" onclick="toggleDescription({{ m.id }})">{{ about }}&#x25BC;</button>
+                <button class="btn" onclick="reserveBook({{ m.id }})">{{ bron }}</button>
+            </div>
+        </div>
+        <div id="description-{{ m.id }}" class="book-description">
+            {{ m.Book_Description }}
+        </div>
+    </div>
     {% endfor %}
-</ul>
-
-<ul>
-    {% for c in cats %}
-    <li>
-        <a>{{c.Genre}}</a>
-    </li>
-    {% endfor %}
-</ul>
-
+    <div id="no-results" class="no-results" style="display: none;">{{ no_result }}</div>
+</div>
 {% endblock %}
+

@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<head>
-    <link rel="stylesheet" href="{% static 'css/styles_base.css' %}" />
-</head>
+<script src="{% static 'js/about.js' %}"></script>
+<div class="container-about">
+    <div class="history">
+        <h1>{{ title }}</h1>
+        <p>{{ text1 }}</p>
+        <p>{{ text2 }}</p>
+    </div>
+    <div class="image-wrapper">
+        <img class="static-image" src="{% static 'images/image1.jpg' %}">
+    </div>
+</div>
 {% endblock %}

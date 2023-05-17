@@ -8,18 +8,20 @@
         <div class="news-item">
             <h3>{{ n.News_TitleOfArticle }}</h3>
             <a>{{ n.News_Article }}</a>
-            <img src="{{ n.News_Photo.url }}" alt="{{n.News_Article}}" />
-            <p>{{n.News_DateOfPub}}</p>
+            <img src="{{ n.News_Photo.url }}" alt="{{ n.News_Article }}" />
+            <p>{{ n.News_DateOfPub }}</p>
         </div>
         {% endfor %}
     </div>
     <div class="rectangle">
-        <h2>{{popular}}</h2>
+        <h2>{{ popular }}</h2>
         <div class="carousel" id="popular-carousel">
             {% for b in book %}
             {% if b.Book_Popular %}
             <div class="carousel-item{% if forloop.first %} active{% endif %}">
-                <h3>{{b.Book_Title}}</h3>
+                <h3>{{ b.Book_Title }}</h3>
+                <a>{{ b.Book_Author }}</a>
+                <img src="{{ b.Book_Photo.url }}" alt="{{ b.Book_Title }}" />
             </div>
             {% endif %}
             {% endfor %}
@@ -28,20 +30,20 @@
         <div class="carousel-button next">&#8250;</div>
     </div>
     <div class="rectangle">
-        <h2>{{latest}}</h2>
+        <h2>{{ latest }}</h2>
         <div class="carousel" id="latest-carousel">
             {% for book in latest_list %}
             <div class="carousel-item{% if forloop.first %} active{% endif %}">
-                <h3>{{book.Book_Title}}</h3>
+                <h3>{{ book.Book_Title }}</h3>
+                <a>{{ book.Book_Author }}</a>
+                <img src="{{ book.Book_Photo.url }}" alt="{{ book.Book_Title }}" />
             </div>
             {% endfor %}
         </div>
         <div class="carousel-button previous">&#8249;</div>
         <div class="carousel-button next">&#8250;</div>
     </div>
-
 </div>
-<script src="{% static 'js/carousel.js' %}"></script>
 {% endblock %}
 
 
