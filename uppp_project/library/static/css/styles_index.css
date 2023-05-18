@@ -56,13 +56,13 @@ h2 {
 }
 
 
-    .news-item img {
-        max-width: 100%;
-        height: auto;
-        margin-bottom: 10px;
-        margin-top: 10px;
-        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
+.news-item img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
 
 .news-item p {
     font-size: 14px;
@@ -77,6 +77,7 @@ h2 {
 
 /* Стили для прямоугольников в правой части */
 .rectangle {
+    overflow: hidden;
     float: left;
     width: 320px;
     height: 400px;
@@ -86,6 +87,7 @@ h2 {
     background-color: #f5f5f5;
     padding: 10px;
     border-radius: 10px;
+    transition: transform 0.5s ease-out;
 }
 
 /* Стили для кнопок карусели */
@@ -102,9 +104,9 @@ h2 {
     cursor: pointer;
 }
 
-    .carousel-button:hover {
-        background-color: #87a13a;
-    }
+.carousel-button:hover {
+    background-color: #87a13a;
+}
 
 .carousel-button.previous {
     left: 10px;
@@ -116,9 +118,9 @@ h2 {
 
 /* Стили для элементов карусели */
 .carousel-item {
-    display: none;
     background-color: white;
     text-align: center;
+    display: none;
 }
 
 .carousel-item h3 {
@@ -156,6 +158,44 @@ h2 {
     max-width: 100%;
     height: auto;
 }*/
+
+
+.rectangle .slide-right {
+    animation-name: slideRight;
+    animation-duration: 0.25s;
+    animation-timing-function: ease-out;
+    z-index: 1;
+    transition: transform 0.5s ease-out;
+}
+
+.rectangle .slide-left {
+    animation-name: slideLeft;
+    animation-duration: 0.25s;
+    animation-timing-function: ease-out;
+    z-index: 1;
+    transition: transform 0.5s ease-out;
+}
+
+@keyframes slideRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
 ::-webkit-scrollbar {
     width: 10px; /* Ширина скроллбара */
 }

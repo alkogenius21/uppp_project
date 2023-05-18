@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const previousButtons = document.querySelectorAll('.carousel-button.previous');
     const nextButtons = document.querySelectorAll('.carousel-button.next');
 
-    previousButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
+    previousButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
             const carousel = button.parentElement.querySelector('.carousel');
             const activeItem = carousel.querySelector('.carousel-item.active');
 
@@ -15,11 +15,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 activeItem.classList.remove('active');
                 lastItem.classList.add('active');
             }
+
+            carousel.classList.add('slide-right');
+            setTimeout(function () {
+                carousel.classList.remove('slide-right');
+            }, 400);
         });
     });
 
-    nextButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
+    nextButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
             const carousel = button.parentElement.querySelector('.carousel');
             const activeItem = carousel.querySelector('.carousel-item.active');
 
@@ -31,7 +36,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 activeItem.classList.remove('active');
                 firstItem.classList.add('active');
             }
+
+            carousel.classList.add('slide-left');
+            setTimeout(function () {
+                carousel.classList.remove('slide-left');
+            }, 400); 
         });
     });
 });
+
 
