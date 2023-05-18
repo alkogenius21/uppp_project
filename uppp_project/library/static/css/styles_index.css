@@ -3,10 +3,12 @@
     margin: 0 auto;
     height: 850px;
     padding: 20px;
+    padding-bottom: 30px;
 }
 
 h2 {
     margin-top: 0;
+    text-align: center;
 }
 
 /* Стили для левой колонки со скроллбаром */
@@ -20,11 +22,19 @@ h2 {
     border-radius: 10px;
 }
 
+    .news-column h2 {
+        padding: 10px; /* Внутренний отступ заголовка */
+        z-index: 999;
+        text-align: center;
+        background-color: #f5f5f5;
+    }
+
 .news-item {
     margin-bottom: 20px;
     padding: 10px;
-    background-color: #eefdc1;
-    border-radius: 10px 0 0 10px;
+    background-color: #fbf4a987;
+    border-radius: 15px 0 15px 0;
+    border: 5px solid #000000;
 }
 
 .news-item h3 {
@@ -35,13 +45,24 @@ h2 {
 .news-item a {
     color: #333;
     text-decoration: none;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    font-size: 14px;
+    text-align: center; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    line-height: 1.5; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.news-item img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
+
+    .news-item img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
 
 .news-item p {
     font-size: 14px;
@@ -74,16 +95,16 @@ h2 {
     transform: translateY(-50%);
     width: 40px;
     height: 40px;
-    background-color: #ccc;
+    background-color: #eefdc1;
     border-radius: 50%;
     text-align: center;
     line-height: 40px;
     cursor: pointer;
 }
 
-.carousel-button:hover {
-    background-color: #aaa;
-}
+    .carousel-button:hover {
+        background-color: #87a13a;
+    }
 
 .carousel-button.previous {
     left: 10px;
@@ -135,3 +156,15 @@ h2 {
     max-width: 100%;
     height: auto;
 }*/
+::-webkit-scrollbar {
+    width: 10px; /* Ширина скроллбара */
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Цвет фона трека */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888; /* Цвет ползунка */
+    border-radius: 5px; /* Закругление углов ползунка */
+}

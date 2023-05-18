@@ -7,7 +7,7 @@ class Book(models.Model):
 
     Book_Title = models.CharField(max_length=200) 
     Book_Author = models.CharField(max_length=200)  
-    Book_Description = models.TextField() 
+    Book_Description = models.TextField(max_length=650) 
     Book_YearOfPublishing = models.IntegerField() 
     Book_ISBN = models.IntegerField()
     Book_UDK = models.CharField(max_length=200, null=True)

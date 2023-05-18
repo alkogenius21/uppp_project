@@ -6,24 +6,39 @@
     <button id="search-button" onclick="searchBooks()">{{ srch_btn }}</button>
 </div>
 
-<div class="book-grid">
-    {% for m in books %}
-    <div class="book-container">
-        <img class="book-image" src="{{ m.Book_Photo.url }}" alt="{{ m.Book_Title }}">
-        <div class="book-details">
-            <div class="book-title">{{ m.Book_Title }}</div>
-            <div class="book-author">{{ m.Book_Author }}</div>
-            <div class="book-actions">
-                <button id="btn-details-{{ m.id }}" class="btn btn-details" onclick="toggleDescription({{ m.id }})">{{ about }}&#x25BC;</button>
-                <button class="btn" onclick="reserveBook({{ m.id }})">{{ bron }}</button>
+
+<div class="catalog-container">
+
+    <div class="genres">
+        <button onclick="showAllBooks()">All</button>
+        {% for genre in cats %}
+        <button onclick="showBooksByGenre('{{ genre.Genre }}')">{{ genre.Genre }}</button>
+        {% endfor %}
+    </div>
+
+    <div class="book-grid">
+        {% for m in books %}
+        <div class="book-container">
+            <div class="book-image-container">
+                <img id="book-image-{{ m.id }}" class="book-image" src="{{ m.Book_Photo.url }}" alt="{{ m.Book_Title }}">
+                <div id="book-overlay-{{ m.id }}" class="book-overlay">
+                    <div id="description-{{ m.id }}" class="book-description">
+                        {{ m.Book_Description }}
+                    </div>
+                </div>
+            </div>
+            <div class="book-details">
+                <div class="book-title">{{ m.Book_Title }}</div>
+                <div class="book-genre">{{ m.Book_Genre }}</div>
+                <div class="book-author">{{ m.Book_Author }}</div>
+                <div class="book-actions">
+                    <button class="btn" onclick="toggleDescription({{ m.id }})">{{ about }}</button>
+                    <button class="btn" onclick="reserveBook({{ m.id }})">{{ bron }}</button>
+                </div>
             </div>
         </div>
-        <div id="description-{{ m.id }}" class="book-description">
-            {{ m.Book_Description }}
-        </div>
+        {% endfor %}
+        <div id="no-results" class="no-results" style="display: none;">{{ no_result }}</div>
     </div>
-    {% endfor %}
-    <div id="no-results" class="no-results" style="display: none;">{{ no_result }}</div>
 </div>
 {% endblock %}
-

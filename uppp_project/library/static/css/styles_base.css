@@ -2,6 +2,10 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-image: url("/static/images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    backdrop-filter: blur(5px);
 }
 
 /* Шапка сайта */
@@ -47,27 +51,27 @@ header {
     align-items: center;
 }
 
-    .menu li {
-        margin-right: 10px;
-    }
+.menu li {
+    margin-right: 10px;
+}
 
-        .menu li a {
-            color: #000000;
-            text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
+.menu li a {
+    color: #000000;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
 
-            .menu li a.actives {
-                background-color: #fff;
-                font-weight: bold;
-                font-size: 20px;
-            }
+.menu li a.actives {
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+}
 
-            .menu li a:hover,
-            .menu li a.active {
-                background-color: #fff;
-            }
+.menu li a:hover,
+.menu li a.active {
+    background-color: #fff;
+}
 
 /* Подвал сайта */
 footer {
@@ -112,18 +116,18 @@ footer {
         justify-content: center;
     }
 
-        .logo img {
-            margin-right: 0;
-        }
+    .logo img {
+        margin-right: 0;
+    }
 
     .menu {
         margin-top: 10px;
         justify-content: center;
     }
 
-        .menu li {
-            margin-right: 5px;
-        }
+    .menu li {
+        margin-right: 5px;
+    }
 
     .footer-content {
         flex-direction: column;

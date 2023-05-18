@@ -1,16 +1,42 @@
-function toggleDescription(id) {
+Ôªøfunction toggleDescription(id) {
+    const overlay = document.getElementById(`book-overlay-${id}`);
     const description = document.getElementById(`description-${id}`);
-    const button = document.getElementById(`btn-details-${id}`);
-    if (description.style.display === "none") {
-        description.style.display = "block";
+    const isHidden = overlay.style.display === 'none';
+
+    if (isHidden) {
+        overlay.style.display = 'block';
     } else {
-        description.style.display = "none";
+        overlay.style.display = 'none';
     }
 }
 
 function reserveBook(id) {
     // Placeholder implementation
-    console.log(` ÌË„‡ ${id} Á‡·ÓÌËÓ‚‡Ì‡!`);
+    console.log(`–ö–Ω–∏–≥–∞ ${id} –∑–∞–±—Ä–æ–Ω–∏—Ä–æ–≤–∞–Ω–∞!`);
+}
+
+function showAllBooks() {
+    const bookContainers = document.getElementsByClassName('book-container');
+
+    for (let i = 0; i < bookContainers.length; i++) {
+        const bookContainer = bookContainers[i];
+        bookContainer.style.display = 'block';
+    }
+}
+
+function showBooksByGenre(genre) {
+    const bookContainers = document.getElementsByClassName('book-container');
+
+    for (let i = 0; i < bookContainers.length; i++) {
+        const bookContainer = bookContainers[i];
+        const bookGenre = bookContainer.querySelector('.book-genre').textContent;
+
+        if (bookGenre === genre) {
+            bookContainer.style.display = 'block';
+        } else {
+            bookContainer.style.display = 'none';
+        }
+    }
 }
 
 function searchBooks() {
