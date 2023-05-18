@@ -83,7 +83,7 @@ def catalog(request):
     active_item = 'Каталог'
 
     cats = Book_Category.objects.all()
-    books_list = Book.objects.select_related('Book_Genre').all()
+    books_list = Book.objects.select_related('Book_Genre').order_by('Book_Title')
     settings = {'menu': Nav_Tables, 
                 'title': 'Каталог книг', 
                 'books': books_list,

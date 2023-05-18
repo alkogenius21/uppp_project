@@ -49,7 +49,6 @@
     <Content Include="library\static\css\styles_base.css" />
     <Content Include="library\static\css\styles_catalog.css" />
     <Content Include="library\static\css\styles_index.css" />
-    <Content Include="library\static\js\about.js" />
     <Content Include="library\static\js\catalog.js" />
     <Content Include="library\static\js\carousel.js" />
     <Content Include="library\static\js\map.js" />

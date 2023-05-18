@@ -21,7 +21,7 @@
         <div class="book-container">
             <div class="book-image-container">
                 <img id="book-image-{{ m.id }}" class="book-image" src="{{ m.Book_Photo.url }}" alt="{{ m.Book_Title }}">
-                <div id="book-overlay-{{ m.id }}" class="book-overlay">
+                <div id="book-overlay-{{ m.id }}" style ="display: none" class="book-overlay">
                     <div id="description-{{ m.id }}" class="book-description">
                         {{ m.Book_Description }}
                     </div>
