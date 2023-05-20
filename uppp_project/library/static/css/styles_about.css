@@ -1,32 +1,23 @@
-.container-about {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    height: 60vh;
-    padding: 20px;
+.story {
+    margin-bottom: 20px;
 }
 
-.history {
-    flex: 1;
-    padding-right: 20px;
+.library-photos {
+    height: 300px;
+    width: 500px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+}
+.library-photos img:hover {
+    transform: scale(1.1);
 }
 
-.image-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    position: relative;
-}
-
-.image-wrapper img {
-    max-width: 100%;
+.library-photos img {
+    width: 100%;
     height: auto;
+    transition: transform 1s ease-in-out;
 }
 
-.static-image {
-    bottom: 0;
-    right: 0;
-    width: 600px;
-    height: auto;
+.carousel-indicators {
+    bottom: 10px;
 }

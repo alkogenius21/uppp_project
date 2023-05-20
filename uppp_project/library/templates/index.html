@@ -1,49 +1,89 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="container-index">
-    <div class="news-column">
-        <h2>{{ news_name }}</h2>
-        {% for n in news %}
-        <div class="news-item">
-            <h3>{{ n.News_TitleOfArticle }}</h3>
-            <a>{{ n.News_Article }}</a>
-            <img src="{{ n.News_Photo.url }}" alt="{{ n.News_Article }}" />
-            <p>{{ n.News_DateOfPub }}</p>
-        </div>
-        {% endfor %}
-    </div>
-    <div class="rectangle">
-        <h2>{{ popular }}</h2>
-        <div class="carousel" id="popular-carousel">
-            {% for b in book %}
-            {% if b.Book_Popular %}
-            <div class="carousel-item{% if forloop.first %} active{% endif %}">
-                <h3>{{ b.Book_Title }}</h3>
-                <a>{{ b.Book_Author }}</a>
-                <img src="{{ b.Book_Photo.url }}" alt="{{ b.Book_Title }}" />
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 news-column">
+            <h2>{{ news_name }}</h2>
+            <div class="news-wrapper">
+                <div class="news-scrollbar">
+                    <div class="news-content">
+                        {% for n in news %}
+                        <div class="news-item">
+                            <h3 class="news-title">{{ n.News_TitleOfArticle }}</h3>
+                            <a class="news-article">{{ n.News_Article }}</a>
+                            <img src="{{ n.News_Photo.url }}" class="d-block w-100" alt="{{ n.News_Article }}" />
+                            <p class="news-date">{{ n.News_DateOfPub }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-            {% endif %}
-            {% endfor %}
         </div>
-        <div class="carousel-button previous">&#8249;</div>
-        <div class="carousel-button next">&#8250;</div>
-    </div>
-    <div class="rectangle">
-        <h2>{{ latest }}</h2>
-        <div class="carousel" id="latest-carousel">
-            {% for book in latest_list %}
-            <div class="carousel-item{% if forloop.first %} active{% endif %}">
-                <h3>{{ book.Book_Title }}</h3>
-                <a>{{ book.Book_Author }}</a>
-                <img src="{{ book.Book_Photo.url }}" alt="{{ book.Book_Title }}" />
+        <div class="col-md-4">
+            <div class="rectangle">
+                <h2>{{ popular }}</h2>
+                <div id="popular-carousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for b in book %}
+                        {% if b.Book_Popular %}
+                        <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                            <div class="carousel-item-bg"></div>
+                            <div class="carousel-item-content">
+                                <h3>{{ b.Book_Title }}</h3>
+                                <a>{{ b.Book_Author }}</a>
+                                <img src="{{ b.Book_Photo.url }}" alt="{{ b.Book_Title }}" />
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#popular-carousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#popular-carousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
             </div>
-            {% endfor %}
+            <div class="rectangle">
+                <h2>{{ latest }}</h2>
+                <div id="latest-carousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for book in latest_list %}
+                        <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                            <div class="carousel-item-bg"></div>
+                            <div class="carousel-item-content">
+                                <h3>{{ book.Book_Title }}</h3>
+                                <a>{{ book.Book_Author }}</a>
+                                <img src="{{ book.Book_Photo.url }}" alt="{{ book.Book_Title }}" />
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#latest-carousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#latest-carousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="carousel-button previous">&#8249;</div>
-        <div class="carousel-button next">&#8250;</div>
     </div>
 </div>
+
+
 {% endblock %}
 
 

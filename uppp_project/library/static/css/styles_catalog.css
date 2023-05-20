@@ -1,9 +1,66 @@
+.search-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.search-container input[type="text"] {
+    width: 500px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-width: 100%;
+}
+
+.search-container button {
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #45a049;
+}
+
 .catalog-container {
     display: flex;
 }
 
+.genres {
+    float: left;
+    flex-direction: column;
+    background-color: white;
+    width: 130px;
+    margin: 25px;
+}
+
+    .genres ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .genres li {
+        margin-bottom: 5px;
+    }
+
+    .genres button {
+        padding: 8px 12px;
+        font-size: 14px;
+        border: none;
+        background-color: #eefdc1;
+        color: #333;
+        cursor: pointer;
+    }
+
+        .genres button:hover {
+            background-color: #dceeb0;
+        }
+
 .book-grid {
-    float: right;
     flex: 2;
     display: flex;
     flex-wrap: wrap;
@@ -75,74 +132,13 @@
     margin: 5px;
 }
 
-.btn:hover {
-    box-shadow: 0 0 0 2px white, 0 0 0 4px #6a9e18;
-}
-
-.search-container {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.search-container input[type="text"] {
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 500px;
-    max-width: 100%;
-}
-
-.search-container button {
-    padding: 8px 12px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.search-container button:hover {
-    background-color: #45a049;
-}
+    .btn:hover {
+        box-shadow: 0 0 0 2px white, 0 0 0 4px #6a9e18;
+    }
 
 .no-results {
     font-size: 18px;
     text-align: center;
     margin-top: 20px;
-    margin-bottom: 487px;
-}
-
-.genres {
-    flex: 0;
-    float: left;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    width: 130px;
-    margin: 25px;
-}
-
-.genres ul {
-    list-style: none;
-    padding: 0;
-}
-
-.genres li {
-    margin-bottom: 5px;
-}
-
-.genres button {
-    padding: 8px 12px;
-    font-size: 14px;
-    border: none;
-    background-color: #eefdc1;
-    color: #333;
-    cursor: pointer;
-}
-
-.genres button:hover {
-    background-color: #dceeb0;
+    margin-bottom: 520px;
 }
