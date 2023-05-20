@@ -32,7 +32,8 @@ def index(request):
                'latest': 'Последние поступления',
                'news_name': 'Новости',
                'book': book,
-               'latest_list': latest_books
+               'latest_list': latest_books,
+               'videos': 'Полезные видео'
                }
 
     for item in Nav_Tables:

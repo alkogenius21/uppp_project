@@ -3,7 +3,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>uppp_project</Name>
     <RootNamespace>uppp_project</RootNamespace>
-    <InterpreterId>MSBuild|main|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|virt|$(MSBuildProjectFullPath)</InterpreterId>
     <TestFramework>unittest</TestFramework>
   </PropertyGroup>
   <PropertyGroup>
@@ -50,6 +50,7 @@
     <Content Include="library\static\css\styles_catalog.css" />
     <Content Include="library\static\css\styles_index.css" />
     <Content Include="library\static\js\catalog.js" />
+    <Content Include="library\static\js\index.js" />
     <Content Include="library\static\js\map.js" />
     <Content Include="library\templates\about.html" />
     <Content Include="library\templates\adress.html" />
@@ -69,10 +70,10 @@
     <Folder Include="uppp_project\" />
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="main\">
-      <Id>main</Id>
+    <Interpreter Include="virt\">
+      <Id>virt</Id>
       <Version>3.9</Version>
-      <Description>main (Python 3.9 (64-bit))</Description>
+      <Description>virt (Python 3.9 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
