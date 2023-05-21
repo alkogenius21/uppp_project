@@ -1,8 +1,11 @@
 # -*- coding: cp1251 -*-
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from datetime import datetime, timedelta
 from .models import *
- 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
+from .forms import RegistrationForm
+
 Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
              {'title': "Каталог", 'url_name': 'catalog'},
              {'title': "Адрес", 'url_name': 'adress'},
@@ -107,6 +110,61 @@ def catalog(request):
 
     return render(request, 'catalog.html', context=settings)
 
+
+def register(request):
+
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = RegistrationForm()
+
+    active_item = 'Личный Кабинет'
+
+    settings = {'menu': Nav_Tables,
+                'title': 'Личный Кабинет',
+                'form': form,
+                }
+
+    for item in Nav_Tables:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+    return render(request, 'register.html', context=settings)
+
+def user_login(request):
+
+    active_item = 'Личный Кабинет'
+
+    settings = {'menu': Nav_Tables,
+                'title': 'Личный Кабинет',
+                'accept': 'Войти',
+                'alert': 'Ошибка при входе. Пожалуйста, проверьте введенные данные.',
+
+                }
+
+    for item in Nav_Tables:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('profile')
+        else:
+            return redirect('login')
+    return render(request, 'login.html', context=settings)
+
+@login_required
 def personal_area(request):
 
     active_item = 'Личный Кабинет'

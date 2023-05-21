@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'library',
+    'allauth',
+    'allauth.account',
+    'crispy_forms'
 ]
 
 # Middleware framework
@@ -116,3 +119,21 @@ STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+AUTH_USER_MODEL = 'library.LibraryUser'
+
+LOGOUT_REDIRECT_URL = 'home'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'  # Хост SMTP-сервера
+EMAIL_PORT = 587  # Порт SMTP-сервера
+EMAIL_HOST_USER = 'your-email@gmail.com'  # Ваш адрес электронной почты
+EMAIL_HOST_PASSWORD = 'your-email-password'  # Пароль от вашей электронной почты
+EMAIL_USE_TLS = True  # Использовать TLS для безопасной связи
+DEFAULT_FROM_EMAIL = 'your-email@gmail.com'

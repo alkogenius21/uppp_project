@@ -33,6 +33,9 @@
   <ItemGroup>
     <Compile Include="library\admin.py" />
     <Compile Include="library\apps.py" />
+    <Compile Include="library\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="library\migrations\__init__.py" />
     <Compile Include="library\models.py" />
     <Compile Include="library\tests.py" />
@@ -57,7 +60,9 @@
     <Content Include="library\templates\base.html" />
     <Content Include="library\templates\catalog.html" />
     <Content Include="library\templates\index.html" />
+    <Content Include="library\templates\login.html" />
     <Content Include="library\templates\personal_area.html" />
+    <Content Include="library\templates\register.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +72,7 @@
     <Folder Include="library\static\css\" />
     <Folder Include="library\static\js\" />
     <Folder Include="library\templates\" />
+    <Folder Include="library\templates\registration\" />
     <Folder Include="uppp_project\" />
   </ItemGroup>
   <ItemGroup>

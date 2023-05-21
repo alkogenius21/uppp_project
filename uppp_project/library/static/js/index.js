@@ -6,20 +6,16 @@
 })();
 
 var players = [];
-var currentSlide = 0;
-var isPlayingVideo = false;
 
 function onYouTubeIframeAPIReady() {
     players[0] = new YT.Player('youtube-player1', {
         height: '400',
         width: '730',
         videoId: 'T4Px70rNaq0',
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        },
+        
         playerVars: {
-            autoplay: 0
+            autoplay: 0,
+            mute: 1
         }
     });
 
@@ -27,12 +23,10 @@ function onYouTubeIframeAPIReady() {
         height: '400',
         width: '730',
         videoId: 'B7JJmM7IQH0',
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        },
+        
         playerVars: {
-            autoplay: 0
+            autoplay: 0,
+            mute: 1
         }
     });
 
@@ -40,46 +34,10 @@ function onYouTubeIframeAPIReady() {
         height: '400',
         width: '730',
         videoId: '48NmJz8XV44',
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        },
+        
         playerVars: {
-            autoplay: 0
+            autoplay: 0,
+            mute: 1
         }
     });
 }
-
-function onPlayerReady(event) {
-    event.target.playVideo();
-}
-
-function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.PLAYING) {
-        isPlayingVideo = true;
-        $('#video-carousel').carousel('pause');
-    } else if (event.data === YT.PlayerState.ENDED || event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.CUED) {
-        isPlayingVideo = false;
-        $('#video-carousel').carousel('cycle');
-    }
-}
-
-$(document).ready(function () {
-    $('#video-carousel').on('slide.bs.carousel', function (e) {
-        if (isPlayingVideo) {
-            players[currentSlide].pauseVideo();
-        }
-    });
-
-    $('.carousel-control-prev').click(function () {
-        if (isPlayingVideo) {
-            players[currentSlide].pauseVideo();
-        }
-    });
-
-    $('.carousel-control-next').click(function () {
-        if (isPlayingVideo) {
-            players[currentSlide].pauseVideo();
-        }
-    });
-});

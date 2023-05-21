@@ -1,7 +1,22 @@
 # -*- coding: cp1251 -*-
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import AbstractUser
 
+class LibraryUser(AbstractUser):
+
+    first_name = models.CharField(max_length=30)
+    second_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    date_of_birth = models.DateField(null=True)
+    email = models.CharField(max_length=100)
+    phone = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.username
+
+    groups = models.ManyToManyField('auth.Group', related_name='library_users', related_query_name='library_user')
+    user_permissions = models.ManyToManyField('auth.Permission', related_name='library_users', related_query_name='library_user')
 
 class Book(models.Model):
 
@@ -37,29 +52,13 @@ class Book_Category(models.Model):
     def get_absolute_url(self):
         return reverse('category', kwargs={'cat_id': self.pk})
 
-class User(models.Model):
 
-    User_Surname = models.CharField(max_length=15) 
-    User_Name = models.CharField(max_length=15) 
-    User_Patronymic = models.CharField(max_length=15) 
-    User_DateOfBirth = models.DateField()
-    User_PhoneNumber = models.CharField(max_length=12)
-    User_Mail = models.CharField(max_length=250, null=True)
-    Type_Of_Account = models.ForeignKey('Type_Of_Account', on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return self.User_Mail
 
 class Library_Card(models.Model):
-    User_id = models.ForeignKey('User', on_delete=models.PROTECT, null=True)
+    #User_id = models.ForeignKey('User', on_delete=models.PROTECT, null=True)
     Book_id = models.ForeignKey('Book', on_delete=models.PROTECT, null=True)
     Date_taken = models.DateField()
     Dste_given = models.DateField()
-
-class Type_Of_Account(models.Model):
-    Type = models.CharField(max_length=5)
-    Login = models.CharField(max_length=30)
-    Password = models.CharField(max_length=50)
 
 class News_paper(models.Model):
 
@@ -67,7 +66,7 @@ class News_paper(models.Model):
     News_Article = models.TextField()
     News_TitleOfArticle = models.CharField(max_length=40) 
     News_ArticleAuthor = models.CharField(max_length=80)
-    News_Photo = models.ImageField(upload_to='media/posts/', default='media/default_post .jpg')
+    News_Photo = models.ImageField(upload_to='media/posts/', default='media/default_post.jpg')
 
     def __str__(self):
         return self.News_Article
