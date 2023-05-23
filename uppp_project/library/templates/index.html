@@ -64,13 +64,13 @@
                 <div id="popular-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         {% for b in book %}
-                        {% if b.Book_Popular %}
+                        {% if b.book_popular %}
                         <div class="carousel-item{% if forloop.first %} active{% endif %}">
                             <div class="carousel-item-bg"></div>
                             <div class="carousel-item-content">
-                                <h3>{{ b.Book_Title }}</h3>
-                                <a>{{ b.Book_Author }}</a>
-                                <img src="{{ b.Book_Photo.url }}" alt="{{ b.Book_Title }}" />
+                                <h3>{{ b.book_title }}</h3>
+                                <a>{{ b.book_author }}</a>
+                                <img src="{{ b.book_photo.url }}" alt="{{ b.book_title }}" />
                             </div>
                         </div>
                         {% endif %}
@@ -94,9 +94,9 @@
                         <div class="carousel-item{% if forloop.first %} active{% endif %}">
                             <div class="carousel-item-bg"></div>
                             <div class="carousel-item-content">
-                                <h3>{{ book.Book_Title }}</h3>
-                                <a>{{ book.Book_Author }}</a>
-                                <img src="{{ book.Book_Photo.url }}" alt="{{ book.Book_Title }}" />
+                                <h3>{{ book.book_title }}</h3>
+                                <a>{{ book.book_author }}</a>
+                                <img src="{{ book.book_photo.url }}" alt="{{ book.book_title }}" />
                             </div>
                         </div>
                         {% endfor %}
