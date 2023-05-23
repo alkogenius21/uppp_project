@@ -30,7 +30,7 @@
                     </li>
                     {% for genre in cats %}
                     <li>
-                        <button class="btn btn-primary" onclick="showBooksByGenre('{{ genre.Genre }}')">{{ genre.Genre }}</button>
+                        <button class="btn btn-primary" onclick="showBooksByGenre('{{ genre.genre }}')">{{ genre.genre }}</button>
                     </li>
                     {% endfor %}
                 </ul>
@@ -39,20 +39,20 @@
         <div class="col-md-9">
             <div class="book-grid">
                 {% for m in books %}
-                {% if m.Book_Quanity > 0 %}
+                {% if m.book_quanity > 0 %}
                 <div class="book-container">
                     <div class="book-image-container">
-                        <img id="book-image-{{ m.id }}" class="book-image" src="{{ m.Book_Photo.url }}" alt="{{ m.Book_Title }}">
+                        <img id="book-image-{{ m.id }}" class="book-image" src="{{ m.book_photo.url }}" alt="{{ m.book_title }}">
                         <div id="book-overlay-{{ m.id }}" class="book-overlay" style="display:none">
                             <div id="description-{{ m.id }}" class="book-description">
-                                {{ m.Book_Description }}
+                                {{ m.book_description }}
                             </div>
                         </div>
                     </div>
                     <div class="book-details">
-                        <div class="book-title">{{ m.Book_Title }}</div>
-                        <div class="book-genre">{{ m.Book_Genre }}</div>
-                        <div class="book-author">{{ m.Book_Author }}</div>
+                        <div class="book-title">{{ m.book_title }}</div>
+                        <div class="book-genre">{{ m.book_genre }}</div>
+                        <div class="book-author">{{ m.book_author }}</div>
                         <div class="book-actions">
                             <button class="btn btn-primary" onclick="toggleDescription({{ m.id }})">{{ about }}</button>
                             <button class="btn btn-primary" onclick="reserveBook({{ m.id }})">{{ bron }}</button>

@@ -23,7 +23,7 @@ def index(request):
     latest_books = []
 
     for obj in book:
-        if obj.Book_DateOfAdd > week_ago:
+        if obj.book_dateOfAdd > week_ago:
             latest_books.append(obj)
 
         
@@ -87,7 +87,7 @@ def catalog(request):
     active_item = 'Каталог'
 
     cats = Book_Category.objects.all()
-    books_list = Book.objects.select_related('Book_Genre').order_by('Book_Title')
+    books_list = Book.objects.select_related('book_genre').order_by('book_title')
     settings = {'menu': Nav_Tables, 
                 'title': 'Каталог книг', 
                 'books': books_list,
