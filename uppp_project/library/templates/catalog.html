@@ -19,8 +19,10 @@
         </div>
     </div>
 
+    <div id="no-results" class="no-results" style="display: none;">{{ no_result }}</div>
+
     <div class="row mt-4">
-        <div class="col-md-3">
+        <div class="col-md-3" id="genres-container">
             <div class="genres">
                 <ul>
                     <li>
@@ -59,9 +61,7 @@
                 </div>
                 {% endif %}
                 {% endfor %}
-
             </div>
-            <div id="no-results" class="no-results">{{ no_result }}</div>
         </div>
     </div>
 </div>

@@ -1,0 +1,38 @@
+.registration-form {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+    .registration-form input[type="text"],
+    .registration-form input[type="email"],
+    .registration-form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+.registration-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+    .registration-button:hover {
+        background-color: #45a049;
+    }
+
+    .registration-button:active {
+        background-color: #3e8e41;
+    }
+
+    .registration-button:focus {
+        outline: none;
+    }

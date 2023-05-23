@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/styles_index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/styles_catalog.css' %}" />
     <link rel="stylesheet" href="{% static 'css/styles_about.css' %}" />
-    <!--<script src="{% static 'js/carousel.js' %}"></script>-->
+    <link rel="stylesheet" href="{% static 'css/styles_login.css' %}" />
     <script src="{% static 'js/map.js' %}"></script>
     <script src="{% static 'js/catalog.js' %}"></script>
 
@@ -32,7 +32,11 @@
     </header>
     {% endblock mainmenu %}
     <main>
-        {% block content %}{% endblock %}
+        <div class="wrapper">
+            <div class="content-main">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
     </main>
     
     <footer>

@@ -57,10 +57,14 @@ function searchBooks() {
     }
 
     const noResults = document.getElementById('no-results');
+    const genresContainer = document.getElementById('genres-container');
+
     if (foundResults) {
         noResults.style.display = 'none';
+        genresContainer.style.display = 'block';
     } else {
         noResults.style.display = 'block';
+        genresContainer.style.display = 'none';
     }
 }
 

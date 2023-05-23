@@ -1,0 +1,46 @@
+.form-signin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    padding: 15px;
+}
+
+.form-signin h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form-signin .form-group {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-signin .form-group label {
+    display: none;
+}
+
+.form-signin .form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.form-signin .btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.form-signin .btn {
+    padding: 10px 40px;
+    font-size: 16px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

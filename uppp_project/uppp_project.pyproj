@@ -48,10 +48,33 @@
     <Compile Include="uppp_project\wsgi.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="library\static\bootstrap\css\bootstrap-grid.css" />
+    <Content Include="library\static\bootstrap\css\bootstrap-grid.css.map" />
+    <Content Include="library\static\bootstrap\css\bootstrap-grid.min.css" />
+    <Content Include="library\static\bootstrap\css\bootstrap-grid.min.css.map" />
+    <Content Include="library\static\bootstrap\css\bootstrap-reboot.css" />
+    <Content Include="library\static\bootstrap\css\bootstrap-reboot.css.map" />
+    <Content Include="library\static\bootstrap\css\bootstrap-reboot.min.css" />
+    <Content Include="library\static\bootstrap\css\bootstrap-reboot.min.css.map" />
+    <Content Include="library\static\bootstrap\css\bootstrap.css" />
+    <Content Include="library\static\bootstrap\css\bootstrap.css.map" />
+    <Content Include="library\static\bootstrap\css\bootstrap.min.css" />
+    <Content Include="library\static\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="library\static\bootstrap\js\bootstrap.bundle.js" />
+    <Content Include="library\static\bootstrap\js\bootstrap.bundle.js.map" />
+    <Content Include="library\static\bootstrap\js\bootstrap.bundle.min.js" />
+    <Content Include="library\static\bootstrap\js\bootstrap.bundle.min.js.map" />
+    <Content Include="library\static\bootstrap\js\bootstrap.js" />
+    <Content Include="library\static\bootstrap\js\bootstrap.js.map" />
+    <Content Include="library\static\bootstrap\js\bootstrap.min.js" />
+    <Content Include="library\static\bootstrap\js\bootstrap.min.js.map" />
+    <Content Include="library\static\bootstrap\js\jquery-3.4.1.slim.js" />
+    <Content Include="library\static\bootstrap\js\popper.min.js" />
     <Content Include="library\static\css\styles_about.css" />
     <Content Include="library\static\css\styles_base.css" />
     <Content Include="library\static\css\styles_catalog.css" />
     <Content Include="library\static\css\styles_index.css" />
+    <Content Include="library\static\css\styles_register.css" />
     <Content Include="library\static\js\catalog.js" />
     <Content Include="library\static\js\index.js" />
     <Content Include="library\static\js\map.js" />
@@ -69,6 +92,9 @@
     <Folder Include="library\" />
     <Folder Include="library\migrations\" />
     <Folder Include="library\static\" />
+    <Folder Include="library\static\bootstrap\" />
+    <Folder Include="library\static\bootstrap\css\" />
+    <Folder Include="library\static\bootstrap\js\" />
     <Folder Include="library\static\css\" />
     <Folder Include="library\static\js\" />
     <Folder Include="library\templates\" />
