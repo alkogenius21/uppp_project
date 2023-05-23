@@ -35,19 +35,28 @@ git clone https://github.com/your-username/library-app.git
 ```bash
 cd uppp_project
 ```
-4. Установите зависимости, используя pip:
+4. Запустите виртуальную среду
+- на Windows
+```bash
+virt\Scripts\activate.bat
+```
+- на Linux/MacOS
+```bash
+source virt/bin/activate
+```
+5. Установите зависимости, используя pip:
 ```bash
 pip install -r requirements.txt
 ```
-5. Запустите миграции базы данных:
+6. Запустите миграции базы данных:
 ```bash
 python manage.py migrate
 ```
-6. Запустите локальный сервер(порт можно указать любой):
+7. Запустите локальный сервер(порт можно указать любой):
 ```bash
 python manage.py runserver 4500
 ```
-7. Откройте веб-браузер и перейдите по адресу http://localhost:4500/ для доступа к "Второй Кегостровской Библиотеке".
+8. Откройте веб-браузер и перейдите по адресу http://localhost:4500/ для доступа к "Второй Кегостровской Библиотеке".
 
 ## Требования
 
