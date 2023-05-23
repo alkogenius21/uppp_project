@@ -44,15 +44,22 @@ function searchBooks() {
     const bookContainers = document.getElementsByClassName('book-container');
     let foundResults = false;
 
-    for (let i = 0; i < bookContainers.length; i++) {
-        const bookTitle = bookContainers[i].getElementsByClassName('book-title')[0].textContent.toLowerCase();
-        const bookAuthor = bookContainers[i].getElementsByClassName('book-author')[0].textContent.toLowerCase();
-
-        if (bookTitle.includes(searchInput) || bookAuthor.includes(searchInput)) {
+    if (searchInput === '') {
+        for (let i = 0; i < bookContainers.length; i++) {
             bookContainers[i].style.display = 'block';
-            foundResults = true;
-        } else {
-            bookContainers[i].style.display = 'none';
+        }
+        foundResults = true;
+    } else {
+        for (let i = 0; i < bookContainers.length; i++) {
+            const bookTitle = bookContainers[i].getElementsByClassName('book-title')[0].textContent.toLowerCase();
+            const bookAuthor = bookContainers[i].getElementsByClassName('book-author')[0].textContent.toLowerCase();
+
+            if (bookTitle.includes(searchInput) || bookAuthor.includes(searchInput)) {
+                bookContainers[i].style.display = 'block';
+                foundResults = true;
+            } else {
+                bookContainers[i].style.display = 'none';
+            }
         }
     }
 
