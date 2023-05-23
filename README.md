@@ -29,7 +29,7 @@
 2. Клонируйте репозиторий на свой локальный компьютер:
 
 ```bash
-git clone https://github.com/your-username/library-app.git
+git clone https://github.com/alkogenius21/uppp_project.git
 ```
 3. Перейдите в папку проекта:
 
