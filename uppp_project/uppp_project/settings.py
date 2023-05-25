@@ -135,9 +135,9 @@ AUTHENTICATION_BACKENDS = [
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = 'smtp.gmail.com'  # Хост SMTP-сервера
-EMAIL_PORT = 587  # Порт SMTP-сервера
-EMAIL_HOST_USER = 'your-email@gmail.com'  # Ваш адрес электронной почты
-EMAIL_HOST_PASSWORD = 'your-email-password'  # Пароль от вашей электронной почты
+EMAIL_HOST = 'smtp.yandex.ru'  # Хост SMTP-сервера
+EMAIL_PORT = 465  # Порт SMTP-сервера
+EMAIL_HOST_USER = 'no-reply.kegostrovskaya@yandex.ru'  # Ваш адрес электронной почты
+EMAIL_HOST_PASSWORD = 'Krerdeu321'  # Пароль от вашей электронной почты
 EMAIL_USE_TLS = True  # Использовать TLS для безопасной связи
-DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
+DEFAULT_FROM_EMAIL = 'no-reply.kegostrovskaya@yandex.ru'
