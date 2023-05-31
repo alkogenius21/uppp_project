@@ -78,16 +78,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'uppp_project.wsgi.application'
 
-# Database
+# main db
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'library_db',
+#        'USER': 'postgres',
+#        'PASSWORD': 'root',
+#        'HOST': '127.0.0.1',
+#        'PORT': '5432',
+#    }
+#}
+
+# develop db
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'library_db',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
