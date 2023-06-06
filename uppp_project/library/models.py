@@ -35,7 +35,7 @@ class Book(models.Model):
     book_udk = models.CharField(max_length=200, null=True)
     book_bbk = models.CharField(max_length=200, null=True)
     book_aviability = models.BooleanField(default=True)
-    book_quanity = models.IntegerField(max_length=35, null=True)
+    book_quanity = models.IntegerField(null=True)
     book_photo = models.ImageField(upload_to='media/books', default='media/book_default.jpg')
     book_genre = models.ForeignKey('Book_Category', on_delete=models.CASCADE, null=True)
     book_dateOfAdd = models.DateField(auto_now_add=True, null = True)

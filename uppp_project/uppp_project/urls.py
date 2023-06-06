@@ -18,6 +18,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('accounts/login/', views.user_login, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('reserve-book/<int:book_id>/', views.reserve_book, name='reserve_book'),
 ]
 
 if settings.DEBUG:
