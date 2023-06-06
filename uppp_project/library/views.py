@@ -163,8 +163,14 @@ def user_login(request):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect('profile')
+            if user.is_verificate and user.is_activate:
+                login(request, user)
+                return redirect('profile')
+            elif not user.is_verificate:
+                verification_link = "http://example.com/verification"  # Замените ссылкой на вашу страницу верификации
+                messages.error(request, f'Ваш аккаунт не верифицирован. Пожалуйста, перейдите по <a href="{verification_link}">ссылке</a> для верификации.')
+            elif not user.is_activate:
+                messages.error(request, 'Ваш аккаунт не активирован. Обратитесь к администратору сайта')
         else:
             messages.error(request, 'Ошибка при входе. Неверный логин или пароль.')
 
