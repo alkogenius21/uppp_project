@@ -78,18 +78,6 @@ class Library_Card(models.Model):
     def __str__(self):
         return f'{self.book_id.book_title} - {self.user_id.username} ({self.status})'
 
-
-@receiver(post_save, sender=Library_Card)
-def update_issue_date(sender, instance, created, **kwargs):
-    if instance.status == 'issued' and not instance.date_taken:
-        instance.Date_taken = instance.date_Reserve
-        instance.save()
-
-@receiver(pre_delete, sender=Library_Card)
-def delete_reservation(sender, instance, **kwargs):
-    if instance.status == 'returned':
-        instance.delete()
-
 class News_paper(models.Model):
 
     News_DateOfPub = models.DateField(auto_now_add=True, null=True) 
