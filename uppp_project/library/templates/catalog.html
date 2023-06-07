@@ -56,6 +56,7 @@
                         <div class="book-author">{{ m.book_author }}</div>
                         <div class="book-actions">
                             <button class="btn-catalog" onclick="toggleDescription({{ m.id }})">{{ about }}</button>
+                            {% csrf_token %}
                             <button class="btn-catalog" onclick="reserveBook({{ m.id }})">{{ bron }}</button>
                         </div>
                     </div>
@@ -66,5 +67,25 @@
         </div>
     </div>
 </div>
+
+<script>
+function reserveBook(bookId) {
+    fetch(`/reserve-book/${bookId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            window.location.href = "{% url 'login' %}";
+        });
+}
+</script>
 
 {% endblock %}

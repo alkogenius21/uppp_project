@@ -5,6 +5,9 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from .forms import RegistrationForm
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.contrib import messages
 
 Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
              {'title': "Каталог", 'url_name': 'catalog'},
@@ -137,15 +140,17 @@ def register(request):
     return render(request, 'register.html', context=settings)
 
 def user_login(request):
-
     active_item = 'Личный Кабинет'
 
-    settings = {'menu': Nav_Tables,
-                'title': 'Личный Кабинет',
-                'accept': 'Войти',
-                'alert': 'Ошибка при входе. Пожалуйста, проверьте введенные данные.',
-
-                }
+    settings = {
+        'menu': Nav_Tables,
+        'title': 'Личный Кабинет',
+        'accept': 'Войти',
+        'login': 'Логин:',
+        'password': 'Пароль:',
+        'register': 'Регистрация',
+        'forgot': 'Забыли пароль?',
+    }
 
     for item in Nav_Tables:
         if item['title'].lower() == active_item.lower():
@@ -158,10 +163,17 @@ def user_login(request):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect('profile')
+            if user.is_verificate and user.is_activate:
+                login(request, user)
+                return redirect('profile')
+            elif not user.is_verificate:
+                verification_link = "http://example.com/verification"  # Замените ссылкой на вашу страницу верификации
+                messages.error(request, f'Ваш аккаунт не верифицирован. Пожалуйста, перейдите по <a href="{verification_link}">ссылке</a> для верификации.')
+            elif not user.is_activate:
+                messages.error(request, 'Ваш аккаунт не активирован. Обратитесь к администратору сайта')
         else:
-            return redirect('login')
+            messages.error(request, 'Ошибка при входе. Неверный логин или пароль.')
+
     return render(request, 'login.html', context=settings)
 
 @login_required
@@ -181,3 +193,24 @@ def personal_area(request):
 
 
     return render(request, 'personal_area.html', context=settings)
+
+def reserve_book(request, book_id):
+
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    book = get_object_or_404(Book, pk=book_id)
+    
+    if book.book_quanity > 0:
+        library_card = Library_Card.objects.create(
+            user_id=request.user, 
+            book_id=book,
+            status='reserved'
+        )
+        
+        book.book_quanity = book.book_quanity - 1
+        book.save()
+        
+        return JsonResponse({'message': f'Книга "{book.book_title}" успешно забронирована.'})
+    else:
+        return JsonResponse({'message': f'Книга "{book.book_title}" недоступна для бронирования.'}, status=400)

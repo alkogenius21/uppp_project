@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import posixpath
+import pytz
 
 DEFAULT_CHARSET = 'utf-8'
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -27,6 +28,8 @@ SECRET_KEY = 'cb99d576-8d01-4106-9a9c-72f558f987dd'
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "192.168.0.5", "127.0.0.1"]
+
+APPEND_SLASH = False
 
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS
@@ -79,7 +82,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'uppp_project.wsgi.application'
 
 # main db
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.postgresql',
@@ -119,11 +121,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 LANGUAGE_CODE = 'ru-RU'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_URL = '/static/'
@@ -140,12 +143,3 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-EMAIL_HOST = 'smtp.yandex.ru'  # Хост SMTP-сервера
-EMAIL_PORT = 465  # Порт SMTP-сервера
-EMAIL_HOST_USER = 'no-reply.kegostrovskaya@yandex.ru'  # Ваш адрес электронной почты
-EMAIL_HOST_PASSWORD = 'Krerdeu321'  # Пароль от вашей электронной почты
-EMAIL_USE_TLS = True  # Использовать TLS для безопасной связи
-DEFAULT_FROM_EMAIL = 'no-reply.kegostrovskaya@yandex.ru'
