@@ -143,3 +143,14 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.ethereal.email'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'rebeca.hills48@ethereal.email'
+EMAIL_HOST_PASSWORD = 'vmJdBF5BzGwDKmqzRt'
+EMAIL_USE_TLS = True
+
+AUTH_PASSWORD_RESET_TIMEOUT_DAYS = 3
+PASSWORD_RESET_FROM_EMAIL = 'rebeca.hills48@ethereal.email'
+LOGIN_URL = 'login'

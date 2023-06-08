@@ -7,3 +7,6 @@ class RegistrationForm(UserCreationForm):
         model = LibraryUser
         fields = ('username', 'password1', 'password2', 'first_name', 'second_name', 'last_name', 'date_of_birth', 'email', 'phone')
 
+class ForgotPasswordForm(forms.Form):
+    username = forms.CharField(label='Username')
+
