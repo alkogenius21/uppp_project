@@ -1,7 +1,7 @@
 # -*- coding: cp1251 -*-
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.urls import reverse
-from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
 import random
@@ -26,6 +26,11 @@ class LibraryUser(AbstractUser):
 
     groups = models.ManyToManyField('auth.Group', related_name='library_users', related_query_name='library_user')
     user_permissions = models.ManyToManyField('auth.Permission', related_name='library_users', related_query_name='library_user')
+
+class EmailVerificationToken(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    token = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Book(models.Model):
 

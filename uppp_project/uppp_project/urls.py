@@ -18,7 +18,12 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('accounts/login/', views.user_login, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('verify/', views.verify_page, name='verify_pls'),
     path('reserve-book/<int:book_id>/', views.reserve_book, name='reserve_book'),
+    path('verify/<str:uidb64>/<str:token>/', views.verify_email, name='verify_email'),
+    path('forgot-password/', views.forgot_password, name='forgot_password'),
+    path('password-reset/<str:uidb64>/<str:token>/', views.reset_password, name='reset_password'),
+    path('password-reset/complete/', views.password_reset_complete, name='password_reset_complete'),
 ]
 
 if settings.DEBUG:

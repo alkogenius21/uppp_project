@@ -4,10 +4,21 @@ from datetime import datetime, timedelta
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from .forms import RegistrationForm
+from .forms import RegistrationForm, ForgotPasswordForm
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
+
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.conf import settings
+
+from django.contrib.auth.forms import SetPasswordForm
 
 Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
              {'title': "Каталог", 'url_name': 'catalog'},
@@ -119,8 +130,11 @@ def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.save(commit=False)
+            user.is_verificate = False
+            user.save()
+            send_verification_email(request, user)
+            return redirect('verify_pls')
     else:
         form = RegistrationForm()
 
@@ -167,8 +181,8 @@ def user_login(request):
                 login(request, user)
                 return redirect('profile')
             elif not user.is_verificate:
-                verification_link = "http://example.com/verification"  # Замените ссылкой на вашу страницу верификации
-                messages.error(request, f'Ваш аккаунт не верифицирован. Пожалуйста, перейдите по <a href="{verification_link}">ссылке</a> для верификации.')
+                send_verification_email(request, user)
+                messages.error(request, f'Ваш аккаунт не верифицирован. Пожалуйста, проверьте почту.')
             elif not user.is_activate:
                 messages.error(request, 'Ваш аккаунт не активирован. Обратитесь к администратору сайта')
         else:
@@ -214,3 +228,102 @@ def reserve_book(request, book_id):
         return JsonResponse({'message': f'Книга "{book.book_title}" успешно забронирована.'})
     else:
         return JsonResponse({'message': f'Книга "{book.book_title}" недоступна для бронирования.'}, status=400)
+
+
+def send_verification_email(request, user):
+    token = default_token_generator.make_token(user)
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    current_site = get_current_site(request)
+    verification_url = f"{current_site}/verify/{uid}/{token}/"
+    
+    subject = 'Подтвердите свой e-mail'
+    text_message = f"Здравствуйте, {user.username}, пожалуйста подвердите регистрацию на сайте: {verification_url}. '/n' если вы не регистрировались, то не переходите по ссылке!"
+    html_message = render_to_string('email/verification_email.html', {
+        'user': user,
+        'verification_url': verification_url,
+    })
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to_email = user.email
+    
+    email = EmailMultiAlternatives(subject, text_message, from_email, [to_email])
+    email.attach_alternative(html_message, "text/html")
+    email.send()
+
+def verify_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = get_user_model().objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
+        user = None
+    
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_verificate = True
+        user.save()
+        return render(request, 'email/email_verified.html')
+    else:
+        return render(request, 'email/email_verification_failed.html')
+
+def verify_page(request):
+    return render(request, 'email/verify_page.html')
+
+def forgot_password(request):
+    if request.method == 'POST':
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            try:
+                user = LibraryUser.objects.get(username=username)
+                print(user)
+            except LibraryUser.DoesNotExist:
+                user = None
+
+            if user is not None:
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                print(uid)
+                current_site = get_current_site(request)
+                reset_url = reverse('reset_password', args=[uid, token])
+                reset_url = f"{request.scheme}://{current_site}{reset_url}"
+                subject = 'Восстановить пароль'
+                from_email = 'noreply@example.com'
+                to_email = user.email
+
+                html_content = render_to_string('email/reset_password_email.html', {
+                    'user': user,
+                    'reset_url': reset_url,
+                })
+
+                msg = EmailMultiAlternatives(subject, '', from_email, [to_email])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+                print(f"Forgot password email sent to {user.email}. Reset URL: {reset_url}")
+            
+            #return redirect('password_reset_done')
+    else:
+        form = ForgotPasswordForm()
+
+    return render(request, 'email/forgot_password.html', {'form': form})
+
+def reset_password(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        print(uid)
+        user = LibraryUser.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, LibraryUser.DoesNotExist):
+        user = None
+    print(user)
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('password_reset_complete')
+        else:
+            form = SetPasswordForm(user)
+
+        return render(request, 'email/reset_password.html', {'form': form})
+    else:
+        return render(request, 'email/invalid_reset_link.html')
+
+def password_reset_complete(request):
+    return render(request, 'email/password_reset_complete.html')
