@@ -1,4 +1,7 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block content %}
-<p>!!!!!</p>
+<div style="text-align: center;">
+    <p style="font-family: Arial, sans-serif; font-size: 24px; color: #333;">Ваша почта подтверждена!</p>
+    <p style="font-family: Arial, sans-serif; font-size: 16px; color: #666;">Можете вернуться на <a href="{% url 'home' %}" style="color: blue; text-decoration: none;">главную</a> страницу</p>
+</div>
 {% endblock %}

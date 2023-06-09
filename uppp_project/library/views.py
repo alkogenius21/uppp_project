@@ -160,8 +160,8 @@ def user_login(request):
         'menu': Nav_Tables,
         'title': 'Личный Кабинет',
         'accept': 'Войти',
-        'login': 'Логин:',
-        'password': 'Пароль:',
+        'login': 'Логин',
+        'password': 'Пароль',
         'register': 'Регистрация',
         'forgot': 'Забыли пароль?',
     }
@@ -266,21 +266,22 @@ def verify_email(request, uidb64, token):
 def verify_page(request):
     return render(request, 'email/verify_page.html')
 
+def forgot_password_good(request):
+    return render(request, 'email/forgot_password_good.html')
+
 def forgot_password(request):
     if request.method == 'POST':
         form = ForgotPasswordForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
             try:
-                user = LibraryUser.objects.get(username=username)
-                print(user)
+                user = LibraryUser.objects.get(email=email)
             except LibraryUser.DoesNotExist:
                 user = None
 
             if user is not None:
                 token = default_token_generator.make_token(user)
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
-                print(uid)
                 current_site = get_current_site(request)
                 reset_url = reverse('reset_password', args=[uid, token])
                 reset_url = f"{request.scheme}://{current_site}{reset_url}"
@@ -297,12 +298,15 @@ def forgot_password(request):
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
                 print(f"Forgot password email sent to {user.email}. Reset URL: {reset_url}")
-            
-            #return redirect('password_reset_done')
+                return redirect('password_reset_done')
+            else:
+                form.add_error('email', 'Аккаунта с таким email не существует')  # Добавляем ошибку в форму
+
     else:
         form = ForgotPasswordForm()
 
     return render(request, 'email/forgot_password.html', {'form': form})
+
 
 def reset_password(request, uidb64, token):
     try:
