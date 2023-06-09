@@ -22,6 +22,7 @@ urlpatterns = [
     path('reserve-book/<int:book_id>/', views.reserve_book, name='reserve_book'),
     path('verify/<str:uidb64>/<str:token>/', views.verify_email, name='verify_email'),
     path('forgot-password/', views.forgot_password, name='forgot_password'),
+    path('forgot-password/complete', views.forgot_password_good, name='password_reset_done'),
     path('password-reset/<str:uidb64>/<str:token>/', views.reset_password, name='reset_password'),
     path('password-reset/complete/', views.password_reset_complete, name='password_reset_complete'),
 ]

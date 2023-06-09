@@ -8,5 +8,10 @@ class RegistrationForm(UserCreationForm):
         fields = ('username', 'password1', 'password2', 'first_name', 'second_name', 'last_name', 'date_of_birth', 'email', 'phone')
 
 class ForgotPasswordForm(forms.Form):
-    username = forms.CharField(label='Username')
+    email = forms.EmailField(label='Email', max_length=100)
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        # Дополнительная валидация email, если необходимо
+        return email
 

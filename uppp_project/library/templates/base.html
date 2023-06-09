@@ -20,7 +20,9 @@
     <header>
         <div class="container-header">
             <div class="logo">
-                <img src="{% static 'images/logo.png' %}" alt="Логотип" />
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Логотип" />
+                </a>
                 <div class="logo-text">Вторая Кегостровская Библиотека</div>
             </div>
             <ul class="menu">
