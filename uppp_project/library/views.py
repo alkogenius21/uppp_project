@@ -331,3 +331,30 @@ def reset_password(request, uidb64, token):
 
 def password_reset_complete(request):
     return render(request, 'email/password_reset_complete.html')
+
+def manager_login(request):
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            if user.is_stuff:
+                login(request, user)
+                return redirect('manager_control')
+            else:
+                messages.error(request, f'У вас нет доступа к этой странице')
+        else:
+            messages.error(request, f'Неверный логин или пароль.')
+
+    return render(request, 'manager/login.html')
+
+def permission_denied(request):
+    return render(request, 'manager/permission_denied.html')
+
+@login_required(login_url='manager_login')
+def manager_control(request):
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+    return render(request, 'manager/profile.html')

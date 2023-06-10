@@ -20,6 +20,7 @@ class LibraryUser(AbstractUser):
     card_number = models.CharField(max_length=10, default=generate_random_number, unique=True)
     is_activate = models.BooleanField(default=False)
     is_verificate = models.BooleanField(default=False)
+    is_stuff = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
