@@ -1,0 +1,62 @@
+﻿{% extends 'manager/base.html' %}
+
+{% block content %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/js/bootstrap.min.js"></script>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="scrollable-block">
+                    <h2>Забронированные книги:</h2>
+                    {% for library_card in reserved_library_cards %}
+                    <div class="book">
+                        <img src="{{ library_card.book_id.book_photo.url }}" alt="{{ library_card.book_id.book_title }}">
+                        <h3>{{ library_card.book_id.book_title }}</h3>
+                        <p>Автор: {{ library_card.book_id.book_author }}</p>
+                        <p>Номер читательского билета: {{ library_card.user_id.card_number }}</p>
+                    </div>
+                    {% empty %}
+                    <p>Нет забронированных книг.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for library_card in overdue_library_cards %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ library_card.book_id.book_photo.url }}" class="d-block w-100" alt="{{ library_card.book_id.book_title }}">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{{ library_card.book_id.book_title }}</h5>
+                                <p>Автор: {{ library_card.book_id.book_author }}</p>
+                                <p>Номер читательского билета: {{ library_card.user_id.card_number }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                <div class="user-search">
+                    <h2>Поиск пользователя:</h2>
+                    <form method="GET" action="{% url 'user_details' %}">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="card_number" placeholder="Введите номер читательского билета">
+                            <button class="btn btn-primary" type="submit">Найти</button>
+                        </div>
+                    </form>
+                    {% if error_message %}
+                    <p class="error">{{ error_message }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

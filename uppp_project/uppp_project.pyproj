@@ -91,6 +91,21 @@
     <Content Include="library\templates\email\invalid_reset_link.html" />
     <Content Include="library\templates\login.html" />
     <Content Include="library\templates\email\password_reset_complete.html" />
+    <Content Include="library\templates\manager\base.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\login.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\permission_denied.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\profile.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\user_details.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="library\templates\personal_area.html" />
     <Content Include="library\templates\register.html" />
     <Content Include="library\templates\email\reset_password.html" />
@@ -110,6 +125,7 @@
     <Folder Include="library\static\js\" />
     <Folder Include="library\templates\" />
     <Folder Include="library\templates\email\" />
+    <Folder Include="library\templates\manager\" />
     <Folder Include="uppp_project\" />
   </ItemGroup>
   <ItemGroup>

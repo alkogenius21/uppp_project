@@ -1,14 +1,12 @@
 
 from uppp_project import settings
-
-# Uncomment next two lines to enable admin:
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from library import views
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+
 urlpatterns = [
-    # Uncomment the next line to enable the admin:
     path('admin/', admin.site.urls),
     path('', views.index, name='home'),
     path('about/', views.about, name='about'),
@@ -25,6 +23,10 @@ urlpatterns = [
     path('forgot-password/complete', views.forgot_password_good, name='password_reset_done'),
     path('password-reset/<str:uidb64>/<str:token>/', views.reset_password, name='reset_password'),
     path('password-reset/complete/', views.password_reset_complete, name='password_reset_complete'),
+    path('manager/login', views.manager_login, name='manager_login'),
+    path('manager/', views.manager_control, name='manager_control'),
+    path('manager/permission--/', views.permission_denied, name='permission_denied'),
+    path('user-details/', views.user_details, name='user_details'),
 ]
 
 if settings.DEBUG:
