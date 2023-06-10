@@ -1,7 +1,7 @@
 
 from uppp_project import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from library import views
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
@@ -26,6 +26,7 @@ urlpatterns = [
     path('manager/login', views.manager_login, name='manager_login'),
     path('manager/', views.manager_control, name='manager_control'),
     path('manager/permission--/', views.permission_denied, name='permission_denied'),
+    path('user-details/', views.user_details, name='user_details'),
 ]
 
 if settings.DEBUG:

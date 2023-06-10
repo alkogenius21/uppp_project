@@ -1,6 +1,6 @@
 # -*- coding: cp1251 -*-
 from django.shortcuts import render, redirect
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -332,8 +332,23 @@ def reset_password(request, uidb64, token):
 def password_reset_complete(request):
     return render(request, 'email/password_reset_complete.html')
 
+menu = [{'title': "Главная", 'url_name': 'manager_control'},
+             {'title': "Фонд книг", 'url_name': '#'},
+             {'title': "Новости", 'url_name': '#'},
+             {'title': "Список должников", 'url_name': '#'},
+             {'title': "Выдать/Забрать книгу", 'url_name': '#'}]
+
 def manager_login(request):
 
+    title = [{'title':'Вторая Кегостровская библиотека'}]
+
+    active_item = 'Вторая Кегостровская библиотека'
+
+    for item in title:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -348,13 +363,47 @@ def manager_login(request):
         else:
             messages.error(request, f'Неверный логин или пароль.')
 
-    return render(request, 'manager/login.html')
+    return render(request, 'manager/login.html', {'menu': title})
 
 def permission_denied(request):
     return render(request, 'manager/permission_denied.html')
 
 @login_required(login_url='manager_login')
 def manager_control(request):
+
+    active_item = 'Главная'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+    
+    today = date.today()
+    overdue_date = today - timedelta(days=21)
+    overdue_library_cards = Library_Card.objects.filter(status='issued', date_taken__lt=overdue_date)
+    library_cards = Library_Card.objects.filter(status='reserved')
+
+    context = {
+        'menu': menu,
+        'reserved_library_cards': library_cards,
+        'overdue_library_cards': overdue_library_cards
+        }
+
     if not request.user.is_stuff:
         return redirect('permission_denied')
-    return render(request, 'manager/profile.html')
+    return render(request, 'manager/profile.html', context=context)
+
+def user_details(request):
+    card_number = request.GET.get('card_number')
+
+    try:
+        user = LibraryUser.objects.get(card_number=card_number)
+    except LibraryUser.DoesNotExist:
+        error_message = 'Пользователь с таким номером читательского билета не найден.'
+        return render(request, 'manager/profile.html', {'error_message': error_message})
+
+    reserved_books = Library_Card.objects.filter(user_id=user, status='reserved')
+    issued_books = Library_Card.objects.filter(user_id=user, status='issued')
+
+    return render(request, 'manager/user_details.html', {'user': user, 'reserved_books': reserved_books, 'issued_books': issued_books})

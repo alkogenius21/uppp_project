@@ -1,0 +1,36 @@
+﻿{% extends 'manager/base.html' %}
+{% block content %}
+<h2>Информация о пользователе:</h2>
+<p>Имя: {{ user.first_name }}</p>
+<p>Фамилия: {{ user.last_name }}</p>
+<p>Email: {{ user.email }}</p>
+<p>Номер читательского билета: {{ user.card_number }}</p>
+<!-- Добавьте другие необходимые поля пользователя -->
+
+<h2>Забронированные книги:</h2>
+<ul>
+    {% for card in reserved_books %}
+    <li>
+        <p>Название: {{ card.book_id.book_title }}</p>
+        <p>Автор: {{ card.book_id.book_author }}</p>
+        <p>Номер читательского билета пользователя: {{ card.user_id.card_number }}</p>
+    </li>
+    {% empty %}
+    <li>Нет забронированных книг.</li>
+    {% endfor %}
+</ul>
+
+<h2>Взятые на дом книги:</h2>
+<ul>
+    {% for card in issued_books %}
+    <li>
+        <p>Название: {{ card.book_id.book_title }}</p>
+        <p>Автор: {{ card.book_id.book_author }}</p>
+        <p>Номер читательского билета пользователя: {{ card.user_id.card_number }}</p>
+        <p>Дата выдачи: {{ card.date_taken }}</p>
+    </li>
+    {% empty %}
+    <li>Нет взятых на дом книг.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

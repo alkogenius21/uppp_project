@@ -1,0 +1,42 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% block head %}
+    <meta charset="utf-8" />
+    <title>БиблиоСфера</title>
+    <link rel="stylesheet" href="{% static 'css/styles_base.css' %}" />
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container-header">
+            <div class="logo">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Логотип" />
+                </a>
+                <div class="logo-text">ИБС "БиблиоСфера"</div>
+            </div>
+            <ul class="menu">
+                {% for i in menu %}
+                <li><a href="#" {% if i.active %} class="actives" {% endif %}>{{ i.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </header>
+    <main>
+        <div class="wrapper">
+            <div class="content-main">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            © ИБС "БиблиоСфера" 2023
+        </div>
+
+    </footer>
+</body>
+</html>
