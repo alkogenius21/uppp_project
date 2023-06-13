@@ -1,29 +1,39 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     {% block head %}
     <meta charset="utf-8" />
-    <title>БиблиоСфера</title>
+    <title>{{title}}</title>
     <link rel="stylesheet" href="{% static 'css/styles_base.css' %}" />
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="{% static 'js/catalog.js' %}"></script>
     {% endblock %}
 </head>
 <body>
+    {% block mainmenu %}
     <header>
         <div class="container-header">
             <div class="logo">
-                <a href="{% url 'home' %}">
+                <a href="{% url 'manager_control' %}">
                     <img src="{% static 'images/logo.png' %}" alt="Логотип" />
                 </a>
-                <div class="logo-text">ИБС "БиблиоСфера"</div>
+                <a href="{% url 'manager_control' %}">
+                    <div class="logo-text">ИБС "БиблиоСфера"</div>
+                </a>
             </div>
             <ul class="menu">
                 {% for i in menu %}
-                <li><a href="#" {% if i.active %} class="actives" {% endif %}>{{ i.title }}</a></li>
+                <li><a href="{% url i.url_name %}" {% if i.active %} class="actives" {% endif %}>{{ i.title }}</a></li>
                 {% endfor %}
             </ul>
         </div>
     </header>
+    {% endblock mainmenu %}
     <main>
         <div class="wrapper">
             <div class="content-main">
@@ -31,12 +41,12 @@
             </div>
         </div>
     </main>
-
+    
     <footer>
         <div class="footer-content">
             © ИБС "БиблиоСфера" 2023
         </div>
-
+        
     </footer>
 </body>
 </html>

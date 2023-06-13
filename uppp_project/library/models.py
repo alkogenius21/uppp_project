@@ -49,6 +49,11 @@ class Book(models.Model):
     book_dateOfAdd = models.DateField(auto_now_add=True, null = True)
     book_popular = models.BooleanField(null=True)
 
+    def update_book(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        self.save()
+
     def __str__(self):
         return self.book_title
 
@@ -97,3 +102,7 @@ class News_paper(models.Model):
     def __str__(self):
         return self.News_Article
 
+    def update_news(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        self.save()

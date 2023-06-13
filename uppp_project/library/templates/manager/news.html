@@ -1,0 +1,58 @@
+﻿{% extends 'manager/base.html' %}
+{% block content %}
+<style>
+    .news-block {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+        .news-block img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+</style>
+<div class="row">
+    <div class="col-md-3">
+        <form method="get" action="{% url 'news' %}">
+            <label for="date">Фильтр по дате:</label>
+            <input type="date" name="date" id="date">
+            <button type="submit">Применить</button>
+        </form>
+    </div>
+    <div class="col-md-6"></div>
+    <div class="col-md-3">
+        <button onclick="redirectToAddNews()">Добавить запись</button>
+    </div>
+</div>
+<div class="row">
+    {% for n in filtered_news %}
+    <div class="col-md-3">
+        <div class="news-block">
+            <h3>{{ n.News_TitleOfArticle }}</h3>
+            <a>{{ n.News_Article }}</a>
+            <img src="{{ n.News_Photo.url }}" alt="{{ n.News_Article }}" />
+            <p>Дата публикации: {{ n.News_DateOfPub }}</p>
+            <p>Автор: {{ n.News_ArticleAuthor }}</p>
+            <button onclick="redirectToEditNews({{ n.id }})">Изменить запись</button>
+            <form method="post" name="delete_news" onsubmit="return confirm('Вы уверены, что хотите удалить эту запись?');">
+                {% csrf_token %}
+                <input type="hidden" name="delete_news" value="{{ n.id }}">
+                <button type="submit" class="btn btn-danger">Удалить запись</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    function redirectToAddNews() {
+        window.location.href = "{% url 'add_news' %}";
+    }
+
+    function redirectToEditNews(newsId) {
+        var url = `/edit/${newsId}/`;
+        window.location.href = url;
+    }
+</script>
+{% endblock %}

@@ -25,8 +25,17 @@ urlpatterns = [
     path('password-reset/complete/', views.password_reset_complete, name='password_reset_complete'),
     path('manager/login', views.manager_login, name='manager_login'),
     path('manager/', views.manager_control, name='manager_control'),
-    path('manager/permission--/', views.permission_denied, name='permission_denied'),
-    path('user-details/', views.user_details, name='user_details'),
+    path('manager/permission/', views.permission_denied, name='permission_denied'),
+    path('manager/catalog/', views.manager_catalog, name='fond'),
+    path('manager/news/', views.manager_news, name='news'),
+    path('manager/news/add/', views.add_news, name='add_news'),
+    path('edit/<int:news_id>/', views.edit_news, name='edit_news'),
+    path('manager/debtors/', views.manager_debtors, name='debtors'),
+    path('manager/return-add/', views.manager_return, name='return-add'),
+    path('manager/add_book/', views.add_book, name='add_book'),
+    path('change_book/<int:book_id>/', views.change_book, name='change_book'),
+    path('book_details/<int:book_id>/', views.book_details, name='book_details'),
+    path('manager/user-details/', views.user_details, name='user_details'),
 ]
 
 if settings.DEBUG:
