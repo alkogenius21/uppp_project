@@ -395,6 +395,7 @@ def manager_control(request):
         return redirect('permission_denied')
     return render(request, 'manager/profile.html', context=context)
 
+@login_required(login_url='manager_login')
 def user_details(request):
     card_number = request.GET.get('card_number')
 
@@ -639,6 +640,12 @@ def book_details(request, book_id):
             item['active'] = False
 
     book = get_object_or_404(Book, pk=book_id)
+
+    if request.method == 'POST' and 'delete_book' in request.POST:
+        book_id = request.POST.get('delete_book')
+        book_to_delete = Book.objects.get(id=book_id)
+        book_to_delete.delete()
+        return redirect('fond')
 
     context = {
         'menu': menu,
