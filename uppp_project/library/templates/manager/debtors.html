@@ -1,1 +1,42 @@
+﻿{% extends 'manager/base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/manager/styles_debtors.css' %}">
+<h2>Список должников</h2>
+    {% for user, books in user_books.items %}
+{% if books %}
+<div class="container">
+    <div class="user">
+        <h3>{{ user.first_name }} {{ user.second_name }} {{ user.last_name }}</h3>
+        <p>Номер читательского билета: {{ user.card_number }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Телефон: {{ user.phone }}</p>
+    </div>
 
+    <h2>Список задержанных книг</h2>
+    <div class="container-book">
+        {% for book in books %}
+        <div class="book">
+            <h3>{{ book.book_id.book_title }}</h3>
+            <p>{{ book.book_id.book_author }}</p>
+            <p><strong>ISBN:</strong> {{ book.book_id.book_isbn }}</p>
+            <p><strong>УДК:</strong> {{ book.book_id.book_udk }}</p>
+            <p><strong>ББК:</strong> {{ book.book_id.book_bbk }}</p>
+            <p><strong>Дата взятия:</strong> {{ book.date_taken }}</p>
+            <form action="{% url 'extend_book' book.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Продлить</button>
+            </form>
+        </div>
+        {% endfor %}
+        <form action="{% url 'send_email' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="recipient" value="{{ user.email }}">
+            <input type="hidden" name="books" value="{% for book in books %}{{ book.book_id.book_title }} - {{ book.book_id.book_author }}, {% endfor %}">
+            <button type="submit">Отправить уведомление</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+    {% endfor %}
+{% endblock %}

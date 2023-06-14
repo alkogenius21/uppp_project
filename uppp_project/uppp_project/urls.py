@@ -31,11 +31,13 @@ urlpatterns = [
     path('manager/news/add/', views.add_news, name='add_news'),
     path('edit/<int:news_id>/', views.edit_news, name='edit_news'),
     path('manager/debtors/', views.manager_debtors, name='debtors'),
+    path('extend_book/<int:book_id>/', views.extend_book, name='extend_book'),
     path('manager/return-add/', views.manager_return, name='return-add'),
     path('manager/add_book/', views.add_book, name='add_book'),
     path('change_book/<int:book_id>/', views.change_book, name='change_book'),
     path('book_details/<int:book_id>/', views.book_details, name='book_details'),
     path('manager/user-details/', views.user_details, name='user_details'),
+    path('send_email/', views.send_email, name='send_email'),
 ]
 
 if settings.DEBUG:

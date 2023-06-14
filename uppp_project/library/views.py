@@ -20,6 +20,9 @@ from django.conf import settings
 
 from django.contrib.auth.forms import SetPasswordForm
 
+from django.utils.html import strip_tags
+from django.forms.models import model_to_dict
+
 Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
              {'title': "Каталог", 'url_name': 'catalog'},
              {'title': "Адрес", 'url_name': 'adress'},
@@ -546,9 +549,30 @@ def edit_news(request, news_id):
 @login_required(login_url='manager_login')
 def manager_debtors(request):
 
+    active_item = 'Список Должников'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+    
+    today = date.today()
+    threshold_date = today - timedelta(days=21)
+    users = LibraryUser.objects.all()
+    user_books = {}
+
+    for user in users:
+        books = Library_Card.objects.filter(user_id=user, status='issued', date_taken__lte=threshold_date)
+        user_books[user] = books
+
+    context = {
+        'menu': menu,
+        'user_books': user_books,
+        }
     if not request.user.is_stuff:
         return redirect('permission_denied')
-    return render(request, 'manager/debtors.html')
+    return render(request, 'manager/debtors.html', context=context)
 
 @login_required(login_url='manager_login')
 def manager_return(request):
@@ -656,3 +680,47 @@ def book_details(request, book_id):
         return redirect('permission_denied')
 
     return render(request, 'manager/book_details.html', context=context)
+
+@login_required(login_url='manager_login')
+def send_email(request):
+    if request.method == 'POST':
+        recipient = request.POST.get('recipient')
+        books_string = request.POST.get('books')
+        books = [book.strip() for book in books_string.split(',') if book.strip()]
+        print(books)
+        book_list = []
+        for book in books:
+            book_parts = book.split(' - ')
+            if len(book_parts) == 2:
+                book_title = book_parts[0]
+                book_author = book_parts[1]
+                book_dict = {'book_title': book_title, 'book_author': book_author}
+                book_list.append(book_dict)
+        print(book_list)
+        # Создание письма
+        subject = 'Уведомление о просроченных книгах'
+        from_email = 'your_email@example.com'
+        to_email = recipient
+
+        # Загрузка шаблона HTML-письма
+        html_message = render_to_string('email/email_debtor.html', {'books': book_list})
+
+        # Отправка письма
+        try:
+            msg = EmailMultiAlternatives(subject, strip_tags(html_message), from_email, [to_email])
+            msg.attach_alternative(html_message, "text/html")
+            msg.send()
+            success_message = 'Email успешно отправлен.'
+        except Exception as e:
+            error_message = 'Произошла ошибка при отправке email.'
+
+    return redirect('debtors')
+
+@login_required(login_url='manager_login')
+def extend_book(request, book_id):
+    book = get_object_or_404(Library_Card, id=book_id, status='issued')
+    
+    if request.method == 'POST':
+        book.date_taken = timezone.now().date()
+        book.save()
+        return redirect('debtors')
