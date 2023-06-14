@@ -3,7 +3,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>uppp_project</Name>
     <RootNamespace>uppp_project</RootNamespace>
-    <InterpreterId>MSBuild|virt|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
     <TestFramework>unittest</TestFramework>
   </PropertyGroup>
   <PropertyGroup>
@@ -76,6 +76,9 @@
     <Content Include="library\static\css\manager\styles_profile.css">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="library\static\css\manager\styles_tools.css">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="library\static\css\styles_about.css" />
     <Content Include="library\static\css\styles_base.css" />
     <Content Include="library\static\css\styles_catalog.css" />
@@ -108,6 +111,9 @@
     </Content>
     <Content Include="library\templates\manager\base.html" />
     <Content Include="library\templates\manager\book_details.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\book_tools.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="library\templates\manager\catalog.html">
@@ -164,10 +170,10 @@
     <Folder Include="uppp_project\" />
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="virt\">
-      <Id>virt</Id>
+    <Interpreter Include="env\">
+      <Id>env</Id>
       <Version>3.9</Version>
-      <Description>virt (Python 3.9 (64-bit))</Description>
+      <Description>env (Python 3.9 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>

@@ -95,9 +95,10 @@ class Library_Card(models.Model):
 
     def save(self, *args, **kwargs):
         if self.status == 'reserved':
-            days_passed = (timezone.now().date() - self.date_Reserve).days
-            if days_passed > 7:
-                self.status = 'canceled'
+            if self.date_Reserve is not None:
+                days_passed = (timezone.now().date() - self.date_Reserve).days
+                if days_passed > 7:
+                    self.status = 'canceled'
         super().save(*args, **kwargs)
 
     @classmethod
@@ -105,6 +106,26 @@ class Library_Card(models.Model):
         today = date.today()
         threshold_date = today - timedelta(days=21)
         return cls.objects.filter(status='issued', date_taken__lte=threshold_date)
+
+    def issue_book(self):
+        if self.status == 'reserved':
+            self.status = 'issued'
+            self.book_id.book_quanity -= 1
+            self.book_id.save()
+            self.date_taken = timezone.now().date()
+            self.save()
+
+    def return_book(self):
+        if self.status == 'issued':
+            self.status = 'returned'
+            self.book_id.book_quanity += 1
+            self.book_id.save()
+            self.save()
+
+    def cancel_book(self):
+        if self.status == 'reserved':
+            self.status = 'canceled'
+            self.save()
 
 class News_paper(models.Model):
 

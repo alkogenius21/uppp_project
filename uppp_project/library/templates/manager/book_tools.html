@@ -1,0 +1,47 @@
+﻿{% extends 'manager/base.html' %}
+{% block content %}
+
+<img src="{{ book.book_photo.url }}" />
+<h1>{{ book.book_title }}</h1>
+<p><strong>Автор:</strong> {{ book.book_author }}</p>
+<p><strong>Год издания:</strong> {{ book.book_yearOfPublishing }}</p>
+<p><strong>ISBN:</strong> {{ book.book_isbn }}</p>
+<p><strong>УДК:</strong> {{ book.book_udk }}</p>
+<p><strong>ББК:</strong> {{ book.book_bbk }}</p>
+<h2>Эту книгу забронировали следующие пользователи</h2>
+<ul>
+    {% for reservation in reservations %}
+    <li>
+        <p>{{ reservation.user_id.first_name }} {{ reservation.user_id.second_name }} {{ reservation.user_id.last_name }}</p>
+        <a><strong>Номер читательского билета</strong>{{ reservation.user_id.card_number }}</a>
+        <form action="{% url 'issue_book' book.id reservation.user_id.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Выдать книгу</button>
+        </form>
+        <form action="{% url 'cancel_book' book.id reservation.user_id.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Отменить бронь</button>
+        </form>
+    </li>
+    {% empty %}
+    <li>Нет записей о бронировании</li>
+    {% endfor %}
+</ul>
+
+<h2>Список пользователей, которым выдана эта книга:</h2>
+<ul>
+    {% for issued_user in issued_users %}
+    <li>
+        <p>{{ issued_user.user_id.first_name }} {{ issued_user.user_id.second_name }} {{ issued_user.user_id.last_name }}</p>
+        <a><strong>Номер читательского билета</strong>{{ issued_user.user_id.card_number }}</a>
+        <form action="{% url 'return_book' book.id issued_user.user_id.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Вернуть книгу</button>
+        </form>
+    </li>
+    {% empty %}
+    <li>Книга не выдана ни одному пользователю</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

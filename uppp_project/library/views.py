@@ -21,7 +21,6 @@ from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
 
 from django.utils.html import strip_tags
-from django.forms.models import model_to_dict
 
 Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
              {'title': "Каталог", 'url_name': 'catalog'},
@@ -413,6 +412,25 @@ def user_details(request):
 
     return render(request, 'manager/user_details.html', {'user': user, 'reserved_books': reserved_books, 'issued_books': issued_books})
 
+def book_tools(request):
+    
+    book_isbn = request.GET.get('book_isbn')
+    
+    try:
+        book = Book.objects.get(book_isbn=book_isbn)
+        reservations = Library_Card.objects.filter(book_id=book.id, status='reserved')
+        issued_users = Library_Card.objects.filter(book_id=book.id, status='issued')
+
+        context = {
+                'book': book,
+                'reservations': reservations,
+                'issued_users': issued_users
+            }
+        return render(request, 'manager/book_tools.html', context=context)
+
+    except Book.DoesNotExist:
+        return redirect('book_tools')
+
 @login_required(login_url='manager_login')
 def manager_catalog(request):
     active_item = 'Фонд книг'
@@ -724,3 +742,18 @@ def extend_book(request, book_id):
         book.date_taken = timezone.now().date()
         book.save()
         return redirect('debtors')
+
+def issue_book(request, book_id, user_id):
+    library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='reserved')
+    library_card.issue_book()
+    return redirect('return-add')
+
+def return_book(request, book_id, user_id):
+    library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='issued')
+    library_card.return_book()
+    return redirect('return-add')
+
+def cancel_book(request, book_id, user_id):
+    library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='reserved')
+    library_card.cancel_book()
+    return redirect('return-add')
