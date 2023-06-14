@@ -33,11 +33,15 @@ urlpatterns = [
     path('manager/debtors/', views.manager_debtors, name='debtors'),
     path('extend_book/<int:book_id>/', views.extend_book, name='extend_book'),
     path('manager/return-add/', views.manager_return, name='return-add'),
+    path('manager/return-add/book-detail', views.book_tools, name='book_tools'),
     path('manager/add_book/', views.add_book, name='add_book'),
     path('change_book/<int:book_id>/', views.change_book, name='change_book'),
     path('book_details/<int:book_id>/', views.book_details, name='book_details'),
     path('manager/user-details/', views.user_details, name='user_details'),
     path('send_email/', views.send_email, name='send_email'),
+    path('book/<int:book_id>/<int:user_id>/issue/', views.issue_book, name='issue_book'),
+    path('book/<int:book_id>/<int:user_id>/return/', views.return_book, name='return_book'),
+    path('book/<int:book_id>/<int:user_id>/cancel/', views.cancel_book, name='cancel_book'),
 ]
 
 if settings.DEBUG:
