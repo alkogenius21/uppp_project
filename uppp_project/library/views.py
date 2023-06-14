@@ -4,7 +4,7 @@ from datetime import datetime, timedelta,date
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from .forms import RegistrationForm, ForgotPasswordForm
+from .forms import RegistrationForm, ForgotPasswordForm, BookForm, NewsForm
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
@@ -19,6 +19,9 @@ from django.utils.encoding import force_bytes, force_str
 from django.conf import settings
 
 from django.contrib.auth.forms import SetPasswordForm
+
+from django.utils.html import strip_tags
+from django.forms.models import model_to_dict
 
 Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
              {'title': "Каталог", 'url_name': 'catalog'},
@@ -333,14 +336,15 @@ def password_reset_complete(request):
     return render(request, 'email/password_reset_complete.html')
 
 menu = [{'title': "Главная", 'url_name': 'manager_control'},
-             {'title': "Фонд книг", 'url_name': '#'},
-             {'title': "Новости", 'url_name': '#'},
-             {'title': "Список должников", 'url_name': '#'},
-             {'title': "Выдать/Забрать книгу", 'url_name': '#'}]
+             {'title': "Фонд книг", 'url_name': 'fond'},
+             {'title': "Новости", 'url_name': 'news'},
+             {'title': "Список должников", 'url_name': 'debtors'},
+             {'title': "Выдать/Забрать книгу", 'url_name': 'return-add'},
+             {'title': "Выйти", 'url_name': 'logout'}]
 
 def manager_login(request):
 
-    title = [{'title':'Вторая Кегостровская библиотека'}]
+    title = [{'title':'Вторая Кегостровская библиотека', 'url_name': 'home'}]
 
     active_item = 'Вторая Кегостровская библиотека'
 
@@ -394,6 +398,7 @@ def manager_control(request):
         return redirect('permission_denied')
     return render(request, 'manager/profile.html', context=context)
 
+@login_required(login_url='manager_login')
 def user_details(request):
     card_number = request.GET.get('card_number')
 
@@ -407,3 +412,315 @@ def user_details(request):
     issued_books = Library_Card.objects.filter(user_id=user, status='issued')
 
     return render(request, 'manager/user_details.html', {'user': user, 'reserved_books': reserved_books, 'issued_books': issued_books})
+
+@login_required(login_url='manager_login')
+def manager_catalog(request):
+    active_item = 'Фонд книг'
+
+    cats = Book_Category.objects.all()
+    books_list = Book.objects.select_related('book_genre').order_by('book_title')
+    settings = {'menu': menu, 
+                'title': 'Фонд книг', 
+                'books': books_list,
+                'cats': cats,
+                'about': 'Подробнее',
+                'no_result': 'По вашему запросу ничего не найдено',
+                'placeholder': 'Название или Автор книги...',
+                'srch_btn': 'Найти'
+                }
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return render(request, 'manager/catalog.html', context=settings)
+
+@login_required(login_url='manager_login')
+def manager_news(request):
+
+    active_item = 'Новости'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+    
+    date_param = request.GET.get('date')
+    
+    if date_param:
+        selected_date = datetime.strptime(date_param, '%Y-%m-%d').date()
+        filtered_news = News_paper.objects.filter(News_DateOfPub=selected_date)
+    else:
+        filtered_news = News_paper.objects.all()
+
+    news = News_paper.objects.order_by('-News_DateOfPub')
+
+    if request.method == 'POST' and 'delete_news' in request.POST:
+        news_id = request.POST.get('delete_news')
+        news_to_delete = News_paper.objects.get(id=news_id)
+        news_to_delete.delete()
+        return redirect('news')
+
+    context={
+        'menu': menu,
+        'news': news,
+        'filtered_news': filtered_news,
+        }
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return render(request, 'manager/news.html', context=context)
+
+@login_required(login_url='manager_login')
+def add_news(request):
+
+    active_item = 'Новости'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+    
+    form = NewsForm()
+
+    if request.method == 'POST':
+        form = NewsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('news')
+
+    context={
+        'menu': menu,
+        'form': form
+        }
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return render(request, 'manager/add_news.html', context=context)
+
+@login_required(login_url='manager_login')
+def edit_news(request, news_id):
+
+    active_item = 'Новости'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+    
+    news = get_object_or_404(News_paper, id=news_id)
+
+    form = NewsForm()
+
+    if request.method == 'POST':
+        form = NewsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('news')
+
+    if request.method == 'POST':
+        form = NewsForm(request.POST, request.FILES, instance=news)
+        if form.is_valid():
+            form.save()
+            return redirect('news')
+    else:
+        form = NewsForm(instance=news)
+
+    context={
+        'menu': menu,
+        'form': form
+        }
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return render(request, 'manager/edit_news.html', context=context)
+
+@login_required(login_url='manager_login')
+def manager_debtors(request):
+
+    active_item = 'Список Должников'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+    
+    today = date.today()
+    threshold_date = today - timedelta(days=21)
+    users = LibraryUser.objects.all()
+    user_books = {}
+
+    for user in users:
+        books = Library_Card.objects.filter(user_id=user, status='issued', date_taken__lte=threshold_date)
+        user_books[user] = books
+
+    context = {
+        'menu': menu,
+        'user_books': user_books,
+        }
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+    return render(request, 'manager/debtors.html', context=context)
+
+@login_required(login_url='manager_login')
+def manager_return(request):
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return render(request, 'manager/tools.html')
+
+@login_required(login_url='manager_login')
+def add_book(request):
+
+    active_item = 'Фонд Книг'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_book = form.save(commit=False)
+            existing_book = Book.objects.filter(book_isbn=new_book.book_isbn).first()
+
+            if existing_book:
+                existing_book.book_quanity += new_book.book_quanity
+                existing_book.save()
+            else:
+                new_book.save()
+
+            return redirect('fond')
+    else:
+        form = BookForm()
+
+    context = {
+        'menu': menu,
+        'form': form,
+        }
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return render(request, 'manager/add_book.html', context=context)
+
+@login_required(login_url='manager_login')
+def change_book(request, book_id):
+
+    active_item = 'Фонд Книг'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+
+    book = get_object_or_404(Book, id=book_id)
+    
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('fond')
+    else:
+        form = BookForm(instance=book)
+
+    context = {
+        'menu': menu,
+        'form': form,
+        'book_id': book_id,
+        }
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return render(request, 'manager/change_book.html', context=context)
+
+@login_required(login_url='manager_login')
+def book_details(request, book_id):
+
+    active_item = 'Фонд Книг'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+    book = get_object_or_404(Book, pk=book_id)
+
+    if request.method == 'POST' and 'delete_book' in request.POST:
+        book_id = request.POST.get('delete_book')
+        book_to_delete = Book.objects.get(id=book_id)
+        book_to_delete.delete()
+        return redirect('fond')
+
+    context = {
+        'menu': menu,
+        'book': book
+        }
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return render(request, 'manager/book_details.html', context=context)
+
+@login_required(login_url='manager_login')
+def send_email(request):
+    if request.method == 'POST':
+        recipient = request.POST.get('recipient')
+        books_string = request.POST.get('books')
+        books = [book.strip() for book in books_string.split(',') if book.strip()]
+        print(books)
+        book_list = []
+        for book in books:
+            book_parts = book.split(' - ')
+            if len(book_parts) == 2:
+                book_title = book_parts[0]
+                book_author = book_parts[1]
+                book_dict = {'book_title': book_title, 'book_author': book_author}
+                book_list.append(book_dict)
+        print(book_list)
+        # Создание письма
+        subject = 'Уведомление о просроченных книгах'
+        from_email = 'your_email@example.com'
+        to_email = recipient
+
+        # Загрузка шаблона HTML-письма
+        html_message = render_to_string('email/email_debtor.html', {'books': book_list})
+
+        # Отправка письма
+        try:
+            msg = EmailMultiAlternatives(subject, strip_tags(html_message), from_email, [to_email])
+            msg.attach_alternative(html_message, "text/html")
+            msg.send()
+            success_message = 'Email успешно отправлен.'
+        except Exception as e:
+            error_message = 'Произошла ошибка при отправке email.'
+
+    return redirect('debtors')
+
+@login_required(login_url='manager_login')
+def extend_book(request, book_id):
+    book = get_object_or_404(Library_Card, id=book_id, status='issued')
+    
+    if request.method == 'POST':
+        book.date_taken = timezone.now().date()
+        book.save()
+        return redirect('debtors')

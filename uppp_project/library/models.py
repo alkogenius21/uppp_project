@@ -2,8 +2,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+from datetime import date, timedelta
 import random
 
 def generate_random_number():
@@ -49,6 +50,11 @@ class Book(models.Model):
     book_dateOfAdd = models.DateField(auto_now_add=True, null = True)
     book_popular = models.BooleanField(null=True)
 
+    def update_book(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        self.save()
+
     def __str__(self):
         return self.book_title
 
@@ -75,6 +81,7 @@ class Library_Card(models.Model):
         ('reserved', 'Забронировано'),
         ('issued', 'Выдано'),
         ('returned', 'Возвращено'),
+        ('canceled','Отменено')
     )
 
     user_id = models.ForeignKey('LibraryUser', on_delete=models.PROTECT, null=True)
@@ -85,6 +92,19 @@ class Library_Card(models.Model):
 
     def __str__(self):
         return f'{self.book_id.book_title} - {self.user_id.username} ({self.status})'
+
+    def save(self, *args, **kwargs):
+        if self.status == 'reserved':
+            days_passed = (timezone.now().date() - self.date_Reserve).days
+            if days_passed > 7:
+                self.status = 'canceled'
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_overdue_records(cls):
+        today = date.today()
+        threshold_date = today - timedelta(days=21)
+        return cls.objects.filter(status='issued', date_taken__lte=threshold_date)
 
 class News_paper(models.Model):
 
@@ -97,3 +117,7 @@ class News_paper(models.Model):
     def __str__(self):
         return self.News_Article
 
+    def update_news(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        self.save()

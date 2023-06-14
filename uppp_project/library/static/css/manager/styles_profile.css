@@ -1,0 +1,63 @@
+/* Общие стили */
+.container {
+    margin-top: 20px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+/* Стили для блока с забронированными книгами */
+.scrollable-block {
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+/* Стили для отдельной книги */
+.book {
+    margin-bottom: 20px;
+}
+
+    .book img {
+        width: 70%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+/* Стили для карусели с просроченными книгами */
+.carousel-inner img {
+    width: 70%;
+    height: auto;
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0);
+    padding: 10px;
+    color: white;
+    text-align: center;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 20px;
+    height: 20px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+}
+
+/* Стили для блока поиска пользователя */
+.user-search {
+    margin-top: 50px;
+}
+
+.error {
+    color: red;
+}

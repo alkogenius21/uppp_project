@@ -70,6 +70,12 @@
     <Content Include="library\static\bootstrap\js\bootstrap.min.js.map" />
     <Content Include="library\static\bootstrap\js\jquery-3.4.1.slim.js" />
     <Content Include="library\static\bootstrap\js\popper.min.js" />
+    <Content Include="library\static\css\manager\styles_debtors.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\static\css\manager\styles_profile.css">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="library\static\css\styles_about.css" />
     <Content Include="library\static\css\styles_base.css" />
     <Content Include="library\static\css\styles_catalog.css" />
@@ -83,6 +89,9 @@
     <Content Include="library\templates\adress.html" />
     <Content Include="library\templates\base.html" />
     <Content Include="library\templates\catalog.html" />
+    <Content Include="library\templates\email\email_debtor.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="library\templates\email\email_verification_failed.html" />
     <Content Include="library\templates\email\email_verified.html" />
     <Content Include="library\templates\email\forgot_password.html" />
@@ -91,16 +100,41 @@
     <Content Include="library\templates\email\invalid_reset_link.html" />
     <Content Include="library\templates\login.html" />
     <Content Include="library\templates\email\password_reset_complete.html" />
-    <Content Include="library\templates\manager\base.html">
+    <Content Include="library\templates\manager\add_book.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\add_news.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\base.html" />
+    <Content Include="library\templates\manager\book_details.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\catalog.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\change_book.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\debtors.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\edit_news.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="library\templates\manager\login.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\news.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="library\templates\manager\permission_denied.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="library\templates\manager\profile.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\tools.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="library\templates\manager\user_details.html">
@@ -122,6 +156,7 @@
     <Folder Include="library\static\bootstrap\css\" />
     <Folder Include="library\static\bootstrap\js\" />
     <Folder Include="library\static\css\" />
+    <Folder Include="library\static\css\manager\" />
     <Folder Include="library\static\js\" />
     <Folder Include="library\templates\" />
     <Folder Include="library\templates\email\" />

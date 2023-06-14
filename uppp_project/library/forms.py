@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import LibraryUser
+from .models import LibraryUser, Book, News_paper
 
 class RegistrationForm(UserCreationForm):
     class Meta:
@@ -12,6 +12,14 @@ class ForgotPasswordForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        # Дополнительная валидация email, если необходимо
         return email
 
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = '__all__'
+
+class NewsForm(forms.ModelForm):
+    class Meta:
+        model = News_paper
+        fields = '__all__'
