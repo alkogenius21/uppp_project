@@ -2,9 +2,7 @@
 {% load static %}
 
 {% block content %}
-<head>
-    <link rel="stylesheet" href="{% static 'css/styles_register.css' %}" />
-</head>
+<link rel="stylesheet" href="{% static 'css/styles_register.css' %}" />
 <form method="POST" class="registration-form">
     {% csrf_token %}
     {{ form.as_p }}

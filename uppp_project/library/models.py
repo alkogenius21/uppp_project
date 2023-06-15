@@ -110,8 +110,6 @@ class Library_Card(models.Model):
     def issue_book(self):
         if self.status == 'reserved':
             self.status = 'issued'
-            self.book_id.book_quanity -= 1
-            self.book_id.save()
             self.date_taken = timezone.now().date()
             self.save()
 
@@ -125,6 +123,8 @@ class Library_Card(models.Model):
     def cancel_book(self):
         if self.status == 'reserved':
             self.status = 'canceled'
+            self.book_id.book_quanity += 1
+            self.book_id.save()
             self.save()
 
 class News_paper(models.Model):

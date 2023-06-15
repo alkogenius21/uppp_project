@@ -184,7 +184,7 @@ def user_login(request):
                 return redirect('profile')
             elif not user.is_verificate:
                 send_verification_email(request, user)
-                messages.error(request, f'Ваш аккаунт не верифицирован. Пожалуйста, проверьте почту.')
+                messages.error(request, f'Ваша почта не подтверждена. Пожалуйста, проверьте почту.')
             elif not user.is_activate:
                 messages.error(request, 'Ваш аккаунт не активирован. Обратитесь к администратору сайта')
         else:
@@ -195,11 +195,16 @@ def user_login(request):
 @login_required
 def personal_area(request):
 
-    active_item = 'Личный Кабинет'
-
+    user = request.user
+    issued_books = Library_Card.objects.filter(user_id=user, status='issued')
+    reserved_books = Library_Card.objects.filter(user_id=user, status='reserved')
     settings = {'menu': Nav_Tables,
-                'title': 'Личный Кабинет'
+                'title': 'Личный Кабинет',
+                'issued_books': issued_books,
+                'reserved_books': reserved_books
                 }
+
+    active_item = 'Личный Кабинет'
 
     for item in Nav_Tables:
         if item['title'].lower() == active_item.lower():
@@ -745,15 +750,18 @@ def extend_book(request, book_id):
 
 def issue_book(request, book_id, user_id):
     library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='reserved')
+    book = Book.objects.get(id=book_id)
     library_card.issue_book()
-    return redirect('return-add')
+    return JsonResponse({'message': f'Книга "{book.book_title}" успешно выдана.'})
 
 def return_book(request, book_id, user_id):
     library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='issued')
+    book = Book.objects.get(id=book_id)
     library_card.return_book()
-    return redirect('return-add')
+    return JsonResponse({'message': f'Книга "{book.book_title}" успешно возвращена.'})
 
 def cancel_book(request, book_id, user_id):
     library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='reserved')
+    book = Book.objects.get(id=book_id)
     library_card.cancel_book()
-    return redirect('return-add')
+    return JsonResponse({'message': f'Бронь на книгу "{book.book_title}" была отменена!'})

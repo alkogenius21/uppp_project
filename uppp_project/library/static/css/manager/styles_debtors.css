@@ -5,6 +5,7 @@
     width: 600px;
     margin-left: auto;
     margin-right: auto;
+    min-height: auto;
 }
 
 .user-container {
