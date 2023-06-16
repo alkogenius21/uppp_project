@@ -39,7 +39,7 @@
             <p>Дата публикации: {{ n.News_DateOfPub }}</p>
             <p>Автор: {{ n.News_ArticleAuthor }}</p>
             <button onclick="redirectToEditNews({{ n.id }})">Изменить запись</button>
-            <form method="post" name="delete_news" onsubmit="return confirm('Вы уверены, что хотите удалить эту книгу?');">
+            <form method="post" name="delete_news" onsubmit="return confirm('Вы уверены, что хотите удалить эту запись?');">
                 {% csrf_token %}
                 <input type="hidden" name="delete_news" value="{{ n.id }}">
                 <button type="submit" class="btn btn-danger">Удалить запись</button>
