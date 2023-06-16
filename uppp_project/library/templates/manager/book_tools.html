@@ -1,0 +1,92 @@
+﻿{% extends 'manager/base.html' %}
+{% block content %}
+
+<img src="{{ book.book_photo.url }}" />
+<h1>{{ book.book_title }}</h1>
+<p><strong>Автор:</strong> {{ book.book_author }}</p>
+<p><strong>Год издания:</strong> {{ book.book_yearOfPublishing }}</p>
+<p><strong>ISBN:</strong> {{ book.book_isbn }}</p>
+<p><strong>УДК:</strong> {{ book.book_udk }}</p>
+<p><strong>ББК:</strong> {{ book.book_bbk }}</p>
+<h2>Эту книгу забронировали следующие пользователи</h2>
+<ul>
+    {% for reservation in reservations %}
+    <li>
+        <p>{{ reservation.user_id.first_name }} {{ reservation.user_id.second_name }} {{ reservation.user_id.last_name }}</p>
+        <a><strong>Номер читательского билета</strong>{{ reservation.user_id.card_number }}</a>
+        <button onclick="issueBook({{ book.id }}, {{ reservation.user_id.id }})">Выдать книгу(бета)</button>
+        <button onclick="cancelBook({{ book.id }}, {{ reservation.user_id.id }})">Отменить книгу(бета)</button>
+    </li>
+    {% empty %}
+    <li>Нет записей о бронировании</li>
+    {% endfor %}
+</ul>
+
+<h2>Список пользователей, которым выдана эта книга:</h2>
+<ul>
+    {% for issued_user in issued_users %}
+    <li>
+        <p>{{ issued_user.user_id.first_name }} {{ issued_user.user_id.second_name }} {{ issued_user.user_id.last_name }}</p>
+        <a><strong>Номер читательского билета</strong>{{ issued_user.user_id.card_number }}</a>
+        <button onclick="returnBook({{ book.id }}, {{ issued_user.user_id.id }})">Вернуть книгу(бета)</button>
+    </li>
+    {% empty %}
+    <li>Книга не выдана ни одному пользователю</li>
+    {% endfor %}
+</ul>
+<script>
+function issueBook(bookId, userId) {
+    fetch(`/book/${bookId}/${userId}/issue/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            window.location.href = "{% url 'login' %}";
+        });
+}
+
+function returnBook(bookId, userId) {
+    fetch(`/book/${bookId}/${userId}/return/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            window.location.href = "{% url 'login' %}";
+        });
+    }
+
+function cancelBook(bookId, userId) {
+    fetch(`/book/${bookId}/${userId}/cancel/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            window.location.href = "{% url 'login' %}";
+        });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Уведомление о просроченных книгах</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Уведомление о просроченных книгах</h2>
+    <p>Здравствуйте,</p>
+    <p>Ваши просроченные книги:</p>
+    <ul>
+        {% for book in books %}
+        <li>
+            <a><strong>Название:</strong> {{ book.book_title }}</a>
+            <p><strong>Автор:</strong> {{ book.book_author }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    <p>С уважением,</p>
+    <p>Вторая кегостровская библиотека</p>
+</body>
+</html>

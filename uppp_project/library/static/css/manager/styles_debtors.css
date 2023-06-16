@@ -1,0 +1,77 @@
+.container {
+    border: 1px solid black;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: auto;
+}
+
+.user-container {
+    border: 1px solid black;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.content-main {
+    min-height: initial !important;
+}
+
+.user {
+    margin-bottom: 10px;
+}
+
+.book {
+    margin-top: 10px;
+    width: 550px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 3px;
+}
+
+strong {
+    font-weight: bold;
+}
+
+/* Новые стили для кнопок */
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    button[type="submit"] {
+        background-color: #008CBA;
+    }
+
+        button[type="submit"]:hover {
+            background-color: #007B9F;
+        }

@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
 <head>
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -51,7 +53,24 @@
                         </div>
                     </div>
                     <div class="book-details">
-                        <div class="book-title">{{ m.book_title }}</div>
+                        <div class="book-title">
+                            {{ m.book_title }}
+                            {% if request.user.is_authenticated %}
+                                {% if m.id in favorite_book_ids %}
+                                <button id="favorite-icon-{{ m.id }}" class="favorite-button active" onclick="toggleFavorite({{ m.id }}, {{ request.user.id }})" data-user-authenticated="True">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                {% else %}
+                                <button id="favorite-icon-{{ m.id }}" class="favorite-button" onclick="toggleFavorite({{ m.id }}, {{ request.user.id }})" data-user-authenticated="True">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                {% endif %}
+                            {% else %}
+                                <button id="favorite-icon-{{ m.id }}" class="favorite-button" onclick="toggleFavorite({{ m.id }}, {{ request.user.id }})" data-user-authenticated="False">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            {% endif %}
+                        </div>
                         <div class="book-genre">{{ m.book_genre }}</div>
                         <div class="book-author">{{ m.book_author }}</div>
                         <div class="book-actions">
@@ -69,23 +88,68 @@
 </div>
 
 <script>
-function reserveBook(bookId) {
-    fetch(`/reserve-book/${bookId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}',
-        },
-    })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
+    function reserveBook(bookId) {
+        fetch(`/reserve-book/${bookId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
         })
-        .catch(error => {
-            console.error('Error:', error);
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = "{% url 'login' %}";
+            });
+    }
+
+    function toggleFavorite(bookId, userId) {
+
+        var isUserAuthenticated = document.getElementById(`favorite-icon-${bookId}`).getAttribute('data-user-authenticated');
+
+        if (isUserAuthenticated === 'False') {
             window.location.href = "{% url 'login' %}";
-        });
-}
+            return;
+        }
+
+        const favoriteButton = document.getElementById(`favorite-icon-${bookId}`);
+        const isFavorite = favoriteButton.classList.contains('active');
+        const url = isFavorite ? `/remove-favorite/${bookId}/${userId}/` : `/add-favorite/${bookId}/${userId}/`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'added') {
+                    favoriteButton.classList.add('active');
+                    favoriteButton.querySelector('i').classList.remove('far');
+                    favoriteButton.querySelector('i').classList.add('fas');
+                } else if (data.message === 'removed') {
+                    favoriteButton.classList.remove('active');
+                    favoriteButton.querySelector('i').classList.remove('fas');
+                    favoriteButton.querySelector('i').classList.add('far');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    document.addEventListener('click', function (event) {
+        if (event.target && event.target.classList.contains('favorite-button')) {
+            const bookId = event.target.id.split('-')[2];
+            const userId = '{{ request.user.id }}';
+            toggleFavorite(bookId, userId);
+        }
+    });
 </script>
 
 {% endblock %}

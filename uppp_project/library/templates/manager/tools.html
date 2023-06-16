@@ -1,0 +1,33 @@
+﻿{% extends 'manager/base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'css/manager/styles_tools.css' %}" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/js/bootstrap.min.js"></script>
+<div class="user-search">
+    <h2>Поиск пользователя</h2>
+    <form method="GET" action="{% url 'user_details' %}">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="card_number" placeholder="Введите номер читательского билета">
+            <button class="btn btn-primary" type="submit">Найти</button>
+        </div>
+    </form>
+    {% if error_message %}
+    <p class="error">{{ error_message }}</p>
+    {% endif %}
+</div>
+<div class="user-search">
+    <h2>Поиск по книге</h2>
+    <form method="GET" action="{% url 'book_tools' %}">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="book_isbn" placeholder="Введите ISBN книги">
+            <button class="btn btn-primary" type="submit">Найти</button>
+        </div>
+    </form>
+    {% if error_message %}
+    <p class="error">{{ error_message }}</p>
+    {% endif %}
+</div>
+{% endblock %}
