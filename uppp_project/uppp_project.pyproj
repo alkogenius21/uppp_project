@@ -84,6 +84,9 @@
     <Content Include="library\static\css\styles_catalog.css" />
     <Content Include="library\static\css\styles_index.css" />
     <Content Include="library\static\css\styles_login.css" />
+    <Content Include="library\static\css\styles_profile.css">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="library\static\css\styles_register.css" />
     <Content Include="library\static\js\catalog.js" />
     <Content Include="library\static\js\index.js" />
@@ -92,6 +95,9 @@
     <Content Include="library\templates\adress.html" />
     <Content Include="library\templates\base.html" />
     <Content Include="library\templates\catalog.html" />
+    <Content Include="library\templates\edit_profile.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="library\templates\email\email_debtor.html">
       <SubType>Code</SubType>
     </Content>

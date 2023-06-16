@@ -142,3 +142,15 @@
     margin-top: 20px;
     margin-bottom: 520px;
 }
+
+.favorite-button {
+    margin-left: 5px;
+    color: black;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+
+.favorite-button.active {
+    color: red;
+}

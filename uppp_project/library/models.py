@@ -73,7 +73,10 @@ class Book_Category(models.Model):
     def get_absolute_url(self):
         return reverse('category', kwargs={'cat_id': self.pk})
 
-
+class Favorite_Book(models.Model):
+    user_id = models.ForeignKey('LibraryUser', on_delete=models.PROTECT, null=True)
+    book_id = models.ForeignKey('Book', on_delete=models.PROTECT, null=True)
+    is_favorite = models.BooleanField(default=True)
 
 class Library_Card(models.Model):
 
@@ -88,6 +91,7 @@ class Library_Card(models.Model):
     book_id = models.ForeignKey('Book', on_delete=models.PROTECT, null=True)
     date_Reserve = models.DateField(auto_now_add=True)
     date_taken = models.DateField(null=True, blank=True)
+    date_returned = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=10, choices=BOOK_STATUS_CHOICES, default='reserved')
 
     def __str__(self):
@@ -110,14 +114,13 @@ class Library_Card(models.Model):
     def issue_book(self):
         if self.status == 'reserved':
             self.status = 'issued'
-            self.book_id.book_quanity -= 1
-            self.book_id.save()
             self.date_taken = timezone.now().date()
             self.save()
 
     def return_book(self):
         if self.status == 'issued':
             self.status = 'returned'
+            self.date_returned = timezone.now().date()
             self.book_id.book_quanity += 1
             self.book_id.save()
             self.save()
@@ -125,6 +128,8 @@ class Library_Card(models.Model):
     def cancel_book(self):
         if self.status == 'reserved':
             self.status = 'canceled'
+            self.book_id.book_quanity += 1
+            self.book_id.save()
             self.save()
 
 class News_paper(models.Model):

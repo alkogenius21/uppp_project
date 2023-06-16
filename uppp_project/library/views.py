@@ -1,10 +1,12 @@
 # -*- coding: cp1251 -*-
+import json
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from datetime import datetime, timedelta,date
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from .forms import RegistrationForm, ForgotPasswordForm, BookForm, NewsForm
+from .forms import RegistrationForm, ForgotPasswordForm, BookForm, NewsForm, EditProfileForm, ProblemReportForm
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
@@ -19,8 +21,10 @@ from django.utils.encoding import force_bytes, force_str
 from django.conf import settings
 
 from django.contrib.auth.forms import SetPasswordForm
-
+from django.views.decorators.csrf import csrf_exempt
 from django.utils.html import strip_tags
+
+from django.core.mail import EmailMessage
 
 Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
              {'title': "Каталог", 'url_name': 'catalog'},
@@ -104,9 +108,16 @@ def catalog(request):
 
     cats = Book_Category.objects.all()
     books_list = Book.objects.select_related('book_genre').order_by('book_title')
+
+    if request.user.is_authenticated:
+        favorite_book_ids = Favorite_Book.objects.filter(user_id=request.user).values_list('book_id', flat=True)
+    else:
+        favorite_book_ids = []
+
     settings = {'menu': Nav_Tables, 
                 'title': 'Каталог книг', 
                 'books': books_list,
+                'favorite_book_ids': favorite_book_ids,
                 'cats': cats,
                 'cat_selected': 0,
                 'bron': 'Заброинровать',
@@ -122,10 +133,32 @@ def catalog(request):
         else:
             item['active'] = False
 
-
-
     return render(request, 'catalog.html', context=settings)
 
+@csrf_exempt
+def add_favorite(request, book_id, user_id):
+
+    user = LibraryUser.objects.get(id=user_id)
+    book = Book.objects.get(id=book_id)
+
+    try:
+        favorite_book = Favorite_Book.objects.get(book_id=book, user_id=user)
+        return JsonResponse({'message': 'removed'})
+    except Favorite_Book.DoesNotExist:
+        favorite_book = Favorite_Book.objects.create(book_id=book, user_id=user)
+        return JsonResponse({'message': 'added'})
+    except LibraryUser.DoesNotExist:
+        return JsonResponse({'message': 'user_not_found'})
+
+
+@csrf_exempt
+def remove_favorite(request, book_id, user_id):
+    try:
+        favorite_book = Favorite_Book.objects.get(book_id=book_id, user_id=user_id)
+        favorite_book.delete()
+        return JsonResponse({'message': 'removed'})
+    except Favorite_Book.DoesNotExist:
+        return JsonResponse({'message': 'not_found'})
 
 def register(request):
 
@@ -184,7 +217,7 @@ def user_login(request):
                 return redirect('profile')
             elif not user.is_verificate:
                 send_verification_email(request, user)
-                messages.error(request, f'Ваш аккаунт не верифицирован. Пожалуйста, проверьте почту.')
+                messages.error(request, f'Ваша почта не подтверждена. Пожалуйста, проверьте почту.')
             elif not user.is_activate:
                 messages.error(request, 'Ваш аккаунт не активирован. Обратитесь к администратору сайта')
         else:
@@ -195,11 +228,26 @@ def user_login(request):
 @login_required
 def personal_area(request):
 
-    active_item = 'Личный Кабинет'
+    user = request.user
+    books = Book.objects.select_related('book_genre').order_by('book_title')
+    issued_books_ids = Library_Card.objects.filter(user_id=user, status='issued').values_list('book_id', flat=True)
+    reserved_books_ids = Library_Card.objects.filter(user_id=user, status='reserved').values_list('book_id', flat=True)
+    favorite_book_ids = Favorite_Book.objects.filter(user_id=user).values_list('book_id', flat=True)
+    library_card = Library_Card.objects.filter(user_id=request.user)
+    form = ProblemReportForm()
 
     settings = {'menu': Nav_Tables,
-                'title': 'Личный Кабинет'
+                'title': 'Личный Кабинет',
+                'issued_books_ids': issued_books_ids,
+                'reserved_books_ids': reserved_books_ids,
+                'user': user,
+                'books': books,
+                'favorite_book_ids': favorite_book_ids,
+                'library_card': library_card,
+                'form': form
                 }
+
+    active_item = 'Личный Кабинет'
 
     for item in Nav_Tables:
         if item['title'].lower() == active_item.lower():
@@ -210,26 +258,72 @@ def personal_area(request):
 
     return render(request, 'personal_area.html', context=settings)
 
+def report(request):
+    if request.method == 'POST':
+        problem_title = request.POST.get('problem_title')
+        problem_description = request.POST.get('problem_description')
+        problem_photo = request.FILES.get('problem_photo')
+
+        email = EmailMessage(
+            'Новый отчет о проблеме',
+            f'Название проблемы: {problem_title}\nОписание проблемы: {problem_description}',
+            'report@2kegostrovskaya.ru',
+            ['admin@2kegostrovskaya.ru'],
+        )
+
+        if problem_photo:
+            email.attach(problem_photo.name, problem_photo.read(), problem_photo.content_type)
+
+        email.send()
+        return HttpResponse(status=200)
+
+@login_required
+def edit_user(request, user_id):
+
+    user = get_object_or_404(LibraryUser, id=user_id)
+    
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('fond')
+    else:
+        form = EditProfileForm()
+
+    context = {
+        'menu': Nav_Tables,
+        'form': form,
+        }
+    return render(request, 'edit_profile.html', context=context)
+
 def reserve_book(request, book_id):
 
     if not request.user.is_authenticated:
         return redirect('login')
 
     book = get_object_or_404(Book, pk=book_id)
+    try:
+        library_card = Library_Card.objects.get(book_id=book, user_id=request.user)
     
-    if book.book_quanity > 0:
-        library_card = Library_Card.objects.create(
-            user_id=request.user, 
-            book_id=book,
-            status='reserved'
-        )
+        if library_card.status == 'reserved':
+            return JsonResponse({'message': f'Книга "{book.book_title}" уже забронирована вами!'})
+        elif library_card.status == 'issued':
+            return JsonResponse({'message': f'Книга "{book.book_title}" уже выдана вам!'})
+    
+    except Library_Card.DoesNotExist:
+        if book.book_quanity > 0:
+            library_card = Library_Card.objects.create(
+                user_id=request.user, 
+                book_id=book,
+                status='reserved'
+            )
         
-        book.book_quanity = book.book_quanity - 1
-        book.save()
+            book.book_quanity = book.book_quanity - 1
+            book.save()
         
-        return JsonResponse({'message': f'Книга "{book.book_title}" успешно забронирована.'})
-    else:
-        return JsonResponse({'message': f'Книга "{book.book_title}" недоступна для бронирования.'}, status=400)
+            return JsonResponse({'message': f'Книга "{book.book_title}" успешно забронирована.'})
+        else:
+            return JsonResponse({'message': f'Книга "{book.book_title}" недоступна для бронирования.'}, status=400)
 
 
 def send_verification_email(request, user):
@@ -538,14 +632,6 @@ def edit_news(request, news_id):
     
     news = get_object_or_404(News_paper, id=news_id)
 
-    form = NewsForm()
-
-    if request.method == 'POST':
-        form = NewsForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('news')
-
     if request.method == 'POST':
         form = NewsForm(request.POST, request.FILES, instance=news)
         if form.is_valid():
@@ -745,15 +831,18 @@ def extend_book(request, book_id):
 
 def issue_book(request, book_id, user_id):
     library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='reserved')
+    book = Book.objects.get(id=book_id)
     library_card.issue_book()
-    return redirect('return-add')
+    return JsonResponse({'message': f'Книга "{book.book_title}" успешно выдана.'})
 
 def return_book(request, book_id, user_id):
     library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='issued')
+    book = Book.objects.get(id=book_id)
     library_card.return_book()
-    return redirect('return-add')
+    return JsonResponse({'message': f'Книга "{book.book_title}" успешно возвращена.'})
 
 def cancel_book(request, book_id, user_id):
     library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='reserved')
+    book = Book.objects.get(id=book_id)
     library_card.cancel_book()
-    return redirect('return-add')
+    return JsonResponse({'message': f'Бронь на книгу "{book.book_title}" была отменена!'})

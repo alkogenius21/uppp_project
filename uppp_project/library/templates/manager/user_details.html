@@ -14,6 +14,8 @@
         <p>Название: {{ card.book_id.book_title }}</p>
         <p>Автор: {{ card.book_id.book_author }}</p>
         <p>Номер читательского билета пользователя: {{ card.user_id.card_number }}</p>
+        <button onclick="issueBook({{ card.book_id.id }}, {{ user.id }})">Выдать книгу(бета)</button>
+        <button onclick="cancelBook({{ card.book_id.id }}, {{ user.id }})">Отменить книгу(бета)</button>
     </li>
     {% empty %}
     <li>Нет забронированных книг.</li>
@@ -28,9 +30,66 @@
         <p>Автор: {{ card.book_id.book_author }}</p>
         <p>Номер читательского билета пользователя: {{ card.user_id.card_number }}</p>
         <p>Дата выдачи: {{ card.date_taken }}</p>
+        <button onclick="returnBook({{ card.book_id.id }}, {{ user.id }})">Вернуть книгу(бета)</button>
     </li>
     {% empty %}
     <li>Нет взятых на дом книг.</li>
     {% endfor %}
 </ul>
+
+<script>
+function issueBook(bookId, userId) {
+    fetch(`/book/${bookId}/${userId}/issue/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            window.location.href = "{% url 'login' %}";
+        });
+}
+
+function returnBook(bookId, userId) {
+    fetch(`/book/${bookId}/${userId}/return/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            window.location.href = "{% url 'login' %}";
+        });
+    }
+
+function cancelBook(bookId, userId) {
+    fetch(`/book/${bookId}/${userId}/cancel/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            window.location.href = "{% url 'login' %}";
+        });
+}
+</script>
 {% endblock %}
