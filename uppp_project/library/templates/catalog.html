@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
@@ -14,29 +14,28 @@
     <div class="row">
         <div class="col-md-12">
             <div class="search-container">
-                <input type="text" id="search-input" class="form-control" placeholder="{{ placeholder }}" onkeydown="handleSearch(event)">
-                <div class="input-group-append">
-                    <button id="search-button" class="btn-catalog" onclick="searchBooks()">{{ srch_btn }}</button>
-                </div>
+                <input type="text" id="search-input" class="form-control" placeholder="Название или автор книги" onkeydown="handleSearch(event)">
+                <span class="input-group-text" onclick="searchBooks()">
+                    <i class="fas fa-search"></i>
+                </span>
             </div>
         </div>
     </div>
 
-    <div id="no-results" class="no-results" style="display: none;">{{ no_result }}</div>
+    <div id="no-results" class="no-results" style="display: none;">
+        По вашему запросу результатов не найдено
+    </div>
 
     <div class="row mt-4">
         <div class="col-2" id="genres-container">
+            <h5 style="text-align:center">Фильтр по жанрам</h5>
             <div class="genres">
-                <ul>
-                    <li>
-                        <button class="btn btn-primary" onclick="showAllBooks()">All</button>
-                    </li>
+                <div class="btn-group-vertical" role="group" aria-label="Группа вертикальных кнопок">
+                    <button class="genres-catalog" onclick="showAllBooks()">Все книги</button>
                     {% for genre in cats %}
-                    <li>
-                        <button class="btn btn-primary" onclick="showBooksByGenre('{{ genre.genre }}')">{{ genre.genre }}</button>
-                    </li>
+                    <button class="genres-catalog" style="display:block" onclick="showBooksByGenre('{{ genre.genre|safe }}');">{{ genre.genre }}</button>
                     {% endfor %}
-                </ul>
+                </div>
             </div>
         </div>
         <div class="col-xl-10">
@@ -56,27 +55,27 @@
                         <div class="book-title">
                             {{ m.book_title }}
                             {% if request.user.is_authenticated %}
-                                {% if m.id in favorite_book_ids %}
-                                <button id="favorite-icon-{{ m.id }}" class="favorite-button active" onclick="toggleFavorite({{ m.id }}, {{ request.user.id }})" data-user-authenticated="True">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                {% else %}
-                                <button id="favorite-icon-{{ m.id }}" class="favorite-button" onclick="toggleFavorite({{ m.id }}, {{ request.user.id }})" data-user-authenticated="True">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                                {% endif %}
+                            {% if m.id in favorite_book_ids %}
+                            <button id="favorite-icon-{{ m.id }}" class="favorite-button active" onclick="toggleFavorite({{ m.id }}, {{ request.user.id }})" data-user-authenticated="True" title="Добавить книгу в избранное">
+                                <i class="fas fa-heart"></i>
+                            </button>
                             {% else %}
-                                <button id="favorite-icon-{{ m.id }}" class="favorite-button" onclick="toggleFavorite({{ m.id }}, {{ request.user.id }})" data-user-authenticated="False">
-                                    <i class="far fa-heart"></i>
-                                </button>
+                            <button id="favorite-icon-{{ m.id }}" class="favorite-button" onclick="toggleFavorite({{ m.id }}, {{ request.user.id }})" data-user-authenticated="True" title="Добавить книгу в избранное">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            {% endif %}
+                            {% else %}
+                            <button id="favorite-icon-{{ m.id }}" class="favorite-button" onclick="toggleFavorite({{ m.id }}, {{ request.user.id }})" data-user-authenticated="False" title="Добавить книгу в избранное">
+                                <i class="far fa-heart"></i>
+                            </button>
                             {% endif %}
                         </div>
                         <div class="book-genre">{{ m.book_genre }}</div>
                         <div class="book-author">{{ m.book_author }}</div>
                         <div class="book-actions">
-                            <button class="btn-catalog" onclick="toggleDescription({{ m.id }})">{{ about }}</button>
+                            <button class="btn-catalog" onclick="toggleDescription({{ m.id }})">Подробности</button>
                             {% csrf_token %}
-                            <button class="btn-catalog" onclick="reserveBook({{ m.id }})">{{ bron }}</button>
+                            <button class="btn-catalog" onclick="reserveBook({{ m.id }})">Забронировать</button>
                         </div>
                     </div>
                 </div>
@@ -84,6 +83,33 @@
                 {% endfor %}
             </div>
         </div>
+    </div>
+    <div class="row mt-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if books.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ books.previous_page_number }}">Назад</a>
+                </li>
+                {% endif %}
+                {% for i in books.paginator.page_range %}
+                {% if books.number == i %}
+                <li class="page-item active" aria-current="page">
+                    <span class="page-link">{{ i }}</span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if books.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ books.next_page_number }}">Вперед</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 </div>
 
@@ -150,6 +176,7 @@
             toggleFavorite(bookId, userId);
         }
     });
+
 </script>
 
 {% endblock %}

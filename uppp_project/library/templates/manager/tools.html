@@ -4,30 +4,42 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="{% static 'css/manager/styles_tools.css' %}" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/js/bootstrap.min.js"></script>
-<div class="user-search">
-    <h2>Поиск пользователя</h2>
-    <form method="GET" action="{% url 'user_details' %}">
-        {% csrf_token %}
+<style>
+    .content-main {
+        min-height: 75vh;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" name="card_number" placeholder="Введите номер читательского билета">
-            <button class="btn btn-primary" type="submit">Найти</button>
+            <div class="col-md-5">
+                <h2 style="text-align:center">Поиск пользователя</h2>
+                <form method="GET" action="{% url 'user_details' %}">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="card_number" placeholder="Введите номер читательского билета">
+                        <button class="btn btn-primary" type="submit">Найти</button>
+                    </div>
+                </form>
+                {% if error_message %}
+                <p class="error">{{ error_message }}</p>
+                {% endif %}
+            </div>
+            <div class="col-2"></div>
+            <div class="col-md-5">
+                <h2 style="text-align:center">Поиск по книге</h2>
+                <form method="GET" action="{% url 'book_tools' %}">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="book_isbn" placeholder="Введите ISBN книги">
+                        <button class="btn btn-primary" type="submit">Найти</button>
+                    </div>
+                </form>
+                {% if error_message %}
+                <p class="error">{{ error_message }}</p>
+                {% endif %}
+            </div>
         </div>
-    </form>
-    {% if error_message %}
-    <p class="error">{{ error_message }}</p>
-    {% endif %}
-</div>
-<div class="user-search">
-    <h2>Поиск по книге</h2>
-    <form method="GET" action="{% url 'book_tools' %}">
-        {% csrf_token %}
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" name="book_isbn" placeholder="Введите ISBN книги">
-            <button class="btn btn-primary" type="submit">Найти</button>
-        </div>
-    </form>
-    {% if error_message %}
-    <p class="error">{{ error_message }}</p>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}

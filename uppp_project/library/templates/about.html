@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% load static %}
 {% block content %}
 <head>
@@ -6,16 +6,17 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 </head>
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-7 d-flex justify-content-center">
             <div class="story">
                 <h3>{{ title }}</h3>
-                <p>{{ text1 }}</p>
-                <p>{{ text2 }}</p>
+                <p class="lead">Наша бибилиотека была основана еще в 1900 году ученым Российской Империи Виктором Ивановичем Сеченовым, переехавшим в Кегостров из-за любви к здешней природе.</p>
+                <p><em>Первым фондом Второй Кегостровской Библиотеки выступила личная коллекция книг и научных пособий Сеченова, которую впоследствии он пополнял на свои накопленные средства.</em></p>
+                <p><em>Спустя более века библиотека переживала как взлеты, так и падения, а все из-за притока, а ближе к 90-м оттока жителей прекрасного острова. Но не смотря на все трудности Вторая Кегостровская библиотека все еще регулярно работает для Вас!</em></p>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5 d-flex justify-content-center">
             <div id="library-carousel" class="carousel slide library-photos" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#library-carousel" data-slide-to="0" class="active"></li>
@@ -39,11 +40,11 @@
 </div>
 
 
-<script>
-    $(document).ready(function () {
-        $('.carousel').carousel({
-            interval: 5000 // Change slide every 5 seconds
+    <script>
+        $(document).ready(function () {
+            $('.carousel').carousel({
+                interval: 5000 // Change slide every 5 seconds
+            });
         });
-    });
-</script>
-{% endblock %}
+    </script>
+    {% endblock %}

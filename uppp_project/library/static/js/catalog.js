@@ -10,11 +10,6 @@
     }
 }
 
-function reserveBook(id) {
-    // Placeholder implementation
-    console.log(`Книга ${id} забронирована!`);
-}
-
 function showAllBooks() {
     const bookContainers = document.getElementsByClassName('book-container');
 
@@ -81,3 +76,33 @@ function handleSearch(event) {
         event.preventDefault();
     }
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Получаем все кнопки жанров
+    var genreButtons = document.querySelectorAll(".genres-catalog");
+
+    // Функция для проверки наличия книг заданного жанра на странице
+    function checkBooksByGenre(genre) {
+        var books = document.querySelectorAll(".book-genre");
+        var genreFound = false;
+
+        for (var i = 0; i < books.length; i++) {
+            if (books[i].textContent.trim() === genre) {
+                genreFound = true;
+                break;
+            }
+        }
+
+        return genreFound;
+    }
+
+    // Проверяем каждую кнопку жанра и скрываем ее, если нет книг с этим жанром
+    genreButtons.forEach(function (button) {
+        var genre = button.textContent.trim();
+
+        if (!checkBooksByGenre(genre)) {
+            button.style.display = "none";
+        }
+    });
+});

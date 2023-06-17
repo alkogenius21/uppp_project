@@ -23,7 +23,9 @@
                 <a href="{% url 'home' %}">
                     <img src="{% static 'images/logo.png' %}" alt="Логотип" />
                 </a>
-                <div class="logo-text">Вторая Кегостровская Библиотека</div>
+                <a href="{% url 'home' %}" style="text-decoration: none">
+                    <div class="logo-text">Вторая Кегостровская Библиотека</div>
+                </a>
             </div>
             <ul class="menu">
                 {% for i in menu %}

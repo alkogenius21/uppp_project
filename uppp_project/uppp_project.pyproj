@@ -105,6 +105,9 @@
     <Content Include="library\templates\email\email_verified.html" />
     <Content Include="library\templates\email\forgot_password.html" />
     <Content Include="library\templates\email\forgot_password_good.html" />
+    <Content Include="library\templates\email\second_verify.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="library\templates\index.html" />
     <Content Include="library\templates\email\invalid_reset_link.html" />
     <Content Include="library\templates\login.html" />
@@ -144,6 +147,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="library\templates\manager\profile.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="library\templates\manager\raport.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="library\templates\manager\tools.html">

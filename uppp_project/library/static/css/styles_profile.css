@@ -9,7 +9,7 @@
 }
 
 .profile-wrapper {
-    height: 72vh;
+    min-height: 72vh;
     border: 1px solid #dee2e6;
     border-radius: 8px;
     padding: 10px;

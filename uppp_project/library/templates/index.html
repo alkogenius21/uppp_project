@@ -12,22 +12,22 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 news-column">
-            <h2>{{ news_name }}</h2>
+            <h1 style="text-align:center">{{ news_name }}</h1>
             <div class="news-wrapper">
                 <div class="news-scrollbar">
                     <div class="news-content">
                         {% for n in news %}
                         <div class="news-item">
                             <h3 class="news-title">{{ n.News_TitleOfArticle }}</h3>
-                            <a class="news-article">{{ n.News_Article }}</a>
-                            <img src="{{ n.News_Photo.url }}" class="d-block w-100" alt="{{ n.News_Article }}" />
+                            <p class="news-article">{{ n.News_Article }}</p>
+                            <img src="{{ n.News_Photo.url }}" class="d-block w-100" style="border-radius: 8px" alt="{{ n.News_TitleOfArticle }}" />
                             <p class="news-date">{{ n.News_DateOfPub }}</p>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
-            <h2>{{ videos }}</h2>
+            <h1 style="text-align:center">{{ videos }}</h1>
             <div class="rectangle ytoube-player">
                 <div id="video-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
@@ -60,13 +60,12 @@
         </div>
         <div class="col-md-4">
             <div class="rectangle">
-                <h2>{{ popular }}</h2>
-                <div id="popular-carousel" class="carousel slide" data-ride="carousel">
+                <h2 style="text-align:center">{{ popular }}</h2>
+                <div id="popular-carousel" class="carousel slide carousel-item-bg" data-ride="carousel">
                     <div class="carousel-inner">
                         {% for b in book %}
                         {% if b.book_popular %}
                         <div class="carousel-item{% if forloop.first %} active{% endif %}">
-                            <div class="carousel-item-bg"></div>
                             <div class="carousel-item-content">
                                 <h3>{{ b.book_title }}</h3>
                                 <a>{{ b.book_author }}</a>
@@ -87,8 +86,8 @@
                 </div>
             </div>
             <div class="rectangle">
-                <h2>{{ latest }}</h2>
-                <div id="latest-carousel" class="carousel slide" data-ride="carousel">
+                <h2 style="text-align:center">{{ latest }}</h2>
+                <div id="latest-carousel" class="carousel slide carousel-item-bg" data-ride="carousel">
                     <div class="carousel-inner">
                         {% for book in latest_list %}
                         <div class="carousel-item{% if forloop.first %} active{% endif %}">
