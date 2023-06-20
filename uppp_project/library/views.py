@@ -782,6 +782,14 @@ def manager_debtors(request):
 
 @login_required(login_url='manager_login')
 def manager_return(request):
+    
+    active_item = 'Выдать/забрать книгу'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
 
     context = {
         'menu': menu

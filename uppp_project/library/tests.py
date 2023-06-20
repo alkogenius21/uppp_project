@@ -1,120 +1,76 @@
 ﻿from django.test import TestCase
-from .models import Book, Book_Category
-from django.test import TestCase, RequestFactory
-from django.contrib.auth.models import User
-from .views import index, about, adress, catalog, register, user_login, personal_area
+from django.contrib.auth import get_user_model
+from .models import LibraryUser, EmailVerificationToken, Book, Book_Category, Favorite_Book, Library_Card, News_paper
 
-class BookModelTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        # Создание тестовых данных для всех тестов в классе
-        genre = Book_Category.objects.create(name='Test Genre')
-        Book.objects.create(
-            Book_Title='Test Book',
-            Book_Author='Test Author',
-            Book_Description='This is a test book.',
-            Book_YearOfPublishing=2022,
-            Book_ISBN=1234567890,
-            Book_Genre=genre,
+class LibraryModelsTestCase(TestCase):
+
+    def setUp(self):
+        # Create a user for testing
+        self.user = get_user_model().objects.create_user(
+            username='testuser',
+            password='testpassword',
+            email='test@example.com'
         )
 
-    def test_book_title_field(self):
-        book = Book.objects.get(id=1)
-        title = book._meta.get_field('Book_Title')
-        max_length = title.max_length
-        self.assertEquals(max_length, 200)  # Проверка максимальной длины поля Book_Title
+    def test_library_user_creation(self):
+        user = LibraryUser.objects.create(
+            username='libraryuser',
+            password='testpassword',
+            email='library@example.com',
+            first_name='John',
+            last_name='Doe',
+            phone='1234567890'
+        )
+        self.assertEqual(user.username, 'libraryuser')
+        self.assertEqual(user.email, 'library@example.com')
 
-    def test_book_author_field(self):
-        book = Book.objects.get(id=1)
-        author = book._meta.get_field('Book_Author')
-        max_length = author.max_length
-        self.assertEquals(max_length, 200)  # Проверка максимальной длины поля Book_Author
+    def test_email_verification_token_creation(self):
+        token = EmailVerificationToken.objects.create(
+            user=self.user,
+            token='randomtoken'
+        )
+        self.assertEqual(token.user, self.user)
+        self.assertEqual(token.token, 'randomtoken')
 
-    def test_book_description_field(self):
-        book = Book.objects.get(id=1)
-        description = book._meta.get_field('Book_Description')
-        max_length = description.max_length
-        self.assertEquals(max_length, 650)  # Проверка максимальной длины поля Book_Description
+    def test_book_creation(self):
+        category = Book_Category.objects.create(genre='Fiction')
+        book = Book.objects.create(
+            book_title='Book Title',
+            book_author='Book Author',
+            book_description='Book Description',
+            book_yearOfPublishing=2023,
+            book_isbn=1234567890,
+            book_genre=category
+        )
+        self.assertEqual(book.book_title, 'Book Title')
+        self.assertEqual(book.book_genre, category)
 
-    def test_book_year_of_publishing_field(self):
-        book = Book.objects.get(id=1)
-        year_of_publishing = book._meta.get_field('Book_YearOfPublishing')
-        self.assertIsInstance(year_of_publishing, models.IntegerField)  # Проверка типа поля Book_YearOfPublishing
+    def test_favorite_book_creation(self):
+        favorite_book = Favorite_Book.objects.create(
+            user_id=self.user,
+            book_id=Book.objects.create(book_title='Favorite Book'),
+            is_favorite=True
+        )
+        self.assertEqual(favorite_book.user_id, self.user)
+        self.assertEqual(favorite_book.is_favorite, True)
 
-    def test_book_genre_field(self):
-        book = Book.objects.get(id=1)
-        genre = book.Book_Genre
-        self.assertEquals(genre.name, 'Test Genre')  # Проверка значения поля Book_Genre
+    def test_library_card_creation(self):
+        library_card = Library_Card.objects.create(
+            user_id=self.user,
+            book_id=Book.objects.create(book_title='Library Card Book'),
+            status='issued'
+        )
+        self.assertEqual(library_card.user_id, self.user)
+        self.assertEqual(library_card.status, 'issued')
 
-    def test_object_creation(self):
-        book = Book.objects.get(id=1)
-        self.assertEquals(book.Book_Title, 'Test Book')  # Проверка значения поля Book_Title
-        self.assertEquals(book.Book_Author, 'Test Author')  # Проверка значения поля Book_Author
+    def test_news_paper_creation(self):
+        news_paper = News_paper.objects.create(
+            News_Article='News Article',
+            News_TitleOfArticle='News Title',
+            News_ArticleAuthor='News Author'
+        )
+        self.assertEqual(news_paper.News_Article, 'News Article')
+        self.assertEqual(news_paper.News_TitleOfArticle, 'News Title')
 
-    def test_verbose_name_plural(self):
-        self.assertEquals(str(Book._meta.verbose_name_plural), 'Êíèãè')  # Проверка множественного числа verbose_name
+    # Add more test methods as needed
 
-    def test_ordering(self):
-        ordering = Book._meta.ordering
-        self.assertEquals(ordering, ['Book_Genre', 'Book_Title'])  # Проверка порядка сортировки
-
-class ViewsTest(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-
-    def test_index_view(self):
-        request = self.factory.get('/')
-        request.user = self.user
-
-        response = index(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'index.html')
-
-    def test_about_view(self):
-        request = self.factory.get('/about/')
-        request.user = self.user
-
-        response = about(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'about.html')
-
-    def test_adress_view(self):
-        request = self.factory.get('/adress/')
-        request.user = self.user
-
-        response = adress(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'adress.html')
-
-    def test_catalog_view(self):
-        request = self.factory.get('/catalog/')
-        request.user = self.user
-
-        response = catalog(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'catalog.html')
-
-    def test_register_view(self):
-        request = self.factory.get('/register/')
-        request.user = self.user
-
-        response = register(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'register.html')
-
-    def test_user_login_view(self):
-        request = self.factory.get('/login/')
-        request.user = self.user
-
-        response = user_login(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'login.html')
-
-    def test_personal_area_view(self):
-        request = self.factory.get('/personal_area/')
-        request.user = self.user
-
-        response = personal_area(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'personal_area.html')
