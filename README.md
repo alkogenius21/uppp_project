@@ -1,6 +1,7 @@
 # Вторая Кегостровская Библиотека
-[![Project Status: Beta](https://img.shields.io/badge/status-alpha-orange.svg)](https://github.com/alkogenius21/uppp_project)
+[![Project Status: Beta](https://img.shields.io/badge/status-beta-blue.svg)](https://github.com/alkogenius21/uppp_project)
 [![Technical Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/alkogenius21/uppp_project)
+
 Добро пожаловать в "Вторую Кегостровскую Библиотеку"! Это веб-приложение разработано на базе фреймворка Django и предоставляет удобный способ управления книгами.
 ![Кегостровская Библиотека](site_screen/main.png)
 
