@@ -6,7 +6,7 @@ from .models import LibraryUser, Book, News_paper
 class RegistrationForm(UserCreationForm):
     class Meta:
         model = LibraryUser
-        fields = ('username', 'password1', 'password2', 'first_name', 'second_name', 'last_name', 'date_of_birth', 'email', 'phone')
+        fields = ('username', 'password1', 'password2', 'email', 'phone')
 
 class ForgotPasswordForm(forms.Form):
     email = forms.EmailField(label='Email', max_length=100)
@@ -25,7 +25,7 @@ class NewsForm(forms.ModelForm):
         model = News_paper
         fields = '__all__'
 
-class EditProfileForm(forms.Form):
+class EditProfileForm(forms.ModelForm):
     class Meta:
         model = LibraryUser
         fields = ('username', 'first_name', 'second_name', 'last_name', 'date_of_birth', 'email', 'phone')

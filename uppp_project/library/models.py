@@ -74,8 +74,8 @@ class Book_Category(models.Model):
         return reverse('category', kwargs={'cat_id': self.pk})
 
 class Favorite_Book(models.Model):
-    user_id = models.ForeignKey('LibraryUser', on_delete=models.PROTECT, null=True)
-    book_id = models.ForeignKey('Book', on_delete=models.PROTECT, null=True)
+    user_id = models.ForeignKey('LibraryUser', on_delete=models.CASCADE, null=True)
+    book_id = models.ForeignKey('Book', on_delete=models.CASCADE, null=True)
     is_favorite = models.BooleanField(default=True)
 
 class Library_Card(models.Model):
@@ -87,8 +87,8 @@ class Library_Card(models.Model):
         ('canceled','Отменено')
     )
 
-    user_id = models.ForeignKey('LibraryUser', on_delete=models.PROTECT, null=True)
-    book_id = models.ForeignKey('Book', on_delete=models.PROTECT, null=True)
+    user_id = models.ForeignKey('LibraryUser', on_delete=models.CASCADE, null=True)
+    book_id = models.ForeignKey('Book', on_delete=models.CASCADE, null=True)
     date_Reserve = models.DateField(auto_now_add=True)
     date_taken = models.DateField(null=True, blank=True)
     date_returned = models.DateField(null=True, blank=True)

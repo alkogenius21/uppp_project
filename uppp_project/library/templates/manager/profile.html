@@ -4,8 +4,9 @@
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="{% static 'css/manager/styles_profile.css' %}" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/js/bootstrap.min.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <div class="container">
     <div class="row">
         <div class="col-md-6 books-column">
@@ -18,6 +19,7 @@
                             <img src="{{ library_card.book_id.book_photo.url }}" alt="{{ library_card.book_id.book_title }}">
                             <h3>{{ library_card.book_id.book_title }}</h3>
                             <p>Автор: {{ library_card.book_id.book_author }}</p>
+                            <p class="carousel-card-number">ISBN {{ library_card.book_id.book_isbn }}</p>
                             <p>Номер читательского билета: {{ library_card.user_id.card_number }}</p>
                         </div>
                         {% empty %}
@@ -28,7 +30,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <h2>Просроченные книги</h2>
+            <h2 style="text-align:center">Просроченные книги</h2>
             <div id="popular-carousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     {% for library_card in overdue_library_cards %}
@@ -37,34 +39,37 @@
                         <div class="carousel-item-content">
                             <h5 class="carousel-title">{{ library_card.book_id.book_title }}</h5>
                             <p class="carousel-author">Автор: {{ library_card.book_id.book_author }}</p>
+                            <p class="carousel-card-number">ISBN {{ library_card.book_id.book_isbn }}</p>
                             <p class="carousel-card-number">Номер читательского билета: {{ library_card.user_id.card_number }}</p>
                         </div>
                     </div>
+                    {% empty %}
+                    <p>Нет просроченных книг.</p>
                     {% endfor %}
                 </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-                <div class="user-search">
-                    <h2>Поиск пользователя</h2>
-                    <form method="GET" action="{% url 'user_details' %}">
-                        {% csrf_token %}
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="card_number" placeholder="Введите номер читательского билета">
-                            <button class="btn btn-primary" type="submit">Найти</button>
-                        </div>
-                    </form>
-                    {% if error_message %}
-                    <p class="error">{{ error_message }}</p>
-                    {% endif %}
-                </div>
+            <div class="user-search">
+                <h2 style="text-align:center">Поиск пользователя</h2>
+                <form method="GET" action="{% url 'user_details' %}">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="card_number" placeholder="Введите номер читательского билета">
+                        <button class="btn btn-primary" type="submit">Найти</button>
+                    </div>
+                </form>
+                {% if error_message %}
+                <p class="error">{{ error_message }}</p>
+                {% endif %}
             </div>
+        </div>
     </div>
 </div>
 {% endblock %}

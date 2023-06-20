@@ -1,38 +1,21 @@
-.registration-form {
-    background-color: #f2f2f2;
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 400px;
-    margin: 0 auto;
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
 }
 
-    .registration-form input[type="text"],
-    .registration-form input[type="email"],
-    .registration-form input[type="password"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-    }
-
-.registration-button {
-    background-color: #4CAF50;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
+.center-label {
+    text-align: center;
 }
 
-    .registration-button:hover {
-        background-color: #45a049;
-    }
+.register-button {
+    background-color: #fca311;
+    border-color: #fca311;
+    color: #ffffff;
+}
 
-    .registration-button:active {
-        background-color: #3e8e41;
-    }
-
-    .registration-button:focus {
-        outline: none;
+    .register-button:hover {
+        background-color: #e6930b;
+        border-color: #e6930b;
     }

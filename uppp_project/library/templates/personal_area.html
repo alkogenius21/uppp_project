@@ -42,13 +42,18 @@
                     <div class="row justify-content-center">
                         <div class="col-6">
                             <img src="{% static 'images/profile.png' %}" class="rounded mx-auto d-block" alt="Фото профиля">
-                            <p class="h4">{{ user.first_name }} {{ user.second_name }} {{ user.last_name }} </p>
+                            <p class="h4" style="text-align:center">{{ user.first_name }} {{ user.second_name }} {{ user.last_name }} </p>
                         </div>
                         <div class="col-6">
                             <p><strong>Email:</strong>{{ user.email }}</p>
                             <p><strong>Номер телефона:</strong>{{ user.phone }}</p>
                             <p><strong>Дата рождения:</strong>{{ user.date_of_birth }}</p>
                             <button onclick="redirectToChangeUser({{ user.id }})">Редактировать профиль</button>
+                            <form method="post" action="{% url 'forgot_password' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="email" value="{{ user.email }}">
+                                <button type="submit">Сбросить пароль</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -56,6 +61,7 @@
             <div id="content2" class="content-block">
                 <div class="row">
                     <div class="col">
+                        <h2 style="text-align:center">Избранные книги</h2>
                         <div class="books-wrapper">
                             <div class="books-content">
                                 <div class="book-grid">
@@ -94,6 +100,9 @@
                                     </div>
                                     {% endif %}
                                     {% endfor %}
+                                    {% if books|length == 0 %}
+                                    <div class="alert-danger" role="alert">Нет избранных книг</div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -103,6 +112,7 @@
             <div id="content3" class="content-block">
                 <div class="row">
                     <div class="col">
+                        <h2 style="text-align:center">Заброинрованные книги</h2>
                         <div class="books-wrapper">
                             <div class="books-content">
                                 <div class="book-grid">
@@ -132,6 +142,9 @@
                                     </div>
                                     {% endif %}
                                     {% endfor %}
+                                    {% if books|length == 0 %}
+                                    <div class="alert-danger" role="alert">Нет забронированных книг</div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -141,6 +154,7 @@
             <div id="content4" class="content-block">
                 <div class="row">
                     <div class="col">
+                        <h2 style="text-align:center">Выданные книги</h2>
                         <div class="books-wrapper">
                             <div class="books-content">
                                 <div class="book-grid">
@@ -170,6 +184,9 @@
                                     </div>
                                     {% endif %}
                                     {% endfor %}
+                                    {% if books|length == 0 %}
+                                        <div class="alert-danger" role="alert">Нет выданных книг</div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -179,6 +196,7 @@
             <div id="content5" class="content-block">
                 <div class="row">
                     <div class="col">
+                        <h2 style="text-align:center">История читательского билета</h2>
                         <div class="books-wrapper">
                             <div class="books-content">
                                 <div class="book-grid">
@@ -236,6 +254,7 @@
             <div id="content6" class="content-block">
                 <div class="row">
                     <div class="col">
+                        <h2 style="text-align:center">Отправить отчёт</h2>
                         <div class="profile-wrapper">
                             <div id="success-message" class="alert alert-success" style="display: none;">Отчёт отправлен!</div>
                             <form id="report-form" method="POST" action="{% url 'report' %}" enctype="multipart/form-data">
@@ -243,13 +262,13 @@
                                 <div class="mb-3">
                                     <div class="form-group">
                                         <label for="{{ form.problem_title.id_for_label }}">Название проблемы</label>
-                                        <input type="text" class="form-control" id="{{ form.problem_title.id_for_label }}" name="{{ form.problem_title.html_name }}" placeholder="Введите название проблемы">
+                                        <input type="text" class="form-control" id="{{ form.problem_title.id_for_label }}" name="{{ form.problem_title.html_name }}" placeholder="">
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <div class="form-group">
                                         <label for="{{ form.problem_description.id_for_label }}">Описание проблемы</label>
-                                        <textarea class="form-control" id="{{ form.problem_description.id_for_label }}" name="{{ form.problem_description.html_name }}" placeholder="Введите описание проблемы"></textarea>
+                                        <textarea class="form-control" id="{{ form.problem_description.id_for_label }}" name="{{ form.problem_description.html_name }}" placeholder=""></textarea>
                                     </div>
                                 </div>
                                 <div class="mb-3">

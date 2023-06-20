@@ -23,8 +23,17 @@ from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.html import strip_tags
-
+from django.core.paginator import Paginator
 from django.core.mail import EmailMessage
+
+from django.contrib.auth import logout
+from django.db.models import Q
+
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
              {'title': "Каталог", 'url_name': 'catalog'},
@@ -114,17 +123,16 @@ def catalog(request):
     else:
         favorite_book_ids = []
 
+    items_per_page = 8
+    paginator = Paginator(books_list, items_per_page)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     settings = {'menu': Nav_Tables, 
                 'title': 'Каталог книг', 
-                'books': books_list,
+                'books': page_obj,
                 'favorite_book_ids': favorite_book_ids,
                 'cats': cats,
-                'cat_selected': 0,
-                'bron': 'Заброинровать',
-                'about': 'Подробнее',
-                'no_result': 'По вашему запросу ничего не найдено',
-                'placeholder': 'Название или Автор книги...',
-                'srch_btn': 'Найти'
                 }
 
     for item in Nav_Tables:
@@ -165,11 +173,18 @@ def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
+            email = form.cleaned_data['email']
+            phone = form.cleaned_data['phone']
+            
+            if LibraryUser.objects.filter(email=email).exists() or LibraryUser.objects.filter(phone=phone).exists():
+                messages.error(request, 'Пользователь с таким email или номером телефона уже существует.')
+                return redirect('register')
             user = form.save(commit=False)
             user.is_verificate = False
             user.save()
             send_verification_email(request, user)
             return redirect('verify_pls')
+            
     else:
         form = RegistrationForm()
 
@@ -280,21 +295,27 @@ def report(request):
 @login_required
 def edit_user(request, user_id):
 
-    user = get_object_or_404(LibraryUser, id=user_id)
-    
+    user = request.user
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, request.FILES, instance=user)
+        form = EditProfileForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('fond')
+            user.is_verificate = False
+            user.save()
+            send_verification_email(request, user)
+            logout(request)
+            return redirect('second_verify')
     else:
-        form = EditProfileForm()
+        form = EditProfileForm(instance=user)
 
     context = {
         'menu': Nav_Tables,
         'form': form,
         }
     return render(request, 'edit_profile.html', context=context)
+
+def second_verify(request):
+    return render(request, 'email/second_verify.html')
 
 def reserve_book(request, book_id):
 
@@ -432,8 +453,9 @@ menu = [{'title': "Главная", 'url_name': 'manager_control'},
              {'title': "Фонд книг", 'url_name': 'fond'},
              {'title': "Новости", 'url_name': 'news'},
              {'title': "Список должников", 'url_name': 'debtors'},
+             {'title': "Отчёт", 'url_name': 'raport'},
              {'title': "Выдать/Забрать книгу", 'url_name': 'return-add'},
-             {'title': "Выйти", 'url_name': 'logout'}]
+             {'title': "Выйти", 'url_name': 'logout'},]
 
 def manager_login(request):
 
@@ -505,6 +527,86 @@ def user_details(request):
     issued_books = Library_Card.objects.filter(user_id=user, status='issued')
 
     return render(request, 'manager/user_details.html', {'user': user, 'reserved_books': reserved_books, 'issued_books': issued_books})
+
+@login_required(login_url='manager_login')
+def raport(request):
+
+    card_number = request.GET.get('card_number')
+    book_title = request.GET.get('book_title')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    status = request.GET.get('status')
+    
+    library_card = Library_Card.objects.all()
+    
+    if card_number:
+        library_card = library_card.filter(user_id__card_number=card_number)
+    
+    if book_title:
+        library_card = library_card.filter(book_id__book_title__icontains=book_title)
+    
+    if start_date and end_date:
+        library_card = library_card.filter(Q(date_Reserve__gte=start_date) & Q(date_Reserve__lte=end_date))
+    
+    if status:
+        library_card = library_card.filter(status=status)
+
+    active_item = 'Отчёт'
+
+    settings = {'menu': menu,
+                'library_card': library_card,
+                }
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return render(request, 'manager/raport.html', context=settings)
+
+
+@login_required(login_url='manager_login')
+def generate_raport_pdf(request):
+     
+    pdfmetrics.registerFont(TTFont('Times-Roman', 'times.ttf'))
+
+    records = Library_Card.objects.all()
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="library_records.pdf"'
+    
+    doc = SimpleDocTemplate(response, pagesize=landscape(letter))
+    elements = []
+    
+    data = [['Дата бронирования', 'Дата выдачи', 'Дата вовзрата', 'Читательский билет', 'Книга(ISBN)', 'Статус']]
+
+    for record in records:
+        data.append([str(record.date_Reserve), str(record.date_taken), str(record.date_returned), record.user_id.card_number, record.book_id.book_isbn, record.status])
+    
+    table = Table(data, colWidths=[110, 110, 110, 150, 150, 120])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Times-Roman'),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    
+    elements.append(table)
+    doc.build(elements)
+
+    if not request.user.is_stuff:
+        return redirect('permission_denied')
+
+    return response
+
 
 def book_tools(request):
     
@@ -680,11 +782,23 @@ def manager_debtors(request):
 
 @login_required(login_url='manager_login')
 def manager_return(request):
+    
+    active_item = 'Выдать/забрать книгу'
+
+    for item in menu:
+        if item['title'].lower() == active_item.lower():
+            item['active'] = True
+        else:
+            item['active'] = False
+
+    context = {
+        'menu': menu
+        }
 
     if not request.user.is_stuff:
         return redirect('permission_denied')
 
-    return render(request, 'manager/tools.html')
+    return render(request, 'manager/tools.html', context=context)
 
 @login_required(login_url='manager_login')
 def add_book(request):

@@ -1,22 +1,32 @@
 .story {
-    margin-bottom: 20px;
+    margin-bottom: auto;
+    margin-top: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    z-index: 2;
 }
 
 .library-photos {
-    height: 300px;
-    width: 500px;
-    border: 1px solid #ccc;
+    height: auto;
+    width: 620px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
     overflow: hidden;
 }
 .library-photos img:hover {
     transform: scale(1.1);
 }
 
-.library-photos img {
-    width: 100%;
-    height: auto;
-    transition: transform 1s ease-in-out;
-}
+    .library-photos img {
+        height: auto;
+        transition: transform 1s ease-in-out;
+        height: auto;
+        border-radius: 8px;
+        width: 600px;
+        border: 1px solid #dee2e6;
+    }
 
 .carousel-indicators {
     bottom: 10px;

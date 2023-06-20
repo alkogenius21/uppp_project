@@ -14,7 +14,7 @@
 }
 
 .search-container button {
-    font-size: 16px;
+    font-size: 20px;
     background-color: #4CAF50;
     color: #fff;
     border: none;
@@ -30,41 +30,13 @@
     display: flex;
 }
 
-.genres {
-    float: left;
-    flex-direction: column;
-    background-color: white;
-    width: 130px;
-    margin: 25px;
-}
-
-    .genres ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .genres li {
-        margin-bottom: 5px;
-    }
-
-    .genres button {
-        padding: 8px 12px;
-        font-size: 14px;
-        border: none;
-        background-color: #eefdc1;
-        color: #333;
-        cursor: pointer;
-    }
-
-        .genres button:hover {
-            background-color: #dceeb0;
-        }
-
 .book-grid {
     flex: 2;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
 }
 
 .book-container {
@@ -124,6 +96,7 @@
 
 .btn-catalog {
     border-radius: 10px;
+    border: none;
     color: black;
     transition: .2s linear;
     background: #eefdc1;
@@ -154,3 +127,40 @@
 .favorite-button.active {
     color: red;
 }
+
+.genres-catalog {
+    border-radius: 10px;
+    color: black;
+    transition: .2s linear;
+    background: #eefdc1;
+    width: 200px;
+    height: 45px;
+    margin: 5px;
+    border:none;
+}
+
+    .genres-catalog:hover {
+        box-shadow: 0 0 0 2px white, 0 0 0 4px #6a9e18;
+    }
+.genres {
+    margin-left: 30px;
+    width: 213px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.pagination {
+
+}
+
+    .pagination .page-item.active .page-link {
+        background-color: #333333 !important;
+        color: #ffffff !important;
+    }
+
+    .pagination .page-link {
+        color: #333333 !important;
+    }

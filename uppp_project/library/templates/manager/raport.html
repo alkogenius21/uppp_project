@@ -1,0 +1,168 @@
+﻿{% extends 'manager/base.html' %}
+{% load static %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/styles_profile.css' %}">
+
+<style>
+    .table {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10">
+            <h1 style="text-align:center">Отчёт по книгам</h1>
+            <form method="GET" action="{% url 'raport' %}">
+                <div class="input-group mb-3">
+                    <div class="col-6">
+                        <h3 style="text-align:center">Фильтр по дате создания записи</h3>
+                        <label for="start_date" class="input-group-text">С</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date" placeholder="Start date" value="{{ request.GET.start_date }}">
+                        <label for="end_date" class="input-group-text">По</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date" placeholder="End date" value="{{ request.GET.end_date }}">
+                    </div>
+                    <div class="col-6">
+                        <h3 style="text-align:center">Фильтр по статусу записи</h3>
+                        <label for="status" class="input-group-text">Статус</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="">Все записи</option>
+                            <option value="reserved" {% if request.GET.status == 'reserved' %}selected{% endif %}>Забронировано</option>
+                            <option value="issued" {% if request.GET.status == 'issued' %}selected{% endif %}>Выдано</option>
+                            <option value="returned" {% if request.GET.status == 'returned' %}selected{% endif %}>Возвращено</option>
+                            <option value="canceled" {% if request.GET.status == 'canceled' %}selected{% endif %}>Отменено</option>
+                        </select>
+                        <label for="card_number" class="input-group-text">Номер читательского билета</label>
+                        <input type="text" class="form-control" id="card_number" name="card_number" placeholder="Введите номер читательского билета" value="{{ request.GET.card_number }}">
+                    </div>
+                    <div class="col">
+                        <label for="book_title" class="input-group-text">Название книги</label>
+                        <input type="text" class="form-control" id="book_title" name="book_title" placeholder="Введите название книги" value="{{ request.GET.book_title }}">
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary btn-lg" type="submit">Применить</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-2">
+            <h3 style="text-align:center">Генерация отчета</h3>
+            <form action="{% url 'generate' %}" method="post">
+                {% csrf_token %}
+                <div class="d-grid gap-2 col-md-12 mx-auto">
+                    <button class="btn btn-primary" type="submit">Сгенерировать отчет полный отчет в PDF</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="books-wrapper">
+                <div class="books-content">
+                    <div class="book-grid">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Пользователь</th>
+                                    <th>Книга</th>
+                                    <th>Дата бронирования</th>
+                                    <th>Дата взятия</th>
+                                    <th>Дата возврата</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead> 
+                            <tbody>
+                                {% for card in library_card %}
+                                <tr>
+                                    <td>
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseOne">
+                                                        {{ card.user_id.card_number }}
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body">
+                                                        <p><strong>Фамилия</strong> {{ card.user_id.first_name }}</p>
+                                                        <p><strong>Имя</strong> {{ card.user_id.second_name }}</p>
+                                                        <p><strong>Отчество</strong> {{ card.user_id.last_name }}</p>
+                                                        <p><strong>Email</strong> {{ card.user_id.email }}</p>
+                                                        <p><strong>Телефон</strong> {{ card.user_id.phone }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseOne">
+                                                        {{ card.book_id.book_title }}
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body">
+                                                        <p><strong>Автор:</strong> {{ card.book_id.book_author }}</p>
+                                                        <p><strong>ISBN</strong> {{ card.book_id.book_isbn }}</p>
+                                                        <p><strong>УДК</strong> {{ card.book_id.book_udk }}</p>
+                                                        <p><strong>ББК</strong> {{ card.book_id.book_bbk }}</p>
+                                                        <p><strong>Дата добавления</strong> {{ card.book_id.book_dateOfAdd }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ card.date_Reserve }}</td>
+                                    <td>
+                                        {% if card.status == 'issued' %}
+                                        {{ card.date_taken }}
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if card.status == 'issued' %}
+                                        {{ card.date_returned|default_if_none:'-' }}
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if card.status == 'reserved' %}
+                                        Забронировано
+                                        {% endif %}
+                                        {% if card.status == 'issued' %}
+                                        Книга выдана
+                                        {% endif %}
+                                        {% if card.status == 'returned' %}
+                                        Книга возвращена
+                                        {% endif %}
+                                        {% if card.status == 'canceled' %}
+                                        Бронь книги отменена
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function redirectToDownload() {
+        window.location.href = "{% url 'generate' %}";
+    }
+</script>
+
+{% endblock %}
