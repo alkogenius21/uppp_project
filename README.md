@@ -36,28 +36,32 @@ git clone https://github.com/alkogenius21/uppp_project.git
 ```bash
 cd uppp_project
 ```
-4. Запустите виртуальную среду
+4. Установите виртуальную среду
+ ```bash
+python -m venv venv
+```
+5. Запустите виртуальную среду
 - на Windows
 ```bash
-virt\Scripts\activate.bat
+venv\Scripts\activate.bat
 ```
 - на Linux/MacOS
 ```bash
-source virt/bin/activate
+source venv/bin/activate
 ```
-5. Установите зависимости, используя pip:
+6. Установите зависимости, используя pip:
 ```bash
 pip install -r requirements.txt
 ```
-6. Запустите миграции базы данных:
+7. Запустите миграции базы данных:
 ```bash
 python manage.py migrate
 ```
-7. Запустите локальный сервер(порт можно указать любой):
+8. Запустите локальный сервер(порт можно указать любой):
 ```bash
 python manage.py runserver 4500
 ```
-8. Откройте веб-браузер и перейдите по адресу http://localhost:4500/ для доступа к "Второй Кегостровской Библиотеке".
+9. Откройте веб-браузер и перейдите по адресу http://localhost:4500/ для доступа к "Второй Кегостровской Библиотеке".
 
 ## Требования
 
