@@ -2,11 +2,18 @@
 import json
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from datetime import datetime, timedelta,date
+from datetime import datetime, timedelta, date
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from .forms import RegistrationForm, ForgotPasswordForm, BookForm, NewsForm, EditProfileForm, ProblemReportForm
+from .forms import (
+    RegistrationForm,
+    ForgotPasswordForm,
+    BookForm,
+    NewsForm,
+    EditProfileForm,
+    ProblemReportForm,
+)
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
@@ -35,19 +42,21 @@ from reportlab.lib import colors
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
-Nav_Tables = [{'title': "Главная", 'url_name': 'home'},
-             {'title': "Каталог", 'url_name': 'catalog'},
-             {'title': "Адрес", 'url_name': 'adress'},
-             {'title': "История библиотеки", 'url_name': 'about'},
-             {'title': "Личный Кабинет", 'url_name': 'profile'}]
+Nav_Tables = [
+    {"title": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "url_name": "home"},
+    {"title": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "url_name": "catalog"},
+    {"title": "пїЅпїЅпїЅпїЅпїЅ", "url_name": "adress"},
+    {"title": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "url_name": "about"},
+    {"title": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "url_name": "profile"},
+]
+
 
 def index(request):
-
     current_date = datetime.now().date()
     week_ago = current_date - timedelta(days=7)
 
-    active_item = 'Главная'
-    news_list = News_paper.objects.order_by('-News_DateOfPub')
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+    news_list = News_paper.objects.order_by("-News_DateOfPub")
     book = Book.objects.all()
     latest_books = []
 
@@ -55,108 +64,108 @@ def index(request):
         if obj.book_dateOfAdd > week_ago:
             latest_books.append(obj)
 
-        
-
-    settings = {'menu': Nav_Tables,
-               'title': 'Вторая Кегостровская библиотека',
-               'news': news_list,
-               'popular': 'Популярные книги',
-               'latest': 'Последние поступления',
-               'news_name': 'Новости',
-               'book': book,
-               'latest_list': latest_books,
-               'videos': 'Полезные видео'
-               }
+    settings = {
+        "menu": Nav_Tables,
+        "title": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "news": news_list,
+        "popular": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
+        "latest": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "news_name": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "book": book,
+        "latest_list": latest_books,
+        "videos": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
+    }
 
     for item in Nav_Tables:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
-    
-    return render(request, 'index.html', context=settings)
+            item["active"] = False
+
+    return render(request, "index.html", context=settings)
+
 
 def about(request):
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
-    active_item = 'История библиотеки'
-
-    settings ={'menu': Nav_Tables, 
-            'title': 'История Библиотеки',
-            'text1': 'Первый абзац',
-            'text2': 'Второй абзац'}
+    settings = {
+        "menu": Nav_Tables,
+        "title": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "text1": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
+        "text2": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
+    }
 
     for item in Nav_Tables:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
-    return render(request, 'about.html', context=settings)
+    return render(request, "about.html", context=settings)
+
 
 def adress(request):
+    active_item = "пїЅпїЅпїЅпїЅпїЅ"
 
-    active_item = 'Адрес'
-
-    settings ={'menu': Nav_Tables, 
-                'title': 'Адрес',
-                'adress': 'Мы находимся здесь:'
-                }
+    settings = {"menu": Nav_Tables, "title": "пїЅпїЅпїЅпїЅпїЅ", "adress": "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ:"}
 
     for item in Nav_Tables:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
-    return render(request, 'adress.html', context=settings)
+    return render(request, "adress.html", context=settings)
+
 
 def catalog(request):
-
-    
-    active_item = 'Каталог'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     cats = Book_Category.objects.all()
-    books_list = Book.objects.select_related('book_genre').order_by('book_title')
+    books_list = Book.objects.select_related("book_genre").order_by("book_title")
 
     if request.user.is_authenticated:
-        favorite_book_ids = Favorite_Book.objects.filter(user_id=request.user).values_list('book_id', flat=True)
+        favorite_book_ids = Favorite_Book.objects.filter(
+            user_id=request.user
+        ).values_list("book_id", flat=True)
     else:
         favorite_book_ids = []
 
     items_per_page = 8
     paginator = Paginator(books_list, items_per_page)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    settings = {'menu': Nav_Tables, 
-                'title': 'Каталог книг', 
-                'books': page_obj,
-                'favorite_book_ids': favorite_book_ids,
-                'cats': cats,
-                }
+    settings = {
+        "menu": Nav_Tables,
+        "title": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
+        "books": page_obj,
+        "favorite_book_ids": favorite_book_ids,
+        "cats": cats,
+    }
 
     for item in Nav_Tables:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
-    return render(request, 'catalog.html', context=settings)
+    return render(request, "catalog.html", context=settings)
+
 
 @csrf_exempt
 def add_favorite(request, book_id, user_id):
-
     user = LibraryUser.objects.get(id=user_id)
     book = Book.objects.get(id=book_id)
 
     try:
         favorite_book = Favorite_Book.objects.get(book_id=book, user_id=user)
-        return JsonResponse({'message': 'removed'})
+        return JsonResponse({"message": "removed"})
     except Favorite_Book.DoesNotExist:
         favorite_book = Favorite_Book.objects.create(book_id=book, user_id=user)
-        return JsonResponse({'message': 'added'})
+        return JsonResponse({"message": "added"})
     except LibraryUser.DoesNotExist:
-        return JsonResponse({'message': 'user_not_found'})
+        return JsonResponse({"message": "user_not_found"})
 
 
 @csrf_exempt
@@ -164,139 +173,161 @@ def remove_favorite(request, book_id, user_id):
     try:
         favorite_book = Favorite_Book.objects.get(book_id=book_id, user_id=user_id)
         favorite_book.delete()
-        return JsonResponse({'message': 'removed'})
+        return JsonResponse({"message": "removed"})
     except Favorite_Book.DoesNotExist:
-        return JsonResponse({'message': 'not_found'})
+        return JsonResponse({"message": "not_found"})
+
 
 def register(request):
-
-    if request.method == 'POST':
+    if request.method == "POST":
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
-            phone = form.cleaned_data['phone']
-            
-            if LibraryUser.objects.filter(email=email).exists() or LibraryUser.objects.filter(phone=phone).exists():
-                messages.error(request, 'Пользователь с таким email или номером телефона уже существует.')
-                return redirect('register')
+            email = form.cleaned_data["email"]
+            phone = form.cleaned_data["phone"]
+
+            if (
+                LibraryUser.objects.filter(email=email).exists()
+                or LibraryUser.objects.filter(phone=phone).exists()
+            ):
+                messages.error(
+                    request,
+                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ email пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.",
+                )
+                return redirect("register")
             user = form.save(commit=False)
             user.is_verificate = False
             user.save()
             send_verification_email(request, user)
-            return redirect('verify_pls')
-            
+            return redirect("verify_pls")
+
     else:
         form = RegistrationForm()
 
-    active_item = 'Личный Кабинет'
-
-    settings = {'menu': Nav_Tables,
-                'title': 'Личный Кабинет',
-                'form': form,
-                }
-
-    for item in Nav_Tables:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
-        else:
-            item['active'] = False
-
-    return render(request, 'register.html', context=settings)
-
-def user_login(request):
-    active_item = 'Личный Кабинет'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     settings = {
-        'menu': Nav_Tables,
-        'title': 'Личный Кабинет',
-        'accept': 'Войти',
-        'login': 'Логин',
-        'password': 'Пароль',
-        'register': 'Регистрация',
-        'forgot': 'Забыли пароль?',
+        "menu": Nav_Tables,
+        "title": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "form": form,
     }
 
     for item in Nav_Tables:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+    return render(request, "register.html", context=settings)
+
+
+def user_login(request):
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+
+    settings = {
+        "menu": Nav_Tables,
+        "title": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "accept": "пїЅпїЅпїЅпїЅпїЅ",
+        "login": "пїЅпїЅпїЅпїЅпїЅ",
+        "password": "пїЅпїЅпїЅпїЅпїЅпїЅ",
+        "register": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "forgot": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ?",
+    }
+
+    for item in Nav_Tables:
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
+        else:
+            item["active"] = False
+
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
         if user is not None:
             if user.is_verificate and user.is_activate:
                 login(request, user)
-                return redirect('profile')
+                return redirect("profile")
             elif not user.is_verificate:
                 send_verification_email(request, user)
-                messages.error(request, f'Ваша почта не подтверждена. Пожалуйста, проверьте почту.')
+                messages.error(
+                    request, f"пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ."
+                )
             elif not user.is_activate:
-                messages.error(request, 'Ваш аккаунт не активирован. Обратитесь к администратору сайта')
+                messages.error(
+                    request,
+                    "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
+                )
         else:
-            messages.error(request, 'Ошибка при входе. Неверный логин или пароль.')
+            messages.error(request, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.")
 
-    return render(request, 'login.html', context=settings)
+    return render(request, "login.html", context=settings)
+
 
 @login_required
 def personal_area(request):
-
     user = request.user
-    books = Book.objects.select_related('book_genre').order_by('book_title')
-    issued_books_ids = Library_Card.objects.filter(user_id=user, status='issued').values_list('book_id', flat=True)
-    reserved_books_ids = Library_Card.objects.filter(user_id=user, status='reserved').values_list('book_id', flat=True)
-    favorite_book_ids = Favorite_Book.objects.filter(user_id=user).values_list('book_id', flat=True)
+    books = Book.objects.select_related("book_genre").order_by("book_title")
+    issued_books_ids = Library_Card.objects.filter(
+        user_id=user, status="issued"
+    ).values_list("book_id", flat=True)
+    reserved_books_ids = Library_Card.objects.filter(
+        user_id=user, status="reserved"
+    ).values_list("book_id", flat=True)
+    favorite_book_ids = Favorite_Book.objects.filter(user_id=user).values_list(
+        "book_id", flat=True
+    )
     library_card = Library_Card.objects.filter(user_id=request.user)
     form = ProblemReportForm()
 
-    settings = {'menu': Nav_Tables,
-                'title': 'Личный Кабинет',
-                'issued_books_ids': issued_books_ids,
-                'reserved_books_ids': reserved_books_ids,
-                'user': user,
-                'books': books,
-                'favorite_book_ids': favorite_book_ids,
-                'library_card': library_card,
-                'form': form
-                }
+    settings = {
+        "menu": Nav_Tables,
+        "title": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "issued_books_ids": issued_books_ids,
+        "reserved_books_ids": reserved_books_ids,
+        "user": user,
+        "books": books,
+        "favorite_book_ids": favorite_book_ids,
+        "library_card": library_card,
+        "form": form,
+    }
 
-    active_item = 'Личный Кабинет'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     for item in Nav_Tables:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
+    return render(request, "personal_area.html", context=settings)
 
-    return render(request, 'personal_area.html', context=settings)
 
 def report(request):
-    if request.method == 'POST':
-        problem_title = request.POST.get('problem_title')
-        problem_description = request.POST.get('problem_description')
-        problem_photo = request.FILES.get('problem_photo')
+    if request.method == "POST":
+        problem_title = request.POST.get("problem_title")
+        problem_description = request.POST.get("problem_description")
+        problem_photo = request.FILES.get("problem_photo")
 
         email = EmailMessage(
-            'Новый отчет о проблеме',
-            f'Название проблемы: {problem_title}\nОписание проблемы: {problem_description}',
-            'report@2kegostrovskaya.ru',
-            ['admin@2kegostrovskaya.ru'],
+            "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+            f"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {problem_title}\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {problem_description}",
+            "report@2kegostrovskaya.ru",
+            ["admin@2kegostrovskaya.ru"],
         )
 
         if problem_photo:
-            email.attach(problem_photo.name, problem_photo.read(), problem_photo.content_type)
+            email.attach(
+                problem_photo.name, problem_photo.read(), problem_photo.content_type
+            )
 
         email.send()
         return HttpResponse(status=200)
 
+
 @login_required
 def edit_user(request, user_id):
-
     user = request.user
-    if request.method == 'POST':
+    if request.method == "POST":
         form = EditProfileForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
@@ -304,47 +335,55 @@ def edit_user(request, user_id):
             user.save()
             send_verification_email(request, user)
             logout(request)
-            return redirect('second_verify')
+            return redirect("second_verify")
     else:
         form = EditProfileForm(instance=user)
 
     context = {
-        'menu': Nav_Tables,
-        'form': form,
-        }
-    return render(request, 'edit_profile.html', context=context)
+        "menu": Nav_Tables,
+        "form": form,
+    }
+    return render(request, "edit_profile.html", context=context)
+
 
 def second_verify(request):
-    return render(request, 'email/second_verify.html')
+    return render(request, "email/second_verify.html")
+
 
 def reserve_book(request, book_id):
-
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     book = get_object_or_404(Book, pk=book_id)
     try:
         library_card = Library_Card.objects.get(book_id=book, user_id=request.user)
-    
-        if library_card.status == 'reserved':
-            return JsonResponse({'message': f'Книга "{book.book_title}" уже забронирована вами!'})
-        elif library_card.status == 'issued':
-            return JsonResponse({'message': f'Книга "{book.book_title}" уже выдана вам!'})
-    
+
+        if library_card.status == "reserved":
+            return JsonResponse(
+                {"message": f'пїЅпїЅпїЅпїЅпїЅ "{book.book_title}" пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!'}
+            )
+        elif library_card.status == "issued":
+            return JsonResponse(
+                {"message": f'пїЅпїЅпїЅпїЅпїЅ "{book.book_title}" пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ!'}
+            )
+
     except Library_Card.DoesNotExist:
         if book.book_quanity > 0:
             library_card = Library_Card.objects.create(
-                user_id=request.user, 
-                book_id=book,
-                status='reserved'
+                user_id=request.user, book_id=book, status="reserved"
             )
-        
+
             book.book_quanity = book.book_quanity - 1
             book.save()
-        
-            return JsonResponse({'message': f'Книга "{book.book_title}" успешно забронирована.'})
+
+            return JsonResponse(
+                {"message": f'пїЅпїЅпїЅпїЅпїЅ "{book.book_title}" пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'}
+            )
         else:
-            return JsonResponse({'message': f'Книга "{book.book_title}" недоступна для бронирования.'}, status=400)
+            return JsonResponse(
+                {"message": f'пїЅпїЅпїЅпїЅпїЅ "{book.book_title}" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'},
+                status=400,
+            )
 
 
 def send_verification_email(request, user):
@@ -352,19 +391,23 @@ def send_verification_email(request, user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     current_site = get_current_site(request)
     verification_url = f"{current_site}/verify/{uid}/{token}/"
-    
-    subject = 'Подтвердите свой e-mail'
-    text_message = f"Здравствуйте, {user.username}, пожалуйста подвердите регистрацию на сайте: {verification_url}. '/n' если вы не регистрировались, то не переходите по ссылке!"
-    html_message = render_to_string('email/verification_email.html', {
-        'user': user,
-        'verification_url': verification_url,
-    })
+
+    subject = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ e-mail"
+    text_message = f"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, {user.username}, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {verification_url}. '/n' пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!"
+    html_message = render_to_string(
+        "email/verification_email.html",
+        {
+            "user": user,
+            "verification_url": verification_url,
+        },
+    )
     from_email = settings.DEFAULT_FROM_EMAIL
     to_email = user.email
-    
+
     email = EmailMultiAlternatives(subject, text_message, from_email, [to_email])
     email.attach_alternative(html_message, "text/html")
     email.send()
+
 
 def verify_email(request, uidb64, token):
     try:
@@ -372,25 +415,28 @@ def verify_email(request, uidb64, token):
         user = get_user_model().objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
         user = None
-    
+
     if user is not None and default_token_generator.check_token(user, token):
         user.is_verificate = True
         user.save()
-        return render(request, 'email/email_verified.html')
+        return render(request, "email/email_verified.html")
     else:
-        return render(request, 'email/email_verification_failed.html')
+        return render(request, "email/email_verification_failed.html")
+
 
 def verify_page(request):
-    return render(request, 'email/verify_page.html')
+    return render(request, "email/verify_page.html")
+
 
 def forgot_password_good(request):
-    return render(request, 'email/forgot_password_good.html')
+    return render(request, "email/forgot_password_good.html")
+
 
 def forgot_password(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ForgotPasswordForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
+            email = form.cleaned_data["email"]
             try:
                 user = LibraryUser.objects.get(email=email)
             except LibraryUser.DoesNotExist:
@@ -400,29 +446,36 @@ def forgot_password(request):
                 token = default_token_generator.make_token(user)
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
                 current_site = get_current_site(request)
-                reset_url = reverse('reset_password', args=[uid, token])
+                reset_url = reverse("reset_password", args=[uid, token])
                 reset_url = f"{request.scheme}://{current_site}{reset_url}"
-                subject = 'Восстановить пароль'
-                from_email = 'noreply@example.com'
+                subject = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ"
+                from_email = "noreply@example.com"
                 to_email = user.email
 
-                html_content = render_to_string('email/reset_password_email.html', {
-                    'user': user,
-                    'reset_url': reset_url,
-                })
+                html_content = render_to_string(
+                    "email/reset_password_email.html",
+                    {
+                        "user": user,
+                        "reset_url": reset_url,
+                    },
+                )
 
-                msg = EmailMultiAlternatives(subject, '', from_email, [to_email])
+                msg = EmailMultiAlternatives(subject, "", from_email, [to_email])
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
-                print(f"Forgot password email sent to {user.email}. Reset URL: {reset_url}")
-                return redirect('password_reset_done')
+                print(
+                    f"Forgot password email sent to {user.email}. Reset URL: {reset_url}"
+                )
+                return redirect("password_reset_done")
             else:
-                form.add_error('email', 'Аккаунта с таким email не существует')  # Добавляем ошибку в форму
+                form.add_error(
+                    "email", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ email пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+                )  # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
 
     else:
         form = ForgotPasswordForm()
 
-    return render(request, 'email/forgot_password.html', {'form': form})
+    return render(request, "email/forgot_password.html", {"form": form})
 
 
 def reset_password(request, uidb64, token):
@@ -434,384 +487,415 @@ def reset_password(request, uidb64, token):
         user = None
     print(user)
     if user is not None and default_token_generator.check_token(user, token):
-        if request.method == 'POST':
+        if request.method == "POST":
             form = SetPasswordForm(user, request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('password_reset_complete')
+                return redirect("password_reset_complete")
         else:
             form = SetPasswordForm(user)
 
-        return render(request, 'email/reset_password.html', {'form': form})
+        return render(request, "email/reset_password.html", {"form": form})
     else:
-        return render(request, 'email/invalid_reset_link.html')
+        return render(request, "email/invalid_reset_link.html")
+
 
 def password_reset_complete(request):
-    return render(request, 'email/password_reset_complete.html')
+    return render(request, "email/password_reset_complete.html")
 
-menu = [{'title': "Главная", 'url_name': 'manager_control'},
-             {'title': "Фонд книг", 'url_name': 'fond'},
-             {'title': "Новости", 'url_name': 'news'},
-             {'title': "Список должников", 'url_name': 'debtors'},
-             {'title': "Отчёт", 'url_name': 'raport'},
-             {'title': "Выдать/Забрать книгу", 'url_name': 'return-add'},
-             {'title': "Выйти", 'url_name': 'logout'},]
+
+menu = [
+    {"title": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "url_name": "manager_control"},
+    {"title": "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "url_name": "fond"},
+    {"title": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "url_name": "news"},
+    {"title": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "url_name": "debtors"},
+    {"title": "пїЅпїЅпїЅпїЅпїЅ", "url_name": "raport"},
+    {"title": "пїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "url_name": "return-add"},
+    {"title": "пїЅпїЅпїЅпїЅпїЅ", "url_name": "logout"},
+]
+
 
 def manager_login(request):
+    title = [{"title": "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "url_name": "home"}]
 
-    title = [{'title':'Вторая Кегостровская библиотека', 'url_name': 'home'}]
-
-    active_item = 'Вторая Кегостровская библиотека'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     for item in title:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+            item["active"] = False
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             if user.is_stuff:
                 login(request, user)
-                return redirect('manager_control')
+                return redirect("manager_control")
             else:
-                messages.error(request, f'У вас нет доступа к этой странице')
+                messages.error(request, f"пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
         else:
-            messages.error(request, f'Неверный логин или пароль.')
+            messages.error(request, f"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.")
 
-    return render(request, 'manager/login.html', {'menu': title})
+    return render(request, "manager/login.html", {"menu": title})
+
 
 def permission_denied(request):
-    return render(request, 'manager/permission_denied.html')
+    return render(request, "manager/permission_denied.html")
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def manager_control(request):
-
-    active_item = 'Главная'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
-    
+            item["active"] = False
+
     today = date.today()
     overdue_date = today - timedelta(days=21)
-    overdue_library_cards = Library_Card.objects.filter(status='issued', date_taken__lt=overdue_date)
-    library_cards = Library_Card.objects.filter(status='reserved')
+    overdue_library_cards = Library_Card.objects.filter(
+        status="issued", date_taken__lt=overdue_date
+    )
+    library_cards = Library_Card.objects.filter(status="reserved")
 
     context = {
-        'menu': menu,
-        'reserved_library_cards': library_cards,
-        'overdue_library_cards': overdue_library_cards
-        }
+        "menu": menu,
+        "reserved_library_cards": library_cards,
+        "overdue_library_cards": overdue_library_cards,
+    }
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
-    return render(request, 'manager/profile.html', context=context)
+        return redirect("permission_denied")
+    return render(request, "manager/profile.html", context=context)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def user_details(request):
-    card_number = request.GET.get('card_number')
+    card_number = request.GET.get("card_number")
 
     try:
         user = LibraryUser.objects.get(card_number=card_number)
     except LibraryUser.DoesNotExist:
-        error_message = 'Пользователь с таким номером читательского билета не найден.'
-        return render(request, 'manager/profile.html', {'error_message': error_message})
+        error_message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ."
+        return render(request, "manager/profile.html", {"error_message": error_message})
 
-    reserved_books = Library_Card.objects.filter(user_id=user, status='reserved')
-    issued_books = Library_Card.objects.filter(user_id=user, status='issued')
+    reserved_books = Library_Card.objects.filter(user_id=user, status="reserved")
+    issued_books = Library_Card.objects.filter(user_id=user, status="issued")
 
-    return render(request, 'manager/user_details.html', {'user': user, 'reserved_books': reserved_books, 'issued_books': issued_books})
+    return render(
+        request,
+        "manager/user_details.html",
+        {"user": user, "reserved_books": reserved_books, "issued_books": issued_books},
+    )
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def raport(request):
+    card_number = request.GET.get("card_number")
+    book_title = request.GET.get("book_title")
+    start_date = request.GET.get("start_date")
+    end_date = request.GET.get("end_date")
+    status = request.GET.get("status")
 
-    card_number = request.GET.get('card_number')
-    book_title = request.GET.get('book_title')
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
-    status = request.GET.get('status')
-    
     library_card = Library_Card.objects.all()
-    
+
     if card_number:
         library_card = library_card.filter(user_id__card_number=card_number)
-    
+
     if book_title:
         library_card = library_card.filter(book_id__book_title__icontains=book_title)
-    
+
     if start_date and end_date:
-        library_card = library_card.filter(Q(date_Reserve__gte=start_date) & Q(date_Reserve__lte=end_date))
-    
+        library_card = library_card.filter(
+            Q(date_Reserve__gte=start_date) & Q(date_Reserve__lte=end_date)
+        )
+
     if status:
         library_card = library_card.filter(status=status)
 
-    active_item = 'Отчёт'
+    active_item = "пїЅпїЅпїЅпїЅпїЅ"
 
-    settings = {'menu': menu,
-                'library_card': library_card,
-                }
+    settings = {
+        "menu": menu,
+        "library_card": library_card,
+    }
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
-    return render(request, 'manager/raport.html', context=settings)
+    return render(request, "manager/raport.html", context=settings)
 
 
-@login_required(login_url='manager_login')
+@login_required(login_url="manager_login")
 def generate_raport_pdf(request):
-     
-    pdfmetrics.registerFont(TTFont('Times-Roman', 'times.ttf'))
+    pdfmetrics.registerFont(TTFont("Times-Roman", "times.ttf"))
 
     records = Library_Card.objects.all()
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="library_records.pdf"'
-    
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="library_records.pdf"'
+
     doc = SimpleDocTemplate(response, pagesize=landscape(letter))
     elements = []
-    
-    data = [['Дата бронирования', 'Дата выдачи', 'Дата вовзрата', 'Читательский билет', 'Книга(ISBN)', 'Статус']]
+
+    data = [
+        [
+            "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+            "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
+            "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
+            "пїЅпїЅпїЅпїЅпїЅ(ISBN)",
+            "пїЅпїЅпїЅпїЅпїЅпїЅ",
+        ]
+    ]
 
     for record in records:
-        data.append([str(record.date_Reserve), str(record.date_taken), str(record.date_returned), record.user_id.card_number, record.book_id.book_isbn, record.status])
-    
+        data.append(
+            [
+                str(record.date_Reserve),
+                str(record.date_taken),
+                str(record.date_returned),
+                record.user_id.card_number,
+                record.book_id.book_isbn,
+                record.status,
+            ]
+        )
+
     table = Table(data, colWidths=[110, 110, 110, 150, 150, 120])
-    table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Times-Roman'),
-        ('FONTSIZE', (0, 0), (-1, 0), 12),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
-    ]))
-    
+    table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                ("FONTNAME", (0, 0), (-1, 0), "Times-Roman"),
+                ("FONTSIZE", (0, 0), (-1, 0), 12),
+                ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+                ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+                ("GRID", (0, 0), (-1, -1), 1, colors.black),
+            ]
+        )
+    )
+
     elements.append(table)
     doc.build(elements)
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
     return response
 
 
 def book_tools(request):
-    
-    book_isbn = request.GET.get('book_isbn')
-    
+    book_isbn = request.GET.get("book_isbn")
+
     try:
         book = Book.objects.get(book_isbn=book_isbn)
-        reservations = Library_Card.objects.filter(book_id=book.id, status='reserved')
-        issued_users = Library_Card.objects.filter(book_id=book.id, status='issued')
+        reservations = Library_Card.objects.filter(book_id=book.id, status="reserved")
+        issued_users = Library_Card.objects.filter(book_id=book.id, status="issued")
 
         context = {
-                'book': book,
-                'reservations': reservations,
-                'issued_users': issued_users
-            }
-        return render(request, 'manager/book_tools.html', context=context)
+            "book": book,
+            "reservations": reservations,
+            "issued_users": issued_users,
+        }
+        return render(request, "manager/book_tools.html", context=context)
 
     except Book.DoesNotExist:
-        return redirect('book_tools')
+        return redirect("book_tools")
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def manager_catalog(request):
-    active_item = 'Фонд книг'
+    active_item = "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ"
 
     cats = Book_Category.objects.all()
-    books_list = Book.objects.select_related('book_genre').order_by('book_title')
-    settings = {'menu': menu, 
-                'title': 'Фонд книг', 
-                'books': books_list,
-                'cats': cats,
-                'about': 'Подробнее',
-                'no_result': 'По вашему запросу ничего не найдено',
-                'placeholder': 'Название или Автор книги...',
-                'srch_btn': 'Найти'
-                }
+    books_list = Book.objects.select_related("book_genre").order_by("book_title")
+    settings = {
+        "menu": menu,
+        "title": "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
+        "books": books_list,
+        "cats": cats,
+        "about": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "no_result": "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+        "placeholder": "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ...",
+        "srch_btn": "пїЅпїЅпїЅпїЅпїЅ",
+    }
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
-    return render(request, 'manager/catalog.html', context=settings)
+    return render(request, "manager/catalog.html", context=settings)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def manager_news(request):
-
-    active_item = 'Новости'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
-    
-    date_param = request.GET.get('date')
-    
+            item["active"] = False
+
+    date_param = request.GET.get("date")
+
     if date_param:
-        selected_date = datetime.strptime(date_param, '%Y-%m-%d').date()
+        selected_date = datetime.strptime(date_param, "%Y-%m-%d").date()
         filtered_news = News_paper.objects.filter(News_DateOfPub=selected_date)
     else:
         filtered_news = News_paper.objects.all()
 
-    news = News_paper.objects.order_by('-News_DateOfPub')
+    news = News_paper.objects.order_by("-News_DateOfPub")
 
-    if request.method == 'POST' and 'delete_news' in request.POST:
-        news_id = request.POST.get('delete_news')
+    if request.method == "POST" and "delete_news" in request.POST:
+        news_id = request.POST.get("delete_news")
         news_to_delete = News_paper.objects.get(id=news_id)
         news_to_delete.delete()
-        return redirect('news')
+        return redirect("news")
 
-    context={
-        'menu': menu,
-        'news': news,
-        'filtered_news': filtered_news,
-        }
+    context = {
+        "menu": menu,
+        "news": news,
+        "filtered_news": filtered_news,
+    }
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
-    return render(request, 'manager/news.html', context=context)
+    return render(request, "manager/news.html", context=context)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def add_news(request):
-
-    active_item = 'Новости'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
-    
+            item["active"] = False
+
     form = NewsForm()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = NewsForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('news')
+            return redirect("news")
 
-    context={
-        'menu': menu,
-        'form': form
-        }
+    context = {"menu": menu, "form": form}
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
-    return render(request, 'manager/add_news.html', context=context)
+    return render(request, "manager/add_news.html", context=context)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def edit_news(request, news_id):
-
-    active_item = 'Новости'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
-    
+            item["active"] = False
+
     news = get_object_or_404(News_paper, id=news_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = NewsForm(request.POST, request.FILES, instance=news)
         if form.is_valid():
             form.save()
-            return redirect('news')
+            return redirect("news")
     else:
         form = NewsForm(instance=news)
 
-    context={
-        'menu': menu,
-        'form': form
-        }
+    context = {"menu": menu, "form": form}
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
-    return render(request, 'manager/edit_news.html', context=context)
+    return render(request, "manager/edit_news.html", context=context)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def manager_debtors(request):
-
-    active_item = 'Список Должников'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
-    
+            item["active"] = False
+
     today = date.today()
     threshold_date = today - timedelta(days=21)
     users = LibraryUser.objects.all()
     user_books = {}
 
     for user in users:
-        books = Library_Card.objects.filter(user_id=user, status='issued', date_taken__lte=threshold_date)
+        books = Library_Card.objects.filter(
+            user_id=user, status="issued", date_taken__lte=threshold_date
+        )
         user_books[user] = books
 
     context = {
-        'menu': menu,
-        'user_books': user_books,
-        }
+        "menu": menu,
+        "user_books": user_books,
+    }
     if not request.user.is_stuff:
-        return redirect('permission_denied')
-    return render(request, 'manager/debtors.html', context=context)
+        return redirect("permission_denied")
+    return render(request, "manager/debtors.html", context=context)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def manager_return(request):
-    
-    active_item = 'Выдать/забрать книгу'
+    active_item = "пїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ"
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
-    context = {
-        'menu': menu
-        }
+    context = {"menu": menu}
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
-    return render(request, 'manager/tools.html', context=context)
+    return render(request, "manager/tools.html", context=context)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def add_book(request):
-
-    active_item = 'Фонд Книг'
+    active_item = "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ"
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             new_book = form.save(commit=False)
@@ -823,140 +907,151 @@ def add_book(request):
             else:
                 new_book.save()
 
-            return redirect('fond')
+            return redirect("fond")
     else:
         form = BookForm()
 
     context = {
-        'menu': menu,
-        'form': form,
-        }
+        "menu": menu,
+        "form": form,
+    }
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
-    return render(request, 'manager/add_book.html', context=context)
+    return render(request, "manager/add_book.html", context=context)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def change_book(request, book_id):
-
-    active_item = 'Фонд Книг'
+    active_item = "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ"
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
-
+            item["active"] = False
 
     book = get_object_or_404(Book, id=book_id)
-    
-    if request.method == 'POST':
+
+    if request.method == "POST":
         form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
             form.save()
-            return redirect('fond')
+            return redirect("fond")
     else:
         form = BookForm(instance=book)
 
     context = {
-        'menu': menu,
-        'form': form,
-        'book_id': book_id,
-        }
+        "menu": menu,
+        "form": form,
+        "book_id": book_id,
+    }
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
-    return render(request, 'manager/change_book.html', context=context)
+    return render(request, "manager/change_book.html", context=context)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def book_details(request, book_id):
-
-    active_item = 'Фонд Книг'
+    active_item = "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ"
 
     for item in menu:
-        if item['title'].lower() == active_item.lower():
-            item['active'] = True
+        if item["title"].lower() == active_item.lower():
+            item["active"] = True
         else:
-            item['active'] = False
+            item["active"] = False
 
     book = get_object_or_404(Book, pk=book_id)
 
-    if request.method == 'POST' and 'delete_book' in request.POST:
-        book_id = request.POST.get('delete_book')
+    if request.method == "POST" and "delete_book" in request.POST:
+        book_id = request.POST.get("delete_book")
         book_to_delete = Book.objects.get(id=book_id)
         book_to_delete.delete()
-        return redirect('fond')
+        return redirect("fond")
 
-    context = {
-        'menu': menu,
-        'book': book
-        }
+    context = {"menu": menu, "book": book}
 
     if not request.user.is_stuff:
-        return redirect('permission_denied')
+        return redirect("permission_denied")
 
-    return render(request, 'manager/book_details.html', context=context)
+    return render(request, "manager/book_details.html", context=context)
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def send_email(request):
-    if request.method == 'POST':
-        recipient = request.POST.get('recipient')
-        books_string = request.POST.get('books')
-        books = [book.strip() for book in books_string.split(',') if book.strip()]
+    if request.method == "POST":
+        recipient = request.POST.get("recipient")
+        books_string = request.POST.get("books")
+        books = [book.strip() for book in books_string.split(",") if book.strip()]
         print(books)
         book_list = []
         for book in books:
-            book_parts = book.split(' - ')
+            book_parts = book.split(" - ")
             if len(book_parts) == 2:
                 book_title = book_parts[0]
                 book_author = book_parts[1]
-                book_dict = {'book_title': book_title, 'book_author': book_author}
+                book_dict = {"book_title": book_title, "book_author": book_author}
                 book_list.append(book_dict)
         print(book_list)
-        # Создание письма
-        subject = 'Уведомление о просроченных книгах'
-        from_email = 'your_email@example.com'
+        # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        subject = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ"
+        from_email = "your_email@example.com"
         to_email = recipient
 
-        # Загрузка шаблона HTML-письма
-        html_message = render_to_string('email/email_debtor.html', {'books': book_list})
+        # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ HTML-пїЅпїЅпїЅпїЅпїЅпїЅ
+        html_message = render_to_string("email/email_debtor.html", {"books": book_list})
 
-        # Отправка письма
+        # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         try:
-            msg = EmailMultiAlternatives(subject, strip_tags(html_message), from_email, [to_email])
+            msg = EmailMultiAlternatives(
+                subject, strip_tags(html_message), from_email, [to_email]
+            )
             msg.attach_alternative(html_message, "text/html")
             msg.send()
-            success_message = 'Email успешно отправлен.'
+            success_message = "Email пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ."
         except Exception as e:
-            error_message = 'Произошла ошибка при отправке email.'
+            error_message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ email."
 
-    return redirect('debtors')
+    return redirect("debtors")
 
-@login_required(login_url='manager_login')
+
+@login_required(login_url="manager_login")
 def extend_book(request, book_id):
-    book = get_object_or_404(Library_Card, id=book_id, status='issued')
-    
-    if request.method == 'POST':
+    book = get_object_or_404(Library_Card, id=book_id, status="issued")
+
+    if request.method == "POST":
         book.date_taken = timezone.now().date()
         book.save()
-        return redirect('debtors')
+        return redirect("debtors")
+
 
 def issue_book(request, book_id, user_id):
-    library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='reserved')
+    library_card = Library_Card.objects.get(
+        book_id=book_id, user_id=user_id, status="reserved"
+    )
     book = Book.objects.get(id=book_id)
     library_card.issue_book()
-    return JsonResponse({'message': f'Книга "{book.book_title}" успешно выдана.'})
+    return JsonResponse({"message": f'пїЅпїЅпїЅпїЅпїЅ "{book.book_title}" пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.'})
+
 
 def return_book(request, book_id, user_id):
-    library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='issued')
+    library_card = Library_Card.objects.get(
+        book_id=book_id, user_id=user_id, status="issued"
+    )
     book = Book.objects.get(id=book_id)
     library_card.return_book()
-    return JsonResponse({'message': f'Книга "{book.book_title}" успешно возвращена.'})
+    return JsonResponse({"message": f'пїЅпїЅпїЅпїЅпїЅ "{book.book_title}" пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'})
+
 
 def cancel_book(request, book_id, user_id):
-    library_card = Library_Card.objects.get(book_id=book_id, user_id=user_id, status='reserved')
+    library_card = Library_Card.objects.get(
+        book_id=book_id, user_id=user_id, status="reserved"
+    )
     book = Book.objects.get(id=book_id)
     library_card.cancel_book()
-    return JsonResponse({'message': f'Бронь на книгу "{book.book_title}" была отменена!'})
+    return JsonResponse(
+        {"message": f'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ "{book.book_title}" пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!'}
+    )

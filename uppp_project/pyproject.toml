@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "uppp-project"
+version = "0.1.0"
+description = ""
+authors = ["Nick Obukhov <obuhoff2016@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "4.2.1"
+psycopg2-binary = "^2.9.9"
+pillow = "^10.2.0"
+pytz = "^2024.1"
+django-allauth = "^0.61.1"
+django-crispy-forms = "^2.1"
+reportlab = "^4.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
